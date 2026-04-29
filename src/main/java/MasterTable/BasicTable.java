@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 public class BasicTable extends JFrame {
 
@@ -91,7 +94,7 @@ public class BasicTable extends JFrame {
     }
 
 
-
+    // US- 4
     public void saveAlltoFile() {
         try {
             ArrayList<String> lines = new ArrayList<>();
@@ -110,7 +113,7 @@ public class BasicTable extends JFrame {
                 if (!isEmpty) lines.add(String.join(",", row));
             }
 
-            java.nio.file.Files.write(
+            Files.write(
                     java.nio.file.Paths.get(path),
                     lines,
                     java.nio.charset.StandardCharsets.UTF_8

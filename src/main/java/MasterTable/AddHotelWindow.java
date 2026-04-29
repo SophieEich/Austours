@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class AddHotelWindow extends JFrame {
 
+    //US-4
     private DefaultTableModel model;
     private BasicTable parent;
 
