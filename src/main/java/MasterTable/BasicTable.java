@@ -99,11 +99,15 @@ public class BasicTable extends JFrame {
 
             for (int i = 0; i < model.getRowCount(); i++) {
                 String[] row = new String[model.getColumnCount()];
+                boolean isEmpty = true;
+
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     Object val = model.getValueAt(i, j);
                     row[j] = (val == null ? "" : val.toString());
+                    if (!row[j].isEmpty()) isEmpty = false;
                 }
-                lines.add(String.join(",", row));
+
+                if (!isEmpty) lines.add(String.join(",", row));
             }
 
             java.nio.file.Files.write(
