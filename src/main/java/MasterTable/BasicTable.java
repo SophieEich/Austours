@@ -77,7 +77,7 @@ public class BasicTable extends JFrame {
 
         JButton button = new JButton("ADD HOTEL");
         add(button, BorderLayout.SOUTH);
-        button.addActionListener(e -> new EditWindow());
+        button.addActionListener(e -> new EditWindow(model));
     }
 
     private void innitComponents() {

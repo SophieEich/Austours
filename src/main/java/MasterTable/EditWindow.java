@@ -1,13 +1,14 @@
 package MasterTable;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class EditWindow extends JFrame {
 
-    private BasicTable model;
+    private DefaultTableModel model;
 
-    public EditWindow() {
+    public EditWindow(DefaultTableModel model) {
         this.model = model;
         setTitle("Edit Hotel");
         setSize(500, 400);
