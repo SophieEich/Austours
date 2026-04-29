@@ -85,7 +85,7 @@ public class BasicTable extends JFrame {
 
     private void defineFrame() {
         setSize(700, 700);
-        setTitle("Basic Table Demo"); // name
+        setTitle("Master Data"); // name
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -95,25 +95,15 @@ public class BasicTable extends JFrame {
     public void saveAlltoFile() {
         try {
             ArrayList<String> lines = new ArrayList<>();
-            // Header muss auch Kommas verwenden!
             lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date");
 
             for (int i = 0; i < model.getRowCount(); i++) {
-                StringBuilder line = new StringBuilder();
+                String[] row = new String[model.getColumnCount()];
                 for (int j = 0; j < model.getColumnCount(); j++) {
-
                     Object val = model.getValueAt(i, j);
-                    String text = (val == null ? "" : val.toString());
-
-                    // RETTUNG: Wir setzen jeden Wert wieder in Anführungszeichen,
-                    // so wie es in deiner Original-Datei war.
-                    line.append("\"").append(text).append("\"");
-
-                    if (j < model.getColumnCount() - 1) {
-                        line.append(","); // Hier war vorher vermutlich das ";"
-                    }
+                    row[j] = (val == null ? "" : val.toString());
                 }
-                lines.add(line.toString());
+                lines.add(String.join(",", row));
             }
 
             java.nio.file.Files.write(
@@ -121,12 +111,11 @@ public class BasicTable extends JFrame {
                     lines,
                     java.nio.charset.StandardCharsets.UTF_8
             );
-            System.out.println("Speichern erfolgreich in: " + path);
+            System.out.println("Saved in: " + path);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Fehler beim Speichern: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Could not Save: " + e.getMessage());
         }
+
     }
-
-
 }
