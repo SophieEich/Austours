@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BasicTable extends JFrame {
@@ -20,13 +21,6 @@ public class BasicTable extends JFrame {
         innitComponents();
         addComponents();
         fillTable();
-
-
-
-
-
-
-
 
     }
 
@@ -51,8 +45,6 @@ public class BasicTable extends JFrame {
             if (sc.hasNextLine()) {
                 sc.nextLine();
             }
-
-
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
 
@@ -77,7 +69,7 @@ public class BasicTable extends JFrame {
 
         JButton button = new JButton("ADD HOTEL");
         add(button, BorderLayout.SOUTH);
-        button.addActionListener(e -> new EditWindow(model));
+        button.addActionListener(e -> new AddHotelWindow(model, this));
     }
 
     private void innitComponents() {
@@ -96,6 +88,44 @@ public class BasicTable extends JFrame {
         setTitle("Basic Table Demo"); // name
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+
+
+    public void saveAlltoFile() {
+        try {
+            ArrayList<String> lines = new ArrayList<>();
+            // Header muss auch Kommas verwenden!
+            lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date");
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                StringBuilder line = new StringBuilder();
+                for (int j = 0; j < model.getColumnCount(); j++) {
+
+                    Object val = model.getValueAt(i, j);
+                    String text = (val == null ? "" : val.toString());
+
+                    // RETTUNG: Wir setzen jeden Wert wieder in Anführungszeichen,
+                    // so wie es in deiner Original-Datei war.
+                    line.append("\"").append(text).append("\"");
+
+                    if (j < model.getColumnCount() - 1) {
+                        line.append(","); // Hier war vorher vermutlich das ";"
+                    }
+                }
+                lines.add(line.toString());
+            }
+
+            java.nio.file.Files.write(
+                    java.nio.file.Paths.get(path),
+                    lines,
+                    java.nio.charset.StandardCharsets.UTF_8
+            );
+            System.out.println("Speichern erfolgreich in: " + path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Fehler beim Speichern: " + e.getMessage());
+        }
     }
 
 
