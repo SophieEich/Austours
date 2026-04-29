@@ -48,10 +48,10 @@ public class BasicTable extends JFrame {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
 
-                // splitte die Zeile bei ;
-                String[] data = line.split(",");
 
-                // füge direkt in Tabelle ein
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // before only ",", but this caused issued with names that included an ,
+                // only "," outside of "..." are counted with this line
+
                 model.addRow(data);
             }
 

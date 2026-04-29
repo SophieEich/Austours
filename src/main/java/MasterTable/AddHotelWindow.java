@@ -3,6 +3,7 @@ package MasterTable;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 
 public class AddHotelWindow extends JFrame {
 
@@ -49,10 +50,7 @@ public class AddHotelWindow extends JFrame {
 
         saveButton.addActionListener(e -> {
             String nextId = getNextId(model);
-
-
-
-
+            String today = LocalDate.now().toString();
 
             Object[] newRow = {
                     nextId, //ID automatic
@@ -65,8 +63,8 @@ public class AddHotelWindow extends JFrame {
                     citycode.getText(),
                     phone.getText(),
                     rooms.getText(),
-                    beds.getText()
-                    //LAST EDIT
+                    beds.getText(),
+                    today,
             };
 
             model.addRow(newRow);

@@ -153,7 +153,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 634,"*","Madar Café Central Melk","Wejwoda Kaplan","Freifrau Scharschmid von Adlertreu Salvador","Hauptplatz 10","Melk","3390","9606657",48,302,
 57,"***","City Hotel Albrecht","Spechter Erin-Iustina","von Lévay Nina-Maria","Wiener Straße 25","Schwechat","2320","8984728",24,72,
 287,"****","Kammer und Koppel Engelbrecht","Schrögl Li-Marie","Cohen Shirley-Kya","Am Anger 5","Höbersdorf","2011","1757936",30,7,
-554,"****","Hotel Garni, Pension Scheiblechner","Juschek Denille","Orednik Marie-Henriette","48 Stixenlehen","Göstling","3345","0208296",5,25
+554,"****","Hotel Garni, Pension Scheiblechner","Juschek Denille","Orednik Marie-Henriette","48 Stixenlehen","Göstling","3345","0208296",5,25,
 176,"**","Gasthof Polly","Fischak Rawas","Duha Jayde","Linzerstrasse 1","Haunoldstein","3384","3212277",16,55,
 52,"***","BS-Ötscher Hotel","Kikelj Adél","Mikschitz Ranko","Ötscherwiese 7","Lackenhof","3295","0744468",38,85,
 528,"***","Hotel Krug","Roszival Mary-Lynn","Kaminek von Engelshausen Kaela","Schulgasse 1","Gumpoldskirchen","2352","2276961",17,64,
@@ -172,7 +172,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 318,"**","A-Sissy-Hof","Rottenberger Yuri","Kranzl Anto","Hanau 1","Bischofstetten","3232","8252811",59,266,
 166,"**","Weingut und Gästehaus Berger","Usdin Jo-Anne","Pfund Erhard","Weinbergstraße 2","Gedersdorf","3494","9269045",66,41,
 511,"***","Hotel Garni Zur Post","Adamsky Vilmos","Waldsam Marta-Ana","Wiener Straße 33","Gumpoldskirchen","2352","3074820",49,46,
-146,"**","Madar Café Restaurant zum Fürsten","Bonstötter, Pobenstötter Tobit","Zepharovich Laura-Sofie","Rathausplatz 3","Melk","3390","5146663",4,9
+146,"**","Madar Café Restaurant zum Fürsten","Bonstötter, Pobenstötter Tobit","Zepharovich Laura-Sofie","Rathausplatz 3","Melk","3390","5146663",4,9,
 513,"***","Hotel - Restaurant Martinihof","Pilhofer Vladislav","Vössner Tetteh","Rathausplatz 4","Neudörfl","7201","7489706",32,169,
 155,"***","Gasthof Schmölz","Bucek Shannah","Lachmuth Moiz","Hauptstraße 23","Sankt","3051","8941632",11,34,
 536,"**","Cäsars Privatzimmer","Gitner Fatema","Chansarel Imaru","Brünner Straße 28","Föhrenhain","2201","6822352",11,36,
@@ -197,7 +197,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 363,"**","Grabner vulgo Vorderbichl","Sabatowicz Samantha-Joy","Kleber Hane","Kleindurlas 12","Michelbach","3074","7944354",42,37,
 352,"**","Schloss Klafterbrunn","Lanek Ledejna","Fili Eçrin","Rotheau 14","Eschenau","3153","7749424",8,20,
 236,"***","Gasthof Zum Niederhaus - Familie Perthold","Steuer Pasqualine","Angelesen Sannet","Markt 9","Sankt","3193","0352265",17,10,
-110,"****","Ferienhäuser","Dionysius Jawad","Rubas Theminh","3512 Unterbergern","Unterbergern",""3512","8897234",46,40,
+110,"****","Ferienhäuser","Dionysius Jawad","Rubas Theminh","3512 Unterbergern","Unterbergern",""3512","8897234",46,40,,,,,,,,
 223,"**","R&R Residenzen Hotel","Bodonyi Avalon","Peininger Shakeba","Schwurwiesenweg 1","Mitterbach","3224","1576804",7,27,
 282,"**","Hotel Thier","Moraw Noomi","Fuchsjäger Esra-Nur","Mönichkirchen 243","Mönichkirchen","2872","3780635",6,26,
 643,"*","Pension Landhaus Ingrid B&B","Fräuding Xavien","Haraschta Samuel-Matthias","Loich 7","Loich","3211","7380712",33,31,
@@ -231,7 +231,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 182,"**","Cafe Jakob","von Heillinger Casy","Tschinkel Darius-Vasile","Ebnerstraße 3","Traisen","3160","6154396",1,5,
 479,"***","Hotel Austria","Bötskey Meerab","Freysing Cağatay","Hauptstraße 27","Gablitz","3003","5851504",18,141,
 398,"**","Junges Hotel Melk","Abmayer Michalis","Saurak Everest","Abt-Karl-Straße 42","Melk","3390","9008121",35,57,
-605,"*","Privatzimmer, Private Rooms","Krummel Rosaly","Geretsberger Jennielyn","18 Julius Willerth-Gasse","Wiener","2700","4999473",9,37
+605,"*","Privatzimmer, Private Rooms","Krummel Rosaly","Geretsberger Jennielyn","18 Julius Willerth-Gasse","Wiener","2700","4999473",9,37,
 695,"***","Angerhof","Metik Abil","Schöfmann Medea-Loreen","Forstamt 9","Dorfstetten","4392","8455114",23,62,
 294,"*","Haus Sundl - Privatzimmer","Kostlivy Mao","Wachfeitl Mevre","Rote-Kreuz-Str. 18","Emmersdorf","3644","2689814",25,104,
 107,"***","Gasthof zur Donaubrücke","Holkub Sannet","Cruda Yorck","Tiefenbach 1","Ardagger","3321","7983968",7,20,
@@ -276,7 +276,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 136,"***","Aurelius Pension","Jejkal Eysu","Wyteschnik Sylvana","Albrechtsgasse 28","Baden","2500","9788047",18,128,
 414,"**","Gasthof zum grünen Baum","Halinbourg Ivy","Richter von Knobelsdorff Darielys","Rathausplatz 2","Mautern","3512","1052751",25,114,
 75,"****","Hotel Metropol","Homma von Ammanshof David-Josip","Liemann Alena","Schillerplatz 1","St.","3100","5977964",22,60,
-534,"*","Obermerkenbergerhof","Weletzky Sahifa","Meier (Mayerin, Maier, Meyer) Keynan","Aigelsbach 22","Hofstetten","3202","9617624",44
+534,"*","Obermerkenbergerhof","Weletzky Sahifa","Meier (Mayerin, Maier, Meyer) Keynan","Aigelsbach 22","Hofstetten","3202","9617624",44,83,
 189,"**","Pension Müller Gartner","Kohut Sebadjin","Wietzner Dacia","Rathausstrasse 18","Groß-Enzersdorf","2301","7865083",17,120,
 118,"**","Pension Zuser","Borucki Korintha","Hojtasch Vanna","Hauptstrasse 12","Mitterbach","3224","3933421",6,26,
 596,"****","Hotel Zur Linde","Pfefferle Dijor","Prohazel Lenamaria","Josef-Dunkl-Straße 8","Mistelbach","2130","7379527",64,91,
@@ -317,7 +317,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 400,"*","Gästehaus auf der Kunstmeile","Dreyhahn Sabrina-Beatrice","Krenk Nyanjara","Steiner Landstrasse 22","Krems","3500","5257437",38,53,
 411,"****","Hotel Krainerhütte","Thüll Saharaim","Michatek Zeina","Helenental 41","Baden","2500","4635247",18,75,
 211,"*","Klinglhuber Suites","Eigler Ilsamaria","Freiherr von Mauthner Elias-Daniel","Hohensteinstrasse 5 (Check in: Hotel Klinglhuber)","Krems","3500","8178698",24,14,
-357,"*","Mayr-Eichberg, Familie Berndl","Freiin  Biedermann von Turony Esvet","Kraushorfer Martin-Markus","Kirchweg 11","Wolfsbach","3354","2265375",48,179
+357,"*","Mayr-Eichberg, Familie Berndl","Freiin  Biedermann von Turony Esvet","Kraushorfer Martin-Markus","Kirchweg 11","Wolfsbach","3354","2265375",48,179,
 212,"***","Genießergasthof Kutscherklause","Gresslehner Marsha","Winzur Daniel-Erik","Marktplatz 4","Eggern","3861","9403814",17,14,
 608,"****","Hotel Kartause Gaming","Tulipan Sukomal","Ecker Ayleen-Marie","Kartause 1","Gaming","3292","0638929",38,32,
 598,"****","Hotel The Originals Berghotel Tulbingerkogel","Moutier de Fenul Sanija","Stasenka Larissa-Marie","Tulbingerkogel 1","Mauerbach","3001","3793112",15,33,
@@ -426,7 +426,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 327,"**","Burg Plankenstein","Henker Johanna-Lea","Hyba Pietta","Plankenstein 1","Texing","3242","5410734",55,17,
 285,"**","Mostlandhof","Uherek Stefanie-Cattaleya","Gyurkovich Harry","Schauboden 4","Purgstall","3251","9728121",87,428,
 502,"**","Gasthof Gerhart","Prikosovits Emma-Sophie","Suter Mevlüt-Idris","Elisabethstraße 69","Perchtoldsdorf","2380","1667682",26,21,
-58,"****","Linsberg Asia Hotel, Spa & Therme - Adults Only","Kobos Fábián","von Lippmann Civan","Thermenplatz 1","Bad","2822","8720667",22,11
+58,"****","Linsberg Asia Hotel, Spa & Therme - Adults Only","Kobos Fábián","von Lippmann Civan","Thermenplatz 1","Bad","2822","8720667",22,11,
 520,"**","Kunsthaus Horn","Schwimbersky Kai-Maria","Boesler Mario-Matthias","Wiener Straße 2","Horn","3580","5215060",41,49,
 417,"*","Oldtimer Motorhotel Guntramsdorf","Valenda Nilian","Werblatz Tais","A2 Südautobahn/Oldtimerweg 1","Guntramsdorf","2353","8597114",55,202,
 576,"**","Ramswirt","Naschauer Alberto-Marian","Matasovic Mabele","Rams 40","Kirchberg","2880","4186251",64,162,
@@ -438,7 +438,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 346,"*","Wachahof","Khun Detlef","Beukert Addi","Kohlreuth 22","Edlitz","2842","5604773",12,51,
 172,"**","Gästehaus zur schönen Aussicht","Skusil Fransoa","Thanhofer Yuriy","Siedlung Erlahof 47","Spitz","3620","0985955",24,69,
 478,"*","Gasthof zum Goldenen Pflug","Prini Melanija","Zennss Ekpereamaka-Leticia","Rathausstraße 12","Amstetten","3300","4072176",18,40,
-460,"***","Pension Gästehaus Heller","Leschinsky Teslime","Meier (Maier, Meyer, Mayern) Savas","Kremser Straße 14","Weißenkirchen","3610","4083796",5
+460,"***","Pension Gästehaus Heller","Leschinsky Teslime","Meier (Maier, Meyer, Mayern) Savas","Kremser Straße 14","Weißenkirchen","3610","4083796",5,19,
 652,"*","Haflingerhof Luef","Prix Soi","Wagner von Freynsheim Yaǧiz","Leitenviertel 8","Bad","2853","6737959",48,37,
 239,"*","Gästehaus Hofer","Kerka Kate","Ozillek Harmen","Neustiftgasse 4","Gumpoldskirchen","2352","1802168",25,8,
 213,"**","Hotel Restaurant FIDI","Freifrau von Löwenthal Sharika","Günter Florian-Richard","Sportplatzweg 11","Wolfsthal","2412","5400348",31,77,
@@ -480,7 +480,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 580,"*","Bernstein-Motel Marchegg","Herzfeld Ayelin","Gamser Doru","Feldgasse 1","Marchegg","2293","4946884",66,180,
 432,"****","Hotel Freizeittempel","Wurmbrand Ánikö","Lindtner Ellis-Aurelia","Wiener Straße - Werkstraße 109","Wiener","2700","4142546",25,52,
 264,"*","Landgasthof Barenwirt","Funcke Yaǧız","Schimatzek Haddy","Ybbser Strasse 3","Petzenkirchen","3252","7553077",32,25,
-100,"**","Gästezimmer by Jöchlinger","Mateovics David-Raphael","Nussbeck [verh. Alberskirchner, Weixlbaum] Ovidiu","Leopoldauer Straße 7","Gerasdorf","2201","3534875",41,92
+100,"**","Gästezimmer by Jöchlinger","Mateovics David-Raphael","Nussbeck [verh. Alberskirchner, Weixlbaum] Ovidiu","Leopoldauer Straße 7","Gerasdorf","2201","3534875",41,92,
 10,"**","Kolping Campus Krems","von Levasori del la Motta Hayden","Oulitzky Aminta","Alauntalstraße 95 und 97","Krems","3500","6383182",12,24,
 109,"*","Gasthof Alpenblick","Holtzmann Cong","Obenheimer Juber","Kollmitzberg 3","Amstetten","3321","3225008",18,58,
 73,"***","Hotel-Restaurant Moser Pöchlarn","Bostiancic Yvonna","Prejsinger Keltrin","Bahnhofsplatz 3","Pöchlarn","3380","4220705",71,239,
@@ -564,7 +564,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 606,"*","Kögerlwirt","Prowas Khatangoo","Forche Tinsley","Ybbssteinbach 10","Göstling","3345","1669922",50,205,
 486,"*","Hotel Sonnenhof","Patzmann Madeleine-Sophie","Driemer Ann-Kristin","Saaß 19","Litschau","3874","9866244",5,6,
 27,"***","Parkhotel Krems","Tietze Constantinos","Freiherr von Löwenthal Hannes-Leo","Edmund-Hofbauer-Straße 19","Krems","3500","8256494",49,46,
-47,"*","Hirschenwirt","Rozvadovsky Dominique-Andre","Bous, Bus, Buus Cvijan","Nölling 6 Gasthof Restaurant","Schönbühel","3392","6503582",85
+47,"*","Hirschenwirt","Rozvadovsky Dominique-Andre","Bous, Bus, Buus Cvijan","Nölling 6 Gasthof Restaurant","Schönbühel","3392","6503582",85,250,
 622,"***","Gasthof Grüner Baum","Greuter Leon-Musa","Horaschek Mel-Marcus","Markt 55","Kirchberg","2880","5229450",52,169,
 279,"*","Marienschlössl","Wetheimer Nikolai-Andrú","Kornis Zatiye","Schloßstraße 5","Wiedendorf","3491","7942493",45,178,
 167,"**","Landzeit Motor-Hotel St. Valentin","Cimbalnik Derenick","Pilgrab Gassim","Rasthausstraße 6","Sankt","4300","9191469",7,45,
@@ -696,4 +696,4 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 635,"**","Gwörthwirt","Ruchinger Szonja","Silinger Thalia","Gwörth 3","Kasten","3072","0610245",2,11,
 447,"**","Schlaffass - Schlafen im Holzfass","Pietka Olivia-Chelsea","Krojer Seila","Dumba Park 1","Tattendorf","2523","6726807",20,141,
 297,"*","Dorfwirtshaus Rauch","Lezak Celio","Ploub Mehvan","Eschabruck 11","Eschabruck","3533","8635887",59,73,
-697,,as,,,,,,,,,
+697,,as,,,,,,,,,2026-04-29
