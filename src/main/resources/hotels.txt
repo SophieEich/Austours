@@ -102,7 +102,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 627,"**","Kolpingsfamilie Poysdorf","Krtzca Maurice-Pascal","Baronin von Spielmann [verh. von Segalla] Ignjat","Kolpingstraße 7","Poysdorf","2170","9836474",2,3,
 187,"*","A1 Motel","Romleitner Freidis","Mrasegg Tiberia","Betriebsgebiet I / 4","Inning","3383","6664168",67,85,
 3,"**","Hotel Rainers21","Fett Matias-Andrei","von Kendler Cecily","Liebermannstraße Campus 21","Brunn","2345","6006725",21,45,
-452,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,95,
+452,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,95,2026-04-29
 675,"**","Flussbett","Zschörner Mahnaz","Mendlik Jennifer-Jacqueline","Melkerstrasse 3","Kirchberg","3204","3508170",24,45,
 119,"***","Hotel zur Post","Wykidall Lenea","Grünberger Mirjeta","Westbahnstr. 36","Sankt","4300","2449699",16,49,
 612,"*","Familienpension Sonnenhof","Fesser Noana","Panhans Anna-Irina","Sonnenwg 3","Lackenhof","3295","7728963",4,18,
@@ -697,3 +697,5 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 447,"**","Schlaffass - Schlafen im Holzfass","Pietka Olivia-Chelsea","Krojer Seila","Dumba Park 1","Tattendorf","2523","6726807",20,141,
 297,"*","Dorfwirtshaus Rauch","Lezak Celio","Ploub Mehvan","Eschabruck 11","Eschabruck","3533","8635887",59,73,
 697,,as,,,,,,,,,2026-04-29
+698,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,958,2026-04-29
+699,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,95,2026-04-29

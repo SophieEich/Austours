@@ -69,10 +69,26 @@ public class BasicTable extends JFrame {
        JScrollPane scrollPane = new JScrollPane(table);
        add(scrollPane, BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel();
 
-        JButton button = new JButton("ADD HOTEL");
-        add(button, BorderLayout.SOUTH);
-        button.addActionListener(e -> new AddHotelWindow(model, this));
+        JButton addButton = new JButton("ADD HOTEL");
+        JButton editButton = new JButton("EDIT HOTEL");
+        buttonPanel.add(addButton);
+        buttonPanel.add(editButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        addButton.addActionListener(e -> new AddHotelWindow(model, this, -1)); //1 because no ROw is selected
+
+        //US-5
+        editButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a hotel to edit!");
+                return;
+            }
+            new AddHotelWindow(model, this, selectedRow);
+        });
+
     }
 
     private void innitComponents() {

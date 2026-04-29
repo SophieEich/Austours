@@ -12,10 +12,12 @@ public class AddHotelWindow extends JFrame {
     private BasicTable parent;
 
 
-    public AddHotelWindow(DefaultTableModel model, BasicTable parent) {
+    public AddHotelWindow(DefaultTableModel model, BasicTable parent, int editRow) {
         this.model = model;
         this.parent = parent;
-        setTitle("Edit Hotel");
+
+        boolean isEditing = editRow >= 0;
+        setTitle(isEditing ? "Edit Hotel" : "Add Hotel");
         setSize(500, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -34,6 +36,20 @@ public class AddHotelWindow extends JFrame {
         JTextField rooms = new JTextField();
         JTextField beds = new JTextField();
 
+        //Pre filled fields is editing
+        if (isEditing) {
+            category.setText(model.getValueAt(editRow, 1).toString());
+            name    .setText(model.getValueAt(editRow, 2).toString());
+            owner   .setText(model.getValueAt(editRow, 3).toString());
+            contact .setText(model.getValueAt(editRow, 4).toString());
+            address .setText(model.getValueAt(editRow, 5).toString());
+            city    .setText(model.getValueAt(editRow, 6).toString());
+            citycode.setText(model.getValueAt(editRow, 7).toString());
+            phone   .setText(model.getValueAt(editRow, 8).toString());
+            rooms   .setText(model.getValueAt(editRow, 9).toString());
+            beds    .setText(model.getValueAt(editRow, 10).toString());
+        }
+
         add(new JLabel("Name:")); add(name);
         add(new JLabel("Category:")); add(category);
         add(new JLabel("Owner:")); add(owner);
@@ -50,11 +66,28 @@ public class AddHotelWindow extends JFrame {
 
 
         saveButton.addActionListener(e -> {
-            String nextId = getNextId(model);
+
             String today = LocalDate.now().toString();
 
+
+            if(isEditing) {
+                // UPDATE existing row — keep original ID
+                model.setValueAt(category.getText(), editRow, 1);
+                model.setValueAt(name.getText(),     editRow, 2);
+                model.setValueAt(owner.getText(),    editRow, 3);
+                model.setValueAt(contact.getText(),  editRow, 4);
+                model.setValueAt(address.getText(),  editRow, 5);
+                model.setValueAt(city.getText(),     editRow, 6);
+                model.setValueAt(citycode.getText(), editRow, 7);
+                model.setValueAt(phone.getText(),    editRow, 8);
+                model.setValueAt(rooms.getText(),    editRow, 9);
+                model.setValueAt(beds.getText(),     editRow, 10);
+                model.setValueAt(today,              editRow, 11); // update date
+            }
+
             Object[] newRow = {
-                    nextId, //ID automatic
+
+                    getNextId(model), //ID automatic
                     category.getText(),
                     name.getText(),
                     owner.getText(),
