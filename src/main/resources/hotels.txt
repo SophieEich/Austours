@@ -20,7 +20,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 234,"*","Gasthof zur Post","Palnsteiner Tara-Salome","Kordan Can","Annarotte 20","Annaberg","3222","2030781",34,136,
 468,"****","Gartenlofts auf Gut Guntrams","Koref Georges","von Gillern Maximilian-Zak","Guntrams 11a","Schwarzau","2625","4513153",16,75,
 355,"*","Ferienwohnung Wiesmüller","Kallwoda Rivana","Bezezny Deivis","Ober Neustift 19","Oberneustift","3920","0725617",2,1,
-619,"**","Zimmer mit Garten","Hauf Rik","Vondrus Yosof","Brunngasse 57","Poysdorf","2170","2251496",31,10,
+619,"**","Zimmer mit Garten","Hauf Rik","Vondrus Yosof","Brunngasse 57","Poysdorf","2170","2251496",31,101,2026-04-30
 115,"***","Hotel Restaurant Wallner","Jacobovits Doura","Trantir Phinn","Westbahnstraße 58","Sankt","4300","7762020",2,4,
 328,"*","MÖRWALD Hotel Villa Katharina","Jenecek Hans-Dieter","Rokko Patrick-Jan","Kleine Zeile 13-17","Feuersbrunn","3483","7065314",35,64,
 331,"***","Gasthof Hotel Raymund","Fodor von Szala Jeanne","Schweikert Ryan-Cody","Pernersdorf 93","Pernersdorf","2052","6685459",19,37,
@@ -29,10 +29,10 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 491,"*","Pension Marillenhof","Medelin Ümeyir","Hainzmann Rena","Johann-Steinböckstrasse 2","Melk","3390","5267739",42,44,
 428,"**","Landgasthof Sengstbratl","Ritter von Ehrenfeld-Pop Kadrije","Würth Anderson","Marktplatz 21","Wallsee","3313","3009065",43,199,
 564,"**","Roomantic Apartments","Rosulek Aysuna","Dillenz Roxana-Melissa","Schulgraben 10","Bromberg","2833","3993562",3,8,
-419,"**","Haus Feuchtl","Jankl Patrick-Christopher","Laudin Shira-Keira","Berggasse 11","Purkersdorf","3002","3315296",58,182,
+419,"**","Haus Feuchtl!","Jankl Patrick-Christopher","Laudin Shira-Keira","Berggasse 11","Purkersdorf","3002","3315296",58,182,2026-04-29
 195,"****","Landhaus Stift Ardagger","Tamerlin Marilena","Spudich Nomi","Ardagger Stift 3","Ardagger","3321","4546560",13,19,
 393,"*","Hotel Widhof","Czap Yaşarcan","Kohu Dimitrije","Kerschbaumergasse 11","Tulln","3430","1004623",19,51,
-121,"**","Villa Neuwirth","Walser Clair","Seebach Natjana","Hadersfelderstraße 11","Greifenstein","3422","0701370",32,99,
+121,"**","Villa Neuwirth","Walser Clair","Seebach Natjana","Hadersfelderstraße 11","Greifenstein","3422","0701370",32,990,2026-04-29
 193,"**","WEINBLICK Grafinger","Künzel Richelle","Siegelbaum Santina-Joelle","74 Priel","Senftenberg","3541","7723041",46,11,
 230,"***","JUFA Weinviertel Hotel in der Eselsmühle","Rück Steffen","Reiser Wareesha","Seefeld 59-60","Seefeld-Kadolz","2062","3661595",54,114,
 86,"**","Hotel Mandl","Freiherr von Neumann Shuriano","Lassleben Coline","Ötscherweg 2","Lackenhof","3295","9931739",8,52,
@@ -695,7 +695,4 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 442,"***","Motel Baden","Saib Claire","Leisser Jolien-Summer","Haidhofstraße 2 / Schützengasse 36","Baden","2500","3707201",2,11,
 635,"**","Gwörthwirt","Ruchinger Szonja","Silinger Thalia","Gwörth 3","Kasten","3072","0610245",2,11,
 447,"**","Schlaffass - Schlafen im Holzfass","Pietka Olivia-Chelsea","Krojer Seila","Dumba Park 1","Tattendorf","2523","6726807",20,141,
-297,"*","Dorfwirtshaus Rauch","Lezak Celio","Ploub Mehvan","Eschabruck 11","Eschabruck","3533","8635887",59,73,
-697,,as,,,,,,,,,2026-04-29
-698,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,958,2026-04-29
-699,"**","Schmankerl und Gast","Tellar Arabella-Andreea","Marusak Aishe","Obere Hauptstraße 38","Rohrendorf","3495","6535863",39,95,2026-04-29
+297,"*","Dorfwirtshaus Rauch","Lezak Celio","Ploub Mehvan","Eschabruck 11","Eschabruck","3533","8635887",59,737a,2026-04-29

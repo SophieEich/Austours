@@ -5,14 +5,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 
-public class AddHotelWindow extends JFrame {
+public class AddEditHotelWindow extends JFrame {
 
     //US-4
     private DefaultTableModel model;
-    private BasicTable parent;
+    private HotelTable parent;
 
 
-    public AddHotelWindow(DefaultTableModel model, BasicTable parent, int editRow) {
+    public AddEditHotelWindow(DefaultTableModel model, HotelTable parent, int editRow) {
         this.model = model;
         this.parent = parent;
 
@@ -83,25 +83,26 @@ public class AddHotelWindow extends JFrame {
                 model.setValueAt(rooms.getText(),    editRow, 9);
                 model.setValueAt(beds.getText(),     editRow, 10);
                 model.setValueAt(today,              editRow, 11); // update date
+
+            } else {
+                Object[] newRow = {
+
+                        getNextId(model), //ID automatic
+                        category.getText(),
+                        name.getText(),
+                        owner.getText(),
+                        contact.getText(),
+                        address.getText(),
+                        city.getText(),
+                        citycode.getText(),
+                        phone.getText(),
+                        rooms.getText(),
+                        beds.getText(),
+                        today,
+                };
+
+                model.addRow(newRow);
             }
-
-            Object[] newRow = {
-
-                    getNextId(model), //ID automatic
-                    category.getText(),
-                    name.getText(),
-                    owner.getText(),
-                    contact.getText(),
-                    address.getText(),
-                    city.getText(),
-                    citycode.getText(),
-                    phone.getText(),
-                    rooms.getText(),
-                    beds.getText(),
-                    today,
-            };
-
-            model.addRow(newRow);
             parent.saveAlltoFile();
             dispose();
 
@@ -118,7 +119,7 @@ public class AddHotelWindow extends JFrame {
         int maxId = 0;
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
-                // Den Wert aus der ersten Spalte (ID) holen
+                // Get Value from first column (ID)
                 Object value = model.getValueAt(i, 0);
                 if (value != null) {
                     int currentId = Integer.parseInt(value.toString().trim());

@@ -4,7 +4,10 @@ public class main {
 
     static void main() {
 
-        new BasicTable().setVisible(true);
+        new MainWindow().setVisible(true);
+
+
+
 
     }
 }

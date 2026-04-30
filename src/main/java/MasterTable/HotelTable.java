@@ -8,16 +8,17 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
 
-public class BasicTable extends JFrame {
-
+public class HotelTable extends JPanel {
+    //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
     String path = "src/main/resources/hotels.txt";
 
-    BasicTable() {
+
+
+
+    HotelTable() {
 
         //USER STORY 3
         defineFrame();
@@ -77,7 +78,7 @@ public class BasicTable extends JFrame {
         buttonPanel.add(editButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        addButton.addActionListener(e -> new AddHotelWindow(model, this, -1)); //1 because no ROw is selected
+        addButton.addActionListener(e -> new AddEditHotelWindow(model, this, -1)); //1 because no ROw is selected
 
         //US-5
         editButton.addActionListener(e -> {
@@ -86,7 +87,7 @@ public class BasicTable extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please select a hotel to edit!");
                 return;
             }
-            new AddHotelWindow(model, this, selectedRow);
+            new AddEditHotelWindow(model, this, selectedRow);
         });
 
     }
@@ -103,10 +104,11 @@ public class BasicTable extends JFrame {
     }
 
     private void defineFrame() {
-        setSize(700, 700);
-        setTitle("Master Data"); // name
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setSize(700, 700);
+        //setTitle("Master Data"); // name
+        //setLocationRelativeTo(null);
+        //setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
     }
 
 

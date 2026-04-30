@@ -1,0 +1,38 @@
+=========================================
+  AUSTOURS - Window Hierarchy
+=========================================
+
+main.java
+└── MainWindow.java  (JFrame)
+    ├── Tab: "Hotels"
+    │   └── HotelPanel.java  (JPanel)
+    │       ├── [Button: ADD HOTEL]
+    │       │   └── AddEditHotelWindow.java  (JFrame)
+    │       │       └── Saves to hotels.txt via HotelPanel.saveAlltoFile()
+    │       │
+    │       └── [Button: EDIT HOTEL]
+    │           └── AddEditHotelWindow.java  (JFrame)  -- same window, isEditing = true
+    │               └── Updates existing row + saves to hotels.txt
+    │
+    └── Tab: "Occupancy"
+        └── OccupancyPanel.java  (JPanel)
+            └── [Button: ADD OCCUPANCY]
+                └── AddOccupancyWindow.java  (JFrame)
+                    └── Appends to occupancy.txt via OccupancyPanel.fillTable()
+=========================================
+  Files Used
+=========================================
+
+  hotels.txt     → Master data (Hotels)
+  occupancy.txt  → Transactional data (Occupancy per month)
+=========================================
+  User Stories Covered
+=========================================
+
+  US-3  → AddHotelWindow  (Add new hotel)
+  US-4  → HotelPanel      (List all hotels + save to file)
+  US-5  → AddHotelWindow  (Edit existing hotel, isEditing = true)
+  US-6  → AddOccupancyWindow (Add new occupancy data)
+  US-10 → OccupancyPanel  (List occupancy data with filters)
+
+=========================================
