@@ -124,11 +124,19 @@ public class HotelTable extends JPanel {
 
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     Object val = model.getValueAt(i, j);
-                    row[j] = (val == null ? "" : val.toString());
-                    if (!row[j].isEmpty()) isEmpty = false;
+                    if (val == null) {
+                        row[j] = "";
+                    } else {
+                        row[j] = val.toString();
+                    }
+                    if (!row[j].isEmpty()) {
+                        isEmpty = false;
+                    }
                 }
 
-                if (!isEmpty) lines.add(String.join(",", row));
+                if (!isEmpty) {
+                    lines.add(String.join(",", row));
+                }
             }
 
             Files.write(

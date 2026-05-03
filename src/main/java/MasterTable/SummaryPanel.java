@@ -69,10 +69,15 @@ public class SummaryPanel extends JPanel {
                 if (d.length < 11) continue;
 
                 String categoryStr = d[1].replace("\"", "").trim();
-                int rooms = 0, beds = 0;
+                int rooms = 0;
+                int beds = 0;
 
-                try { rooms = Integer.parseInt(d[9].trim());  } catch (Exception ignored) {}
-                try { beds  = Integer.parseInt(d[10].trim()); } catch (Exception ignored) {}
+                try {
+                    rooms = Integer.parseInt(d[9].trim());
+                } catch (Exception ignored) {}
+                try {
+                    beds  = Integer.parseInt(d[10].trim());
+                } catch (Exception ignored) {}
 
                 // Match category string to enum
                 for (Category cat : Category.values()) {
@@ -89,7 +94,9 @@ public class SummaryPanel extends JPanel {
         }
 
         // Add one row per category
-        int totalCount = 0, totalRooms = 0, totalBeds = 0;
+        int totalCount = 0;
+        int totalRooms = 0;
+        int totalBeds = 0;
 
         for (Category cat : Category.values()) {
             if (cat == Category.ALL) continue;
@@ -98,8 +105,20 @@ public class SummaryPanel extends JPanel {
             int rooms = roomsMap.get(cat.toString());
             int beds  = bedsMap.get(cat.toString());
 
-            double avgRooms = count > 0 ? (double) rooms / count : 0;
-            double avgBeds  = count > 0 ? (double) beds  / count : 0;
+            double avgRooms;
+            if (count > 0 ) {
+                avgRooms = (double) rooms / count;
+            }else {
+                avgRooms = 0;
+            }
+
+            double avgBeds;
+            if (count > 0 ) {
+                avgBeds = (double) beds / count;
+            }else {
+                avgBeds = 0;
+            }
+
 
             model.addRow(new Object[]{
                     cat.toString(),
@@ -114,8 +133,19 @@ public class SummaryPanel extends JPanel {
         }
 
         // Total row
-        double totalAvgRooms = totalCount > 0 ? (double) totalRooms / totalCount : 0;
-        double totalAvgBeds  = totalCount > 0 ? (double) totalBeds  / totalCount : 0;
+        double totalAvgRooms;
+        if (totalCount > 0) {
+            totalAvgRooms = (double) totalRooms / totalCount;
+        }else {
+            totalAvgRooms = 0;
+        }
+
+        double totalAvgBeds;
+        if (totalCount > 0) {
+            totalAvgBeds = (double) totalBeds  / totalCount;
+        } else {
+            totalAvgBeds = 0;
+        }
 
         model.addRow(new Object[]{
                 "TOTAL",

@@ -2,4 +2,6 @@ hotelId,hotelName,category,year,month,roomOccupancy,bedOccupancy1
 661,Gasthof Singula,*,2026,01,53.2,41.1
 661,Gasthof Singula,*,2026,02,48.5,38.0
 36,Hotel Schrannenhof,****,2026,01,51.6,40.7
-36,Hotel Schrannenhof,****,2026,02,45.0,38.511,,ALL,,01,,
+36,Hotel Schrannenhof,****,2026,02,45.0,38.511
+145,Konditorei Müssauer,*,2025,01,10,10
+55,Hotel garni Steinfeld,***,2026,07,1,1

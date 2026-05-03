@@ -21,13 +21,9 @@ public class OccupancyPanel extends JPanel {
 
     OccupancyPanel() {
         definePanel();
-
         initComponents();
-
         addComponents();
-
         loadHotel();
-
         fillTable();
     }
 
@@ -51,7 +47,7 @@ public class OccupancyPanel extends JPanel {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine().trim();
                 if (line.isEmpty()) continue;
-                String[] d = line.split(",");
+                String[] d = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 if (d.length < 7) continue;
 
                 String hotelId   = d[0].trim();

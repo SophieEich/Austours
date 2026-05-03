@@ -19,7 +19,7 @@ public class MainWindow extends JFrame {
     }
 
     private void defineFrame() {
-        setTitle("Information");
+        setTitle("NOE-Hotels");
         setSize(900, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

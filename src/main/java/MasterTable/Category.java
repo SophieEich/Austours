@@ -5,7 +5,8 @@ public enum Category {
     FIVE_STAR("*****"),
     FOUR_STAR("****"),
     THREE_STAR("***"),
-    TWO_AND_ONE_STAR("** & *");
+    TWO_STAR("**") ,
+    ONE_STAR("*");
 
     private final String display;
 

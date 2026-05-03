@@ -25,7 +25,7 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 328,"*","MÖRWALD Hotel Villa Katharina","Jenecek Hans-Dieter","Rokko Patrick-Jan","Kleine Zeile 13-17","Feuersbrunn","3483","7065314",35,64,
 331,"***","Gasthof Hotel Raymund","Fodor von Szala Jeanne","Schweikert Ryan-Cody","Pernersdorf 93","Pernersdorf","2052","6685459",19,37,
 67,"*","OEKOTEL Traiskirchen","Wrchotizky Wida","Dasek Bilegt","Hochmühlstrasse 5.","Traiskirchen","2514","9050008",11,62,
-693,"**","Blumenhof für die Gäste","Tardschek Eseohe","Wodcedalek Börteçine","Wultendorf 8","Staatz","2134","4754631",27,46,
+693,"**","Blumenhof für die Gäste","Tardschek Eseohe","Wodcedalek Börteçine","Wultendorf 8","Staatz","2134","4754631",27,467,2026-04-30
 491,"*","Pension Marillenhof","Medelin Ümeyir","Hainzmann Rena","Johann-Steinböckstrasse 2","Melk","3390","5267739",42,44,
 428,"**","Landgasthof Sengstbratl","Ritter von Ehrenfeld-Pop Kadrije","Würth Anderson","Marktplatz 21","Wallsee","3313","3009065",43,199,
 564,"**","Roomantic Apartments","Rosulek Aysuna","Dillenz Roxana-Melissa","Schulgraben 10","Bromberg","2833","3993562",3,8,
@@ -696,3 +696,5 @@ id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date
 635,"**","Gwörthwirt","Ruchinger Szonja","Silinger Thalia","Gwörth 3","Kasten","3072","0610245",2,11,
 447,"**","Schlaffass - Schlafen im Holzfass","Pietka Olivia-Chelsea","Krojer Seila","Dumba Park 1","Tattendorf","2523","6726807",20,141,
 297,"*","Dorfwirtshaus Rauch","Lezak Celio","Ploub Mehvan","Eschabruck 11","Eschabruck","3533","8635887",59,737a,2026-04-29
+697,,1234,,,,,,,,,2026-04-30
+698,,,,,,,,,-2,,2026-04-30

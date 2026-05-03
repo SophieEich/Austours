@@ -4,6 +4,9 @@
 
 main.java
 └── MainWindow.java  (JFrame)
+    │
+    ├──Tab: "Summary Panel"
+    │
     ├── Tab: "Hotels"
     │   └── HotelPanel.java  (JPanel)
     │       ├── [Button: ADD HOTEL]
@@ -29,6 +32,7 @@ main.java
   User Stories Covered
 =========================================
 
+  US-1  -> Summary
   US-3  → AddHotelWindow  (Add new hotel)
   US-4  → HotelPanel      (List all hotels + save to file)
   US-5  → AddHotelWindow  (Edit existing hotel, isEditing = true)
