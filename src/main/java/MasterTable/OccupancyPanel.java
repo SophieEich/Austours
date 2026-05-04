@@ -6,7 +6,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
-
 public class OccupancyPanel extends JPanel {
 
     JTable table;
