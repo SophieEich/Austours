@@ -13,7 +13,7 @@ public class OccupancyPanel extends JPanel {
     String path = "src/main/resources/occupancy.txt";
 
 
-    // ── US-02: Filter controls ────────────────────────────────────────────────
+    // ── US-02 / US-10: Filter controls ────────────────────────────────────────────────
     // Senior User can filter the occupancy summary by hotel, date range, and category
 
     JComboBox<String>   hotelFilter    = new JComboBox<>();
@@ -32,7 +32,7 @@ public class OccupancyPanel extends JPanel {
         loadHotel();
         fillTable();
     }
-
+    // US-10
     // US-02: Reads occupancy data from file and applies all active filter criteria
     // Displays room and bed occupancy per month in the summary table
     public void fillTable() {
@@ -44,7 +44,7 @@ public class OccupancyPanel extends JPanel {
         if (selectedHotel != null && !selectedHotel.equals("ALL")) {
             filterHotelId = selectedHotel.split(" - ")[0].trim();
         }
-
+        // US-10
         int fYear  = Integer.parseInt(fromYear.getText().trim());
         int fMonth = Integer.parseInt((String) fromMonth.getSelectedItem());
         int tYear  = Integer.parseInt(toYear.getText().trim());
@@ -89,6 +89,7 @@ public class OccupancyPanel extends JPanel {
     }
 
 
+    // US-10
     // US-02: Populates the hotel dropdown from hotels.txt for the hotel filter
     private void loadHotel() {
         hotelFilter.addItem("ALL");
