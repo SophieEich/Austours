@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
 import java.util.Scanner;
+import javax.swing.BoxLayout;
 
 public class OccupancyPanel extends JPanel {
 
@@ -12,12 +13,18 @@ public class OccupancyPanel extends JPanel {
     DefaultTableModel model;
     String path = "src/main/resources/occupancy.txt";
 
-    JComboBox<String> fromMonth = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
-    JComboBox<String> toMonth   = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
+
+    // ── US-02: Filter controls ────────────────────────────────────────────────
+    // Senior User can filter the occupancy summary by hotel, date range, and category
+
+    JComboBox<String>   hotelFilter    = new JComboBox<>();
+    JComboBox<String>   fromMonth      = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
+    JTextField          fromYear       = new JTextField("2024", 5);
+    JComboBox<String>   toMonth        = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
+    JTextField          toYear         = new JTextField("2026", 5);
     JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
-    JTextField fromYear = new JTextField("2024", 5);
-    JTextField toYear   = new JTextField("2026", 5);
-    JComboBox<String> hotelFilter = new JComboBox<>();
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     OccupancyPanel() {
         definePanel();
@@ -27,9 +34,12 @@ public class OccupancyPanel extends JPanel {
         fillTable();
     }
 
+    // US-02: Reads occupancy data from file and applies all active filter criteria
+    // Displays room and bed occupancy per month in the summary table
     public void fillTable() {
         model.setRowCount(0);
 
+        // US-02: Resolve selected hotel filter to a hotel ID
         String selectedHotel = (String) hotelFilter.getSelectedItem();
         String filterHotelId = null;
         if (selectedHotel != null && !selectedHotel.equals("ALL")) {
@@ -80,7 +90,7 @@ public class OccupancyPanel extends JPanel {
     }
 
 
-
+    // US-02: Populates the hotel dropdown from hotels.txt for the hotel filter
     private void loadHotel() {
         hotelFilter.addItem("ALL");
         try {
@@ -99,36 +109,40 @@ public class OccupancyPanel extends JPanel {
         }
     }
 
+    // US-02: Builds the filter bar (hotel, date range, category + FILTER button) and table area
     private void addComponents() {
-        JPanel filterPanel = new JPanel();
-        filterPanel.add(new JLabel("Hotel:"));
-        filterPanel.add(hotelFilter);
-        filterPanel.add(new JLabel("From Month:"));
-        filterPanel.add(fromMonth);
-        filterPanel.add(new JLabel("Year:"));
-        filterPanel.add(fromYear);
-        filterPanel.add(new JLabel("To Month:"));
-        filterPanel.add(toMonth);
-        filterPanel.add(new JLabel("Year:"));
-        filterPanel.add(toYear);
-        filterPanel.add(new JLabel("Category:"));
-        filterPanel.add(categoryFilter);
+
+        // US-02: Row 1 — hotel and date range filters
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row1.add(new JLabel("Hotel:"));      row1.add(hotelFilter);
+        row1.add(new JLabel("From Month:")); row1.add(fromMonth);
+        row1.add(new JLabel("Year:"));       row1.add(fromYear);
+        row1.add(new JLabel("To Month:"));   row1.add(toMonth);
+        row1.add(new JLabel("Year:"));       row1.add(toYear);
+
+        // US-02: Row 2 — category filter + FILTER button
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row2.add(new JLabel("Category:")); row2.add(categoryFilter);
 
         JButton filterButton = new JButton("FILTER");
-        filterPanel.add(filterButton);
         filterButton.addActionListener(e -> fillTable());
+        row2.add(filterButton);
+
+        // Stack both rows vertically
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.Y_AXIS));
+        filterPanel.add(row1);
+        filterPanel.add(row2);
+
         add(filterPanel, BorderLayout.NORTH);
 
-        // Table
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // Button bar
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("ADD OCCUPANCY");
+        addButton.addActionListener(e -> new AddOccupancyWindow(this));
         buttonPanel.add(addButton);
         add(buttonPanel, BorderLayout.SOUTH);
-
-        addButton.addActionListener(e -> new AddOccupancyWindow(this));
     }
 
 

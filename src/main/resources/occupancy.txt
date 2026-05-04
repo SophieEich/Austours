@@ -5,3 +5,4 @@ hotelId,hotelName,category,year,month,roomOccupancy,bedOccupancy1
 36,Hotel Schrannenhof,****,2026,02,45.0,38.511
 145,Konditorei Müssauer,*,2025,01,10,10
 55,Hotel garni Steinfeld,***,2026,07,1,1
+332,Haus der Pferde,***,2025,01,51.6,48.6
