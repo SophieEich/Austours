@@ -3,24 +3,27 @@ package MasterTable;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.*;
 import java.util.Scanner;
 
 public class AddOccupancyWindow extends JFrame {
 
     private OccupancyPanel parent;
 
-    JComboBox<String> hotelSelect = new JComboBox<>(); // ← dropdown for hotel
+    // US - 6 Enter transactional data (room/bed occupancy per month)
+
+    JComboBox<String> hotelSelect = new JComboBox<>(); // Empty dropdown for hotel selection
+    //Occupancy data
     JTextField year      = new JTextField();
     JComboBox<String> month = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
     JTextField roomOcc   = new JTextField();
     JTextField bedOcc    = new JTextField();
-    String path = "src/main/resources/occupancy.txt";
+    String path = "src/main/resources/occupancy.txt"; //where the occupancy data gets saved
 
+    //constructor
     public AddOccupancyWindow(OccupancyPanel parent) {
         this.parent = parent;
         defineFrame();
-        initComponets();
+        initComponents();
         loadHotels();
 
         addComponents();
@@ -29,7 +32,7 @@ public class AddOccupancyWindow extends JFrame {
 
 
     }
-    private void addComponents() {
+    private void addComponents() { //Columns
         add(new JLabel("Hotel:"));
         add(hotelSelect);
         add(new JLabel("Year:"));
@@ -41,18 +44,19 @@ public class AddOccupancyWindow extends JFrame {
         add(new JLabel("Bed Occupancy %:"));
         add(bedOcc);
 
+        // save button -> saveOccupancy
         JButton saveButton = new JButton("Save");
         add(saveButton);
 
         saveButton.addActionListener(e -> saveOccupancy());
     }
 
-    private void initComponets() {
+    private void initComponents() { //each label gets one column
 
         setLayout(new GridLayout(7, 2, 10, 10));
     }
 
-    private void loadHotels() {
+    private void loadHotels() { //checks if a line exists before reading -> should avoid empty lines
         try {
             Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
             if (sc.hasNextLine()) {
@@ -61,7 +65,7 @@ public class AddOccupancyWindow extends JFrame {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (data.length >= 3) {
+                if (data.length >= 3) { //3 columns
                     String id   = data[0].trim();
                     String name = data[2].replace("\"", "").trim();
                     hotelSelect.addItem(id + " - " + name);
@@ -73,6 +77,7 @@ public class AddOccupancyWindow extends JFrame {
         }
     }
 
+    //Framing
     private void defineFrame() {
         setTitle("Add Occupancy");
         setSize(400, 350);
@@ -81,7 +86,7 @@ public class AddOccupancyWindow extends JFrame {
     }
 
     private void saveOccupancy() {
-        // required fields!
+        // if required fields = empty
         if (year.getText().isEmpty() ||
                 roomOcc.getText().isEmpty() ||
                 bedOcc.getText().isEmpty()) {
@@ -89,7 +94,7 @@ public class AddOccupancyWindow extends JFrame {
             return;
         }
 
-        // Only Positve Numbers
+        // Only positive numbers allowed
         double roomOccVal, bedOccVal;
         int yearVal;
         try {
@@ -104,6 +109,7 @@ public class AddOccupancyWindow extends JFrame {
             JOptionPane.showMessageDialog(this, "Year and Occupancy must be valid numbers!");
             return;
         }
+        //
         String selected  = (String) hotelSelect.getSelectedItem();
         String hotelId   = selected.split(" - ")[0].trim();
         String hotelName = selected.split(" - ")[1].trim();
@@ -123,7 +129,7 @@ public class AddOccupancyWindow extends JFrame {
                 roomOcc.getText(),
                 bedOcc.getText()
         );
-
+        //header needed?
         try {
             File file = new File(path);
 
@@ -148,13 +154,14 @@ public class AddOccupancyWindow extends JFrame {
             JOptionPane.showMessageDialog(this, "Could not save: " + e.getMessage());
         }
     }
-
+    //searches category
     private String getCategoryForHotel(String hotelId) {
         try {
             Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
             if (sc.hasNextLine()) {
                 sc.nextLine(); // skip header
             }
+            //read each hotel line
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
