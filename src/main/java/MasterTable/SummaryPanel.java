@@ -23,7 +23,7 @@ public class SummaryPanel extends JPanel {
         definePanel();
         initComponents();
         addComponents();
-        fillTable();
+        fillTable();        //füllen von tabellen
     }
 
     private void definePanel() {
@@ -50,6 +50,7 @@ public class SummaryPanel extends JPanel {
 
     private void fillTable() {
         // Initialize maps using enum
+        //zaehlen der Kategorien
         for (Category cat : Category.values()) {
             if (cat != Category.ALL) {
                 countMap.put(cat.toString(), 0);
