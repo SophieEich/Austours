@@ -32,23 +32,7 @@ public class AddOccupancyWindow extends JFrame {
 
 
     }
-    private void addComponents() { //Columns
-        add(new JLabel("Hoel:"));
-        add(hotelSelect);
-        add(new JLabel("Year:"));
-        add(year);
-        add(new JLabel("Month:"));
-        add(month);
-        add(new JLabel("Room Occupancy %:"));
-        add(roomOcc);
-        add(new JLabel("Bed Occupancy %:"));
-        add(bedOcc);
 
-        // save button -> saveOccupancy
-        JButton saveButton = new JButton("Save");
-        add(saveButton);
-
-        saveButton.addActionListener(e -> saveOccupancy());
     }
 
     private void initComponents() { //each label gets one column
