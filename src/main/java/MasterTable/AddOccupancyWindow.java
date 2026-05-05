@@ -66,7 +66,7 @@ public class AddOccupancyWindow extends JFrame {
                 String line = sc.nextLine();
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 if (data.length >= 3) { //3 columns
-                    String id   = data[0].trim();
+                    String id   = data[0].trim(); //1 = Kategorie
                     String name = data[2].replace("\"", "").trim();
                     hotelSelect.addItem(id + " - " + name);
                 }
