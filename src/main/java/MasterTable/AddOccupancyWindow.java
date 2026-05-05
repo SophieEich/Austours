@@ -33,7 +33,7 @@ public class AddOccupancyWindow extends JFrame {
 
     }
     private void addComponents() { //Columns
-        add(new JLabel("Hotel:"));
+        add(new JLabel("Hoel:"));
         add(hotelSelect);
         add(new JLabel("Year:"));
         add(year);
