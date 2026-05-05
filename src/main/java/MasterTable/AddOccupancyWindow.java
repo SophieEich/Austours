@@ -56,7 +56,26 @@ public class AddOccupancyWindow extends JFrame {
         setLayout(new GridLayout(7, 2, 10, 10));
     }
 
-
+    private void loadHotels() { //checks if a line exists before reading -> should avoid empty lines
+        try {
+            Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
+            if (sc.hasNextLine()) {
+                sc.nextLine(); // skip header
+            }
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                if (data.length >= 3) { //3 columns
+                    String id   = data[0].trim();
+                    String name = data[2].replace("\"", "").trim();
+                    hotelSelect.addItem(id + " - " + name);
+                }
+            }
+            sc.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not load hotels: " + e.getMessage());
+        }
+    }
 
     //Framing
     private void defineFrame() {
