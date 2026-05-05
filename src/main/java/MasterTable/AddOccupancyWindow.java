@@ -39,9 +39,9 @@ public class AddOccupancyWindow extends JFrame {
         add(year);
         add(new JLabel("Month:"));
         add(month);
-        add(new JLabel("Room Occupancy %:"));
+        add(new JLabel("Room Occupancy:"));
         add(roomOcc);
-        add(new JLabel("Bed Occupancy %:"));
+        add(new JLabel("Bed Occupancy:"));
         add(bedOcc);
 
         // save button -> saveOccupancy
@@ -95,18 +95,19 @@ public class AddOccupancyWindow extends JFrame {
         }
 
         // Only positive numbers allowed
-        double roomOccVal, bedOccVal;
+        int  roomOccVal;
+        int  bedOccVal;
         int yearVal;
         try {
-            roomOccVal = Double.parseDouble(roomOcc.getText().trim());
-            bedOccVal  = Double.parseDouble(bedOcc.getText().trim());
+            roomOccVal = Integer.parseInt(roomOcc.getText().trim());
+            bedOccVal  = Integer.parseInt(bedOcc.getText().trim());
             yearVal    = Integer.parseInt(year.getText().trim());
             if (roomOccVal <= 0 || bedOccVal <= 0 || yearVal <= 0) {
                 JOptionPane.showMessageDialog(this, "Values must be positive numbers!");
                 return;
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Year and Occupancy must be valid numbers!");
+            JOptionPane.showMessageDialog(this, "Year and Occupancy must be valid numbers! No decimal numbers");
             return;
         }
         //
