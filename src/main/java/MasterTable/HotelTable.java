@@ -47,16 +47,17 @@ public class HotelTable extends JPanel {
         try {
             Scanner sc = new Scanner(new File(path));
             if (sc.hasNextLine()) {
-                sc.nextLine();
+                sc.nextLine();//skips header
             }
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
+            while (sc.hasNextLine()) {// as long as their are next lines it continues
+                String line = sc.nextLine();// tekes the next line
 
 
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // before only ",", but this caused issued with names that included an ,
                 // only "," outside of "..." are counted with this line
+                // splits the line at y
 
-                model.addRow(data);
+                model.addRow(data); //adds it at the column
             }
 
             sc.close();
@@ -113,19 +114,21 @@ public class HotelTable extends JPanel {
 
 
     // US- 4
-    public void saveAlltoFile() {
+    //Needs to be updated for the SQL Server, then with selects and creates, updates, inserts
+    public void saveAlltoFile() {// the entire file gets always saved anew
         try {
             ArrayList<String> lines = new ArrayList<>();
             lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date");
 
-            for (int i = 0; i < model.getRowCount(); i++) {
+            for (int i = 0; i < model.getRowCount(); i++) { // searching through the table
                 String[] row = new String[model.getColumnCount()];
-                boolean isEmpty = true;
+                boolean isEmpty = true; // isEmpty is our check, if the line is emptyit should not get saved
 
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     Object val = model.getValueAt(i, j);
                     if (val == null) {
-                        row[j] = "";
+                        row[j] = ""; // wiithout [i] because we are alwyas in the right row
+                        // if we dont find something it stays empty
                     } else {
                         row[j] = val.toString();
                     }
@@ -145,6 +148,7 @@ public class HotelTable extends JPanel {
                     java.nio.charset.StandardCharsets.UTF_8
             );
             System.out.println("Saved in: " + path);
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Could not Save: " + e.getMessage());
