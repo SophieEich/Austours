@@ -35,6 +35,7 @@ public class SummaryPanel extends JPanel {
         table = new JTable(model);
         table.setEnabled(false); // read only
 
+        //kategorien der Spalten
         model.addColumn("CATEGORY");
         model.addColumn("NUMBER OF HOTELS");
         model.addColumn("AVG ROOMS");
