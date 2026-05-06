@@ -8,12 +8,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.nio.file.Files;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import java.util.List;
 
 public class HotelTable extends JPanel {
     //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
     String path = "src/main/resources/hotels.txt";
+    private Hotel hotel;
 
 
 
@@ -44,26 +48,26 @@ public class HotelTable extends JPanel {
 
 
 
-        try {
-            Scanner sc = new Scanner(new File(path));
-            if (sc.hasNextLine()) {
-                sc.nextLine();//skips header
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
+            for (Hotel h : hotels) {
+                model.addRow(new Object[]{
+                        h.getId(),
+                        h.getCategory(),
+                        h.getName(),
+                        h.getOwner(),
+                        h.getContact(),
+                        h.getAddress(),
+                        h.getCity(),
+                        h.getCityCode(),
+                        h.getPhone(),
+                        h.getNoRooms(),
+                        h.getNoBeds(),
+                        h.getLastReported()
+                });
             }
-            while (sc.hasNextLine()) {// as long as their are next lines it continues
-                String line = sc.nextLine();// tekes the next line
-
-
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // before only ",", but this caused issued with names that included an ,
-                // only "," outside of "..." are counted with this line
-                // splits the line at y
-
-                model.addRow(data); //adds it at the column
-            }
-
-            sc.close();
-
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "File not found!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not load hotels: " + e.getMessage());
         }
     }
 

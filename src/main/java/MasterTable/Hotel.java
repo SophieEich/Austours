@@ -6,14 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class Hotel {
-    @Entity
-//@Table(name = "person")
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public class Person {
+
+@Entity
+@Table(name = "Hotels")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+    public class Hotel {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Hotel {
         private Long id;
 
         @Column(name = "Category", nullable = false, length = 100)
-        private Category category;
+        private String category;
 
         @Column(name = "Name", nullable = false, length = 100)
         private String name;
@@ -32,8 +32,8 @@ public class Hotel {
         @Column(name = "contact", length = 150)
         private String contact;
 
-        @Column(name = "Adress", nullable = false, length = 100)
-        private String adress;
+        @Column(name = "Address", nullable = false, length = 100)
+        private String address;
 
         @Column(name = "city", length = 150)
         private String city;
@@ -66,4 +66,4 @@ public class Hotel {
 
     }
 
-}
+
