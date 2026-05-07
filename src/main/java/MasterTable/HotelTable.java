@@ -1,23 +1,22 @@
 package MasterTable;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.nio.file.Files;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import java.util.List;
+import java.util.Scanner;
 
 public class HotelTable extends JPanel {
     //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
-    String path = "src/main/resources/hotels.txt";
     private Hotel hotel;
+    String path = "src/main/resources/hotels.txt";
+
 
 
 
@@ -28,25 +27,27 @@ public class HotelTable extends JPanel {
         defineFrame();
         innitComponents();
         addComponents();
+        importIfEmpty();
         fillTable();
 
     }
 
     private void fillTable() {
-        model.addColumn("ID");
-        model.addColumn("CATEGORY");
-        model.addColumn("NAME");
-        model.addColumn("OWNER");
-        model.addColumn("CONTACT");
-        model.addColumn("ADDRESS");
-        model.addColumn("CITY");
-        model.addColumn("CITYCODE");
-        model.addColumn("PHONE");
-        model.addColumn("NUMBER ROOMS");
-        model.addColumn("NUMBER BEDS");
-        model.addColumn("LAST REPORTED DATA"); // Kommt erst mit dem EDIT US-5
-
-
+        if (model.getColumnCount() == 0) {
+            model.addColumn("ID");
+            model.addColumn("CATEGORY");
+            model.addColumn("NAME");
+            model.addColumn("OWNER");
+            model.addColumn("CONTACT");
+            model.addColumn("ADDRESS");
+            model.addColumn("CITY");
+            model.addColumn("CITYCODE");
+            model.addColumn("PHONE");
+            model.addColumn("NUMBER ROOMS");
+            model.addColumn("NUMBER BEDS");
+            model.addColumn("LAST REPORTED DATA"); // Kommt erst mit dem EDIT US-5
+        }
+        model.setRowCount(0); // Rows will be eptied, but columns stay the same
 
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {
             List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
@@ -72,8 +73,8 @@ public class HotelTable extends JPanel {
     }
 
     private void addComponents() {
-       JScrollPane scrollPane = new JScrollPane(table);
-       add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
 
@@ -83,25 +84,39 @@ public class HotelTable extends JPanel {
         buttonPanel.add(editButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        addButton.addActionListener(e -> new AddEditHotelWindow(model, this, -1)); //1 because no ROw is selected
-
+        addButton.addActionListener(e -> {
+            JFrame father = (JFrame) SwingUtilities.getWindowAncestor(this);
+            new AddEditHotelWindow(father, null, this); //null = ADD Modus
+        });
         //US-5
         editButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Please select a hotel to edit!");
+                JOptionPane.showMessageDialog(null, "Please select a hotel to edit!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            new AddEditHotelWindow(model, this, selectedRow);
+            int modelRow = table.convertRowIndexToModel(selectedRow);
+            int columnCount = model.getColumnCount();
+            Object[] rowData = new Object[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                rowData[i] = model.getValueAt(modelRow, i);
+            }
+            JFrame father = (JFrame) SwingUtilities.getWindowAncestor(HotelTable.this);
+            new AddEditHotelWindow(father, rowData, HotelTable.this);
         });
+
+        //US-5
+
 
     }
 
     private void innitComponents() {
-        JLabel headerLabel = new JLabel("Masterdata Hotel:");
+        JLabel headerLabel = new JLabel("Hotels:");
+        add(headerLabel, BorderLayout.NORTH);
         model = new DefaultTableModel();
         table = new JTable();
         table.setModel(model);
+        table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
 
 
 
@@ -119,44 +134,138 @@ public class HotelTable extends JPanel {
 
     // US- 4
     //Needs to be updated for the SQL Server, then with selects and creates, updates, inserts
-    public void saveAlltoFile() {// the entire file gets always saved anew
+    public Hotel addHotel(Hotel h) {
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = s.beginTransaction();
+            s.persist(h); // nach persist() hat h.getId() den Wert von der DB
+            tx.commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not save: " + e.getMessage());
+        }
+        return h; // ID ist jetzt gesetzt
+    }
+
+    public void updateHotel(Hotel h) {
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = s.beginTransaction();
+            s.merge(h);
+            tx.commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not update: " + e.getMessage());
+        }
+    }
+
+    public void refreshTable() {
+        fillTable();
+    }
+
+    private void importFromTxt() {
         try {
-            ArrayList<String> lines = new ArrayList<>();
-            lines.add("id,category,name,owner,contact,address,city,cityCode,phone,noRooms,noBeds,date");
-
-            for (int i = 0; i < model.getRowCount(); i++) { // searching through the table
-                String[] row = new String[model.getColumnCount()];
-                boolean isEmpty = true; // isEmpty is our check, if the line is emptyit should not get saved
-
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    Object val = model.getValueAt(i, j);
-                    if (val == null) {
-                        row[j] = ""; // wiithout [i] because we are alwyas in the right row
-                        // if we dont find something it stays empty
-                    } else {
-                        row[j] = val.toString();
-                    }
-                    if (!row[j].isEmpty()) {
-                        isEmpty = false;
-                    }
-                }
-
-                if (!isEmpty) {
-                    lines.add(String.join(",", row));
-                }
+            Scanner sc = new Scanner(new File(path));
+            if (sc.hasNextLine()) {
+                sc.nextLine(); // skip header
             }
 
-            Files.write(
-                    java.nio.file.Paths.get(path),
-                    lines,
-                    java.nio.charset.StandardCharsets.UTF_8
-            );
-            System.out.println("Saved in: " + path);
+            try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+                Transaction tx = s.beginTransaction();
+
+                while (sc.hasNextLine()) {
+                    String line = sc.nextLine().trim();
+                    if (line.isEmpty()) {
+                        continue;
+                    }
+
+                    String[] d = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                    if (d.length < 11) {
+                        continue;
+                    }
+
+                    try {
+                        Hotel h = Hotel.builder()
+                                .category(d[1].replace("\"", "").trim())
+                                .name(d[2].replace("\"", "").trim())
+                                .owner(d[3].replace("\"", "").trim())
+                                .contact(d[4].replace("\"", "").trim())
+                                .address(d[5].replace("\"", "").trim())
+                                .city(d[6].replace("\"", "").trim())
+                                .cityCode(d[7].replace("\"", "").trim())
+                                .phone(d[8].replace("\"", "").trim())
+                                .noRooms(Integer.parseInt(d[9].trim()))
+                                .noBeds(Integer.parseInt(d[10].trim()))
+                                .lastReported(d.length > 11 ? d[11].trim() : "")
+                                .build();
+
+                        s.persist(h);
+                    } catch (Exception e) {
+                        System.out.println("Skipped line: " + line);
+                    }
+                }
+
+                tx.commit();
+            }
+            sc.close();
+            System.out.println("Import finished!");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Could not Save: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Import failed: " + e.getMessage());
+        }
+    }
+
+
+    private void importIfEmpty() {
+        boolean isEmpty = false;
+
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Long count = s.createQuery("SELECT COUNT(h.id) FROM Hotel h", Long.class)
+                    .uniqueResult();
+            isEmpty = (count == 0);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Import-Check faileds: " + e.getMessage());
+            return;
         }
 
+        if (isEmpty) {
+            System.out.println("Table empty → import from TXT...");
+            importFromTxt(); // ← jetzt außerhalb der Session
+        } else {
+            System.out.println("Data is Database → No Import needed");
+        }
     }
+
+
+
+
+    //add new line
+    public void addRow(Object id, String category, String name, String owner,
+                       String contact, String address, String city, String citycode,
+                       String phone, int rooms, int beds, String today) {
+        model.addRow(new Object[]{
+                id, category, name, owner, contact,
+                address, city, citycode, phone, rooms, beds, today
+        });
+    }
+
+    //update curent line (EDIT)
+    public void updateRow(Object id, String category, String name, String owner,
+                          String contact, String address, String city, String citycode,
+                          String phone, int rooms, int beds, String today) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 0).toString().equals(id.toString())) {
+                model.setValueAt(category,  i, 1);
+                model.setValueAt(name,      i, 2);
+                model.setValueAt(owner,     i, 3);
+                model.setValueAt(contact,   i, 4);
+                model.setValueAt(address,   i, 5);
+                model.setValueAt(city,      i, 6);
+                model.setValueAt(citycode,  i, 7);
+                model.setValueAt(phone,     i, 8);
+                model.setValueAt(rooms,     i, 9);
+                model.setValueAt(beds,      i, 10);
+                model.setValueAt(today,     i, 11);
+                break;
+            }
+        }
+    }
+
+
 }

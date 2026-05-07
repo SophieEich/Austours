@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "Hotels")
+@Table(name = "hotels")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,34 +35,23 @@ import lombok.NoArgsConstructor;
         @Column(name = "Address", nullable = false, length = 100)
         private String address;
 
-        @Column(name = "city", length = 150)
+        @Column(name = "City", length = 150)
         private String city;
 
-        @Column(name = "citycode")
-        private Integer citycode;
+        @Column(name = "Citycode", length = 150)
+        private String cityCode;
 
-        @Column(name = "Phone", unique = true,  length = 150)
+        @Column(name = "Phone",  length = 150)
         private String phone;
 
-        @Column(name = "Nr of Rooms",  length = 150)
-        private Integer nrRooms;
+        @Column(name = "[Nr of Rooms]")
+        private Integer noRooms;
 
-        @Column(name = "Nr of Beds",  length = 150)
-        private Integer nrBeds;
+        @Column(name = "[Nr of Beds]")
+        private Integer noBeds;
 
-        @Column(name = "Last reported Data",  length = 150)
-        private Integer lastReportedData;
-
-
-
-
-
-
-
-
-
-
-
+        @Column(name = "[Last reported Data]")
+        private String lastReported;
 
     }
 

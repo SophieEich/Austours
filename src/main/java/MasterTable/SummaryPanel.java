@@ -47,6 +47,8 @@ public class SummaryPanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 16));
         add(title, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
+
+
     }
 
     private void fillTable() {

@@ -21,13 +21,17 @@
 
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">create</property> <!-- Instead of create we schould use update. But for the first time create is enough-->
-
+        <property name="hibernate.hbm2ddl.auto">update</property> <!-- Instead of create we schould use update. But for the first time create is enough-->
+        <!-- CREATE if you want the entire database to loaded from new, UPDATE if you want to change data only
+        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        also in HotelTable Comment out the methode importFromTxt() LINE 31
+        -->
         <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Entity Mapping -->
         <!-- <mapping class="com.example.model.Person"/> -->
-        <mapping class="unit07.db.crud.intro.Person"/>
+        <mapping class="MasterTable.Hotel"/> <!-- Verbindung zu Hotel Klasse damit Hibernate weiß wie das geht-->
 
     </session-factory>
 </hibernate-configuration>
