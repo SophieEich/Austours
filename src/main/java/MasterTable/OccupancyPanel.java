@@ -3,14 +3,22 @@ package MasterTable;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.io.File;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
+
 public class OccupancyPanel extends JPanel {
 
     JTable table;
     DefaultTableModel model;
-    String path = "src/main/resources/occupancy.txt";
+
 
 
     // ── US-02 / US-10: Filter controls ────────────────────────────────────────────────
@@ -18,9 +26,9 @@ public class OccupancyPanel extends JPanel {
 
     JComboBox<String>   hotelFilter    = new JComboBox<>();
     JComboBox<String>   fromMonth      = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
-    JTextField          fromYear       = new JTextField("2024", 5);
+    JComboBox<String>   fromYear       = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     JComboBox<String>   toMonth        = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
-    JTextField          toYear         = new JTextField("2026", 5);
+    JComboBox<String>   toYear       = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -36,55 +44,58 @@ public class OccupancyPanel extends JPanel {
     // US-02: Reads occupancy data from file and applies all active filter criteria
     // Displays room and bed occupancy per month in the summary table
     public void fillTable() {
+        if (model == null) return;
         model.setRowCount(0);
 
-        // US-02: Resolve selected hotel filter to a hotel ID
+        // 1. Filter-Werte aus der UI holen
         String selectedHotel = (String) hotelFilter.getSelectedItem();
-        String filterHotelId = null;
+        Long filterHotelId = null;
         if (selectedHotel != null && !selectedHotel.equals("ALL")) {
-            filterHotelId = selectedHotel.split(" - ")[0].trim();
+            filterHotelId = Long.parseLong(selectedHotel.split(" - ")[0].trim());
         }
-        // US-10
-        int fYear  = Integer.parseInt(fromYear.getText().trim());
-        int fMonth = Integer.parseInt((String) fromMonth.getSelectedItem());
-        int tYear  = Integer.parseInt(toYear.getText().trim());
-        int tMonth = Integer.parseInt((String) toMonth.getSelectedItem());
 
-        try {
-            Scanner sc = new Scanner(new File(path));
-            if (sc.hasNextLine()) sc.nextLine();
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine().trim();
-                if (line.isEmpty()) continue;
-                String[] d = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (d.length < 7) continue;
 
-                String hotelId   = d[0].trim();
-                String hotelName = d[1].trim();
-                String hotelCategory = d[2].trim();
-                int year         = Integer.parseInt(d[3].trim());
-                int month        = Integer.parseInt(d[4].trim());
-                String roomOcc   = d[5].trim();
-                String bedOcc    = d[6].trim();
+        Category selectedCategory = (Category) categoryFilter.getSelectedItem();
 
-                //Hotel Filter
-                if (filterHotelId != null && !hotelId.equals(filterHotelId)) continue;
+        // 2. Datenbank-Abfrage
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            // JOIN FETCH lädt die Hotel-Daten sofort mit (verhindert LazyInitializationException)
+            List<Occupancy> list = s.createQuery("SELECT o FROM Occupancy o JOIN FETCH o.hotel", Occupancy.class).list();
 
-                //Category Filter
-                Category selectedCategory = (Category) categoryFilter.getSelectedItem();
-                if (selectedCategory != Category.ALL && !hotelCategory.equals(selectedCategory.toString())) continue;
+            for (Occupancy occ : list) {
+                Hotel h = occ.getHotel();
 
-                //Date Filter
-                int rowDate    = year * 100 + month;
-                int filterFrom = fYear * 100 + fMonth;
-                int filterTo   = tYear * 100 + tMonth;
+                // --- FILTER PRÜFUNG ---
+                if (filterHotelId != null && !h.getId().equals(filterHotelId)) continue;
+                if (selectedCategory != null && selectedCategory != Category.ALL) {
+                    if (!h.getCategory().equals(selectedCategory.toString())) continue;
+                }
+
+                // Datum-Filter
+                int rowDate    = occ.getYear() * 100 + occ.getMonth();
+                int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
+                int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
+
+                int fromMonthInt = Integer.parseInt((String) fromMonth.getSelectedItem());
+                int toMonthInt = Integer.parseInt((String) toMonth.getSelectedItem());
+
+                int filterFrom = fromYearInt * 100 + fromMonthInt;
+                int filterTo   = toYearInt * 100 + toMonthInt;
+
                 if (rowDate < filterFrom || rowDate > filterTo) continue;
 
-                model.addRow(new Object[]{hotelId, hotelName, year, month, roomOcc, bedOcc});
+                // 3. In Tabelle schreiben
+                model.addRow(new Object[]{
+                        h.getId(),
+                        h.getName(),
+                        occ.getYear(),
+                        occ.getMonth(),
+                        occ.getRoomOccupancy(),
+                        occ.getBedOccupancy()
+                });
             }
-            sc.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load occupancy data: " + e.getMessage());
+            e.printStackTrace(); // Zeigt SQL-Fehler in der Konsole
         }
     }
 
@@ -92,20 +103,15 @@ public class OccupancyPanel extends JPanel {
     // US-10
     // US-02: Populates the hotel dropdown from hotels.txt for the hotel filter
     private void loadHotel() {
+        hotelFilter.removeAllItems();
         hotelFilter.addItem("ALL");
-        try {
-            Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
-            if (sc.hasNextLine()) sc.nextLine();
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (data.length >= 3) {
-                    hotelFilter.addItem(data[0] + " - " + data[2]);
-                }
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
+            for (Hotel h : hotels) {
+                hotelFilter.addItem(h.getId() + " - " + h.getName());
             }
-            sc.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load hotels!");
+            System.out.println("Could not load filter Hotels.");
         }
     }
 
@@ -142,7 +148,22 @@ public class OccupancyPanel extends JPanel {
         JButton addButton = new JButton("ADD OCCUPANCY");
         addButton.addActionListener(e -> new AddOccupancyWindow(this));
         buttonPanel.add(addButton);
+
+        JButton resetSortButton = new JButton("RESET SORT");
+        resetSortButton.addActionListener(e -> TableUtils.resetSort(table));
+        buttonPanel.add(resetSortButton);
         add(buttonPanel, BorderLayout.SOUTH);
+
+        JTextField searchField = new JTextField(20);
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent evt) {
+                TableUtils.filterTable(table, searchField.getText(), 1);
+            }
+        });
+        JLabel searchLabel = new JLabel("Search Hotelname:");
+        row2.add(searchLabel);
+        row2.add(searchField);
     }
 
 
@@ -156,6 +177,9 @@ public class OccupancyPanel extends JPanel {
         model.addColumn("MONTH");
         model.addColumn("ROOM OCCUPANCY");
         model.addColumn("BED OCCUPANCY");
+
+        table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
+        TableUtils.enableSorting(table);
     }
 
     private void definePanel() {

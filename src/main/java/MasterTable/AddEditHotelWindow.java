@@ -97,6 +97,9 @@ public class AddEditHotelWindow extends JDialog {
         add(new JLabel(""));
         add(saveButton);
 
+        //this line makes the Save Button react to enter -> if you press enter it will save
+        this.getRootPane().setDefaultButton(saveButton);
+
         saveButton.addActionListener(e -> onSave());
     }
 

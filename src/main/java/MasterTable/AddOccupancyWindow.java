@@ -1,31 +1,39 @@
 package MasterTable;
 
+import org.hibernate.Session;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-public class AddOccupancyWindow extends JFrame {
+public class AddOccupancyWindow extends JDialog {
 
     private OccupancyPanel parent;
 
     // US - 6 Enter transactional data (room/bed occupancy per month)
 
-    JComboBox<String> hotelSelect = new JComboBox<>(); // Empty dropdown for hotel selection
+    JComboBox<Hotel> hotelSelect = new JComboBox<>(); // Empty dropdown for hotel selection
     //Occupancy data
-    JTextField year      = new JTextField();
+    JComboBox<String> year  = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     JComboBox<String> month = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
     JTextField roomOcc   = new JTextField();
     JTextField bedOcc    = new JTextField();
-    String path = "src/main/resources/occupancy.txt"; //where the occupancy data gets saved
+
 
     //constructor
     public AddOccupancyWindow(OccupancyPanel parent) {
+        super((JFrame) SwingUtilities.getWindowAncestor(parent), "Add Occupancy", true);
         this.parent = parent;
+
         defineFrame();
         initComponents();
         loadHotels();
-
         addComponents();
 
         setVisible(true);
@@ -33,7 +41,11 @@ public class AddOccupancyWindow extends JFrame {
 
     }
     private void addComponents() { //Columns
-        add(new JLabel("Hotel:"));
+        JTextField hotelSearch = new JTextField();
+        add(new JLabel("Search Hotelname: "));
+        add(hotelSearch);
+
+        add(new JLabel("Selected Hotel:"));
         add(hotelSelect);
         add(new JLabel("Year:"));
         add(year);
@@ -43,10 +55,36 @@ public class AddOccupancyWindow extends JFrame {
         add(roomOcc);
         add(new JLabel("Bed Occupancy:"));
         add(bedOcc);
+        //Placeholder for Grid
+        add(new JLabel(""));
 
         // save button -> saveOccupancy
         JButton saveButton = new JButton("Save");
+        //this line makes the Save Button react to enter -> if you press enter it will save
+        this.getRootPane().setDefaultButton(saveButton);
         add(saveButton);
+
+        //Search Logic
+        hotelSearch.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent evt) {
+                String searchText = hotelSearch.getText().toLowerCase().trim();
+                if(searchText.isEmpty()){
+                    return;
+                }
+
+                for(int i = 0; i < hotelSelect.getItemCount(); i++) {
+                    Hotel h = hotelSelect.getItemAt(i);
+                    //Checks if typed text appears in Hotelname
+                    if(h.getName().toLowerCase().contains(searchText)) {
+                        hotelSelect.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+        });
+
+
 
         saveButton.addActionListener(e -> saveOccupancy());
     }
@@ -56,40 +94,30 @@ public class AddOccupancyWindow extends JFrame {
         setLayout(new GridLayout(7, 2, 10, 10));
     }
 
-    private void loadHotels() { //checks if a line exists before reading -> should avoid empty lines
-        try {
-            Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
-            if (sc.hasNextLine()) {
-                sc.nextLine(); // skip header
+    private void loadHotels() {
+        hotelSelect.removeAllItems(); // ensures that line is empty
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
+            for (Hotel h : hotels) {
+                // Wir speichern das Hotel-Objekt oder einen String
+                hotelSelect.addItem(h);
             }
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (data.length >= 3) { //3 columns
-                    String id   = data[0].trim(); //1 = Kategorie
-                    String name = data[2].replace("\"", "").trim();
-                    hotelSelect.addItem(id + " - " + name);
-                }
-            }
-            sc.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load hotels: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error loading hotels: " + e.getMessage());
         }
     }
 
-    //Framing
+
     private void defineFrame() {
         setTitle("Add Occupancy");
-        setSize(400, 350);
-        setLocationRelativeTo(null);
+        setSize(400, 450);
+        setLocationRelativeTo(getOwner());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     private void saveOccupancy() {
         // if required fields = empty
-        if (year.getText().isEmpty() ||
-                roomOcc.getText().isEmpty() ||
-                bedOcc.getText().isEmpty()) {
+        if (roomOcc.getText().isEmpty() || bedOcc.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all required fields!");
             return;
         }
@@ -97,12 +125,12 @@ public class AddOccupancyWindow extends JFrame {
         // Only positive numbers allowed
         int  roomOccVal;
         int  bedOccVal;
-        int yearVal;
+
         try {
             roomOccVal = Integer.parseInt(roomOcc.getText().trim());
             bedOccVal  = Integer.parseInt(bedOcc.getText().trim());
-            yearVal    = Integer.parseInt(year.getText().trim());
-            if (roomOccVal <= 0 || bedOccVal <= 0 || yearVal <= 0) {
+
+            if (roomOccVal <= 0 || bedOccVal <= 0) {
                 JOptionPane.showMessageDialog(this, "Values must be positive numbers!");
                 return;
             }
@@ -111,72 +139,46 @@ public class AddOccupancyWindow extends JFrame {
             return;
         }
         //
-        String selected  = (String) hotelSelect.getSelectedItem();
-        String hotelId   = selected.split(" - ")[0].trim();
-        String hotelName = selected.split(" - ")[1].trim();
+        Hotel hotel = (Hotel) hotelSelect.getSelectedItem();
+
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = s.beginTransaction();
 
 
+            //Hotel-Objekt gets loaded
 
-        // Looks up category from hotels.txt based on hotel ID
-        String category = getCategoryForHotel(hotelId); // ← auto fetched
-
-
-        String line = String.join(",",
-                hotelId,
-                hotelName,
-                category,
-                year.getText(),
-                (String) month.getSelectedItem(),
-                roomOcc.getText(),
-                bedOcc.getText()
-        );
-        //header needed?
-        try {
-            File file = new File(path);
-
-            boolean needsHeader;
-            if (!file.exists() || file.length() == 0) {
-                needsHeader = true;
-            } else {
-                needsHeader = false;
+            //LAST VALIDATION CHECK. CHECKS if no more beds or rooms are added than the hotel has in the HotelTable
+            if (roomOccVal > hotel.getNoRooms()) {
+                JOptionPane.showMessageDialog(this,
+                        "Room occupancy cannot exceed total rooms!");
+                return;
             }
 
-            FileWriter fw = new FileWriter(file, true);
-            if (needsHeader) {
-                fw.write("hotelId,hotelName,category,year,month,roomOccupancy,bedOccupancy\n");
-                //Without \n the first data line gets glued to the header line!
+            if (bedOccVal > hotel.getNoBeds()) {
+                JOptionPane.showMessageDialog(this,
+                        "Bed occupancy cannot exceed total beds!");
+                return;
             }
-            fw.write(line + "\n");
-            fw.close();
 
-            parent.fillTable();
+
+            Occupancy occ = Occupancy.builder()
+                    .hotel(hotel)
+                    .year(Integer.parseInt((String) year.getSelectedItem()))
+                    .month(Integer.parseInt((String) month.getSelectedItem()))
+                    .roomOccupancy(roomOccVal)
+                    .bedOccupancy(bedOccVal)
+                    .build();
+
+            s.persist(occ);
+            tx.commit();
+
+            parent.fillTable(); // refreshes table in panel
             dispose();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not save: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error saving to DB: " + e.getMessage());
         }
     }
-    //searches category
-    private String getCategoryForHotel(String hotelId) {
-        try {
-            Scanner sc = new Scanner(new File("src/main/resources/hotels.txt"));
-            if (sc.hasNextLine()) {
-                sc.nextLine(); // skip header
-            }
-            //read each hotel line
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (data.length >= 2) {
-                    String id = data[0].trim();
-                    if (id.equals(hotelId)) {
-                        return data[1].replace("\"", "").trim();
-                    }
-                }
-            }
-            sc.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load category: " + e.getMessage());
-        }
-        return "";
-    }
+
+
+
 }

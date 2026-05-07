@@ -20,6 +20,7 @@ public class HibernateUtil {
             return new Configuration()
                     .configure()               // load the config file
                     .addAnnotatedClass(Hotel.class)  // register entity, add more if needed
+                    .addAnnotatedClass(Occupancy.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("SessionFactory couldnt be created.");

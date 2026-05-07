@@ -1,18 +1,19 @@
 package MasterTable;
 
+import org.hibernate.Session;
+
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+
 
 public class SummaryPanel extends JPanel {
 
     JTable table;
     DefaultTableModel model;
-    String path = "src/main/resources/hotels.txt";
 
     Map<String, Integer> countMap = new HashMap<>();
     Map<String, Integer> roomsMap = new HashMap<>();
@@ -49,11 +50,24 @@ public class SummaryPanel extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
 
 
+        JPanel buttonPanel = new JPanel();
+
+        JButton refreshButton = new JButton("REFRESH");
+        refreshButton.addActionListener(e -> fillTable());
+
+        buttonPanel.add(refreshButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+
     }
 
     private void fillTable() {
         // Initialize maps using enum
-        //zaehlen der Kategorien
+
+        model.setRowCount(0);
+
+        //Maps get reset
         for (Category cat : Category.values()) {
             if (cat != Category.ALL) {
                 countMap.put(cat.toString(), 0);
@@ -62,40 +76,24 @@ public class SummaryPanel extends JPanel {
             }
         }
 
-        // Read hotels.txt
-        try {
-            Scanner sc = new Scanner(new File(path));
-            if (sc.hasNextLine()) sc.nextLine(); // skip header
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine().trim();
-                if (line.isEmpty()) continue;
+        // Connects with Database
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
 
-                String[] d = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (d.length < 11) continue;
+            for (Hotel h : hotels) {
+                String categoryStr = h.getCategory();
+                int rooms = (h.getNoRooms() != null) ? h.getNoRooms() : 0;
+                int beds = (h.getNoBeds() != null) ? h.getNoBeds() : 0;
 
-                String categoryStr = d[1].replace("\"", "").trim();
-                int rooms = 0;
-                int beds = 0;
-
-                try {
-                    rooms = Integer.parseInt(d[9].trim());
-                } catch (Exception ignored) {}
-                try {
-                    beds  = Integer.parseInt(d[10].trim());
-                } catch (Exception ignored) {}
-
-                // Match category string to enum
-                for (Category cat : Category.values()) {
-                    if (cat != Category.ALL && cat.toString().equals(categoryStr)) {
-                        countMap.put(cat.toString(), countMap.get(cat.toString()) + 1);
-                        roomsMap.put(cat.toString(), roomsMap.get(cat.toString()) + rooms);
-                        bedsMap.put(cat.toString(),  bedsMap.get(cat.toString())  + beds);
-                    }
+                // Logik zum Zählen/Summieren (wie vorher)
+                if (countMap.containsKey(categoryStr)) {
+                    countMap.put(categoryStr, countMap.get(categoryStr) + 1);
+                    roomsMap.put(categoryStr, roomsMap.get(categoryStr) + rooms);
+                    bedsMap.put(categoryStr, bedsMap.get(categoryStr) + beds);
                 }
             }
-            sc.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load data: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error loading Summary: " + e.getMessage());
         }
 
         // Add one row per category

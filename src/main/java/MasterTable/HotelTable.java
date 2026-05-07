@@ -6,6 +6,8 @@ import org.hibernate.Transaction;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
@@ -80,8 +82,13 @@ public class HotelTable extends JPanel {
 
         JButton addButton = new JButton("ADD HOTEL");
         JButton editButton = new JButton("EDIT HOTEL");
+        // For Sorting
+        JButton resetSortButton =  new JButton("RESET SORT");
+
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
+        // For Sorting
+        buttonPanel.add(resetSortButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         addButton.addActionListener(e -> {
@@ -105,32 +112,61 @@ public class HotelTable extends JPanel {
             new AddEditHotelWindow(father, rowData, HotelTable.this);
         });
 
-        //US-5
+        // For Reset-Sorting
+        resetSortButton.addActionListener(e -> {
+            TableUtils.resetSort(table);
+        });
 
 
     }
 
     private void innitComponents() {
+        // 1. Container for the top Space (Header + Search)
+        JPanel topContainer = new JPanel();
+        topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
+
+        // add Header
         JLabel headerLabel = new JLabel("Hotels:");
-        add(headerLabel, BorderLayout.NORTH);
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        topContainer.add(headerLabel);
+
+        //create Search-Panel
+        JTextField searchField = new JTextField(20);
+        searchField.setToolTipText("Search for Hotel Name...");
+
+        // Event-Listener: Searches every time a key is pressed
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent evt) {
+                // Column 2 is Hotelname in our Table
+                TableUtils.filterTable(table, searchField.getText(), 2);
+                // we give the Methode the table we are working in, the searchText, and in what column it should search
+            }
+        });
+
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel searchLabel = new JLabel("Search Hotelname:");
+
+        searchPanel.add(searchLabel);
+        searchPanel.add(searchField);
+        topContainer.add(searchPanel);
+        add(topContainer, BorderLayout.NORTH);
+
+        // 2. Initialize the table
         model = new DefaultTableModel();
         table = new JTable();
         table.setModel(model);
         table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
 
-
-
+        //activates Sorting for the HotelTable +
+        TableUtils.enableSorting(table);
 
     }
 
     private void defineFrame() {
-        //setSize(700, 700);
-        //setTitle("Master Data"); // name
-        //setLocationRelativeTo(null);
-        //setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
     }
-
 
     // US- 4
     //Needs to be updated for the SQL Server, then with selects and creates, updates, inserts

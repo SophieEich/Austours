@@ -53,6 +53,14 @@ import lombok.NoArgsConstructor;
         @Column(name = "[Last reported Data]")
         private String lastReported;
 
+
+
+    // to String for Occupancy Filter
+    @Override
+    public String toString() {
+        return id + " - " + name;
+    }
+
     }
 
 
