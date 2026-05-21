@@ -2,7 +2,7 @@ package MasterTable;
 
 public class main {
 
-    static void main() {
+    public static void main() {
 
         new MainWindow().setVisible(true);
 
