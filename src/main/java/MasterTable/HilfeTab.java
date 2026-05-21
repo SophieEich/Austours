@@ -54,5 +54,4 @@ public class HilfeTab extends JPanel {
 
         add(new JScrollPane(textArea), BorderLayout.CENTER);
     }
-    }
 }
