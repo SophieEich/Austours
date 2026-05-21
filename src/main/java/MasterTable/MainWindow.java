@@ -1,8 +1,13 @@
 package MasterTable;
 
 import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 
 public class MainWindow extends JFrame {
+
+    // US17: Höhe des Logo-Banners im Header (in Pixeln)
+    private static final int HEADER_LOGO_HEIGHT = 70;
 
     MainWindow() {
         defineFrame();
@@ -10,13 +15,38 @@ public class MainWindow extends JFrame {
     }
 
     private void addComponents() {
+        // US17: Header mit LATP / NOE-TO Logo
+        add(createHeader(), BorderLayout.NORTH);
+
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new SummaryPanel());
         tabs.addTab("Hotels", new HotelTable());
         tabs.addTab("Occupancy", new OccupancyPanel());
         tabs.addTab("Help", new HilfeTab());
 
-        add(tabs);
+        add(tabs, BorderLayout.CENTER);
+    }
+
+    // US17: baut das Header-Panel mit dem Logo
+    private JPanel createHeader() {
+        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        header.setBackground(Color.WHITE);
+
+        URL logoUrl = getClass().getResource("/images/2026-LATP_Logo.jpg");
+        if (logoUrl != null) {
+            ImageIcon raw = new ImageIcon(logoUrl);
+            // Höhe fix, Breite proportional -> sauberes Skalieren bei verschiedenen Fenstergrößen
+            Image scaled = raw.getImage()
+                    .getScaledInstance(-1, HEADER_LOGO_HEIGHT, Image.SCALE_SMOOTH);
+            JLabel logoLabel = new JLabel(new ImageIcon(scaled));
+            header.add(logoLabel);
+        } else {
+            // Fallback, falls die Datei nicht im Classpath liegt
+            JLabel fallback = new JLabel("Lower Austria Tourist Portal");
+            fallback.setFont(new Font("Arial", Font.BOLD, 18));
+            header.add(fallback);
+        }
+        return header;
     }
 
     private void defineFrame() {
@@ -24,18 +54,8 @@ public class MainWindow extends JFrame {
         setSize(930, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        // BorderLayout ist Default für JFrame.contentPane -> kein setLayout nötig
     }
 
-    //Help Tab
-    private void addComponent() {
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Summary", new SummaryPanel());
-        tabs.addTab("Hotels", new HotelTable());
-        tabs.addTab("Occupancy", new OccupancyPanel());
-        tabs.addTab("Help", new HilfeTab());
-
-        add(tabs);
-    }
 
 }
