@@ -3,48 +3,56 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+//US 18
 public class HilfeTab extends JPanel {
-
-    JList<String>  topicList;
-    JEditorPane    contentPane;
-
-    HilfeTab() {
-        definePanel();
-        initComponents();
-        addComponents();
-    }
-
-    private void definePanel() {
+    public HilfeTab() {
         setLayout(new BorderLayout());
+        setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        JTextArea textArea = new JTextArea(
+                "=== LOWER AUSTRIA TOURIST PORTAL - HELP ===\n" +
+                        "\n" +
+                        "--- FOR NOE-TO SENIOR USERS ---\n" +
+                        "\n" +
+                        "HOTEL MASTER DATA\n" +
+                        "- Add Hotel:    Click 'Add Hotel' to create a new entry.\n" +
+                        "- Edit Hotel:   Select a hotel from the list and click 'Edit'.\n" +
+                        "- Delete Hotel: Select a hotel, click 'Delete' and confirm.\n" +
+                        "\n" +
+                        "TRANSACTIONAL DATA\n" +
+                        "- Add Entry:  Select a hotel and enter room/bed occupancy for the month.\n" +
+                        "- Edit Entry: Select an existing entry and modify the values.\n" +
+                        "- Deadline:   Data must be submitted by the 5th business day of the following month.\n" +
+                        "\n" +
+                        "STATISTICS & REPORTS\n" +
+                        "- Filter by hotel, category, year and/or month.\n" +
+                        "- Export reports as PDF via the 'Export' button.\n" +
+                        "- View occupancy histograms by selecting a FROM/TO month and year.\n" +
+                        "\n" +
+                        "BACKUP & EXPORT\n" +
+                        "- Save Backup: Click 'Save' to create a timestamped backup of all data.\n" +
+                        "- Send Data:   Click 'Send' to email the master data to predefined recipients.\n" +
+                        "\n" +
+                        "USER MANAGEMENT\n" +
+                        "- Senior Users:  Full access to master and transactional data.\n" +
+                        "- Delete Rights: Only specially authorized users may delete master data.\n" +
+                        "\n" +
+                        "--- FOR HOTEL REPRESENTATIVES ---\n" +
+                        "\n" +
+                        "HOTEL MASTER DATA\n" +
+                        "- View your hotel(s) in the list.\n" +
+                        "- Edit your hotel's master data (name, address, rooms, beds).\n" +
+                        "\n" +
+                        "TRANSACTIONAL DATA\n" +
+                        "- Add monthly occupancy data for your hotel(s).\n" +
+                        "- View and check all previously entered transactional data.\n"
+        );
+
+        textArea.setEditable(false);
+        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        textArea.setCaretPosition(textArea.getDocument().getLength());
+
+        add(new JScrollPane(textArea), BorderLayout.CENTER);
     }
-
-    private void initComponents() {
-        topicList   = new JList<String>(TOPICS.keySet().toArray(new String[0]));
-        contentPane = new JEditorPane("text/html", "");
-        contentPane.setEditable(false);
-        contentPane.setBorder(new EmptyBorder(12, 16, 12, 16));
-    }
-
-    private void addComponents() {
-        topicList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        topicList.setFixedCellHeight(28);
-        topicList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) showTopic(topicList.getSelectedValue());
-        });
-
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                new JScrollPane(topicList), new JScrollPane(contentPane));
-        split.setDividerLocation(180);
-        split.setBorder(null);
-        add(split, BorderLayout.CENTER);
-
-        topicList.setSelectedIndex(0);
-    }
-
-    private void showTopic(String topic) {
-        String body = TOPICS.getOrDefault(topic,
-                "<h2>" + topic + "</h2><p><i>Content will be added after implementation.</i></p>");
-        contentPane.setText("<html><body style='font-family:Arial;font-size:13px'>" + body + "</body></html>");
-        contentPane.setCaretPosition(0);
     }
 }
