@@ -14,6 +14,7 @@ public class MainWindow extends JFrame {
         tabs.addTab("Summary", new SummaryPanel());
         tabs.addTab("Hotels", new HotelTable());
         tabs.addTab("Occupancy", new OccupancyPanel());
+        tabs.addTab("Help", new HilfeTab());
 
         add(tabs);
     }
