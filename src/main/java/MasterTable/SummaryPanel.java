@@ -82,8 +82,8 @@ public class SummaryPanel extends JPanel {
 
             for (Hotel h : hotels) {
                 String categoryStr = h.getCategory();
-                int rooms = (h.getNoRooms() != null) ? h.getNoRooms() : 0;
-                int beds = (h.getNoBeds() != null) ? h.getNoBeds() : 0;
+                int rooms = (h.getNoRoom() != null) ? h.getNoRoom() : 0;
+                int beds = (h.getNoBed() != null) ? h.getNoBed() : 0;
 
                 // Logik zum Zählen/Summieren (wie vorher)
                 if (countMap.containsKey(categoryStr)) {

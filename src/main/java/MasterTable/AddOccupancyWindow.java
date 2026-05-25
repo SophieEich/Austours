@@ -6,10 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
+
 import org.hibernate.Transaction;
 
 public class AddOccupancyWindow extends JDialog {
@@ -148,13 +146,13 @@ public class AddOccupancyWindow extends JDialog {
             //Hotel-Objekt gets loaded
 
             //LAST VALIDATION CHECK. CHECKS if no more beds or rooms are added than the hotel has in the HotelTable
-            if (roomOccVal > hotel.getNoRooms()) {
+            if (roomOccVal > hotel.getNoRoom()) {
                 JOptionPane.showMessageDialog(this,
                         "Room occupancy cannot exceed total rooms!");
                 return;
             }
 
-            if (bedOccVal > hotel.getNoBeds()) {
+            if (bedOccVal > hotel.getNoBed()) {
                 JOptionPane.showMessageDialog(this,
                         "Bed occupancy cannot exceed total beds!");
                 return;
