@@ -1,5 +1,7 @@
 package MasterTable;
 
+import MasterTable.Login.UsersHibernate;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -8,8 +10,10 @@ public class MainWindow extends JFrame {
 
     // US17: Höhe des Logo-Banners im Header (in Pixeln)
     private static final int HEADER_LOGO_HEIGHT = 70;
+    private final UsersHibernate currentUser;
 
-    MainWindow() {
+    MainWindow(UsersHibernate user) {
+        this.currentUser = user;
         defineFrame();
         addComponents();
     }
@@ -20,8 +24,8 @@ public class MainWindow extends JFrame {
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new SummaryPanel());
-        tabs.addTab("Hotels", new HotelTable());
-        tabs.addTab("Occupancy", new OccupancyPanel());
+        tabs.addTab("Hotels", new HotelTable(currentUser));
+        tabs.addTab("Occupancy", new OccupancyPanel(currentUser));
         tabs.addTab("Help", new HilfeTab());
 
         add(tabs, BorderLayout.CENTER);
@@ -29,7 +33,7 @@ public class MainWindow extends JFrame {
 
     // US17: baut das Header-Panel mit dem Logo
     private JPanel createHeader() {
-        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.WHITE);
 
         URL logoUrl = getClass().getResource("/images/2026-LATP_Logo.jpg");
@@ -39,13 +43,21 @@ public class MainWindow extends JFrame {
             Image scaled = raw.getImage()
                     .getScaledInstance(-1, HEADER_LOGO_HEIGHT, Image.SCALE_SMOOTH);
             JLabel logoLabel = new JLabel(new ImageIcon(scaled));
-            header.add(logoLabel);
+            header.add(logoLabel, BorderLayout.WEST);
         } else {
             // Fallback, falls die Datei nicht im Classpath liegt
             JLabel fallback = new JLabel("Lower Austria Tourist Portal");
             fallback.setFont(new Font("Arial", Font.BOLD, 18));
             header.add(fallback);
         }
+        //User top right
+        JLabel userLabel = new JLabel(
+                currentUser.getUsername() + " (" + currentUser.getRole()+ ") ",
+                SwingConstants.RIGHT
+        );
+        userLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        header.add(userLabel, BorderLayout.EAST);
+
         return header;
     }
 
@@ -56,6 +68,8 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         // BorderLayout ist Default für JFrame.contentPane -> kein setLayout nötig
     }
+
+
 
 
 }

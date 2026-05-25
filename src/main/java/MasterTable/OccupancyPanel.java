@@ -1,24 +1,24 @@
 package MasterTable;
 
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
-import java.io.File;
-import java.util.Scanner;
 import javax.swing.BoxLayout;
+import MasterTable.Login.UserRole;
+import MasterTable.Login.UsersHibernate;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+
 
 
 public class OccupancyPanel extends JPanel {
 
     JTable table;
     DefaultTableModel model;
-
+    private final UsersHibernate currentUser;
 
 
     // ── US-02 / US-10: Filter controls ────────────────────────────────────────────────
@@ -31,9 +31,12 @@ public class OccupancyPanel extends JPanel {
     JComboBox<String>   toYear       = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
 
+
+
     // ─────────────────────────────────────────────────────────────────────────
 
-    OccupancyPanel() {
+    OccupancyPanel(UsersHibernate user) {
+        this.currentUser = user;
         definePanel();
         initComponents();
         addComponents();
@@ -62,6 +65,15 @@ public class OccupancyPanel extends JPanel {
             // JOIN FETCH lädt die Hotel-Daten sofort mit (verhindert LazyInitializationException)
             List<Occupancy> list = s.createQuery("SELECT o FROM Occupancy o JOIN FETCH o.hotel", Occupancy.class).list();
 
+            int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
+            int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
+
+            int fromMonthInt = Integer.parseInt((String) fromMonth.getSelectedItem());
+            int toMonthInt = Integer.parseInt((String) toMonth.getSelectedItem());
+
+            int filterFrom = fromYearInt * 100 + fromMonthInt;
+            int filterTo   = toYearInt * 100 + toMonthInt;
+
             for (Occupancy occ : list) {
                 Hotel h = occ.getHotel();
 
@@ -72,16 +84,7 @@ public class OccupancyPanel extends JPanel {
                 }
 
                 // Datum-Filter
-                int rowDate    = occ.getYear() * 100 + occ.getMonth();
-                int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
-                int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
-
-                int fromMonthInt = Integer.parseInt((String) fromMonth.getSelectedItem());
-                int toMonthInt = Integer.parseInt((String) toMonth.getSelectedItem());
-
-                int filterFrom = fromYearInt * 100 + fromMonthInt;
-                int filterTo   = toYearInt * 100 + toMonthInt;
-
+                int rowDate = occ.getYear() * 100 + occ.getMonth();
                 if (rowDate < filterFrom || rowDate > filterTo) continue;
 
                 // 3. In Tabelle schreiben
@@ -144,10 +147,16 @@ public class OccupancyPanel extends JPanel {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
+
+
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("ADD OCCUPANCY");
         addButton.addActionListener(e -> new AddOccupancyWindow(this));
         buttonPanel.add(addButton);
+
+        // Only admins should add/edit/delete
+        boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
+        addButton.setEnabled(isAdmin);
 
         JButton resetSortButton = new JButton("RESET SORT");
         resetSortButton.addActionListener(e -> TableUtils.resetSort(table));

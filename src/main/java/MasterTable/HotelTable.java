@@ -1,5 +1,7 @@
 package MasterTable;
 
+import MasterTable.Login.UserRole;
+import MasterTable.Login.UsersHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -16,14 +18,12 @@ public class HotelTable extends JPanel {
     //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
-    private Hotel hotel;
     String path = "src/main/resources/hotels.txt";
 
+    private final UsersHibernate currentUser;
 
-
-
-
-    HotelTable() {
+    HotelTable(UsersHibernate user) {
+        this.currentUser = user;
 
         //USER STORY 3
         defineFrame();
@@ -31,10 +31,9 @@ public class HotelTable extends JPanel {
         addComponents();
         importIfEmpty();
         fillTable();
-
     }
 
-    private void fillTable() {
+    public void fillTable() {
         if (model.getColumnCount() == 0) {
             model.addColumn("ID");
             model.addColumn("CATEGORY");
@@ -82,6 +81,12 @@ public class HotelTable extends JPanel {
 
         JButton addButton = new JButton("ADD HOTEL");
         JButton editButton = new JButton("EDIT HOTEL");
+
+        //Only Admin can add/edit
+        boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
+        addButton.setEnabled(isAdmin);
+        editButton.setEnabled(isAdmin);
+
         // For Sorting
         JButton resetSortButton =  new JButton("RESET SORT");
 
@@ -190,11 +195,7 @@ public class HotelTable extends JPanel {
             JOptionPane.showMessageDialog(this, "Could not update: " + e.getMessage());
         }
     }
-
-    public void refreshTable() {
-        fillTable();
-    }
-
+    //IF Databse needs to be created again from scratch
     private void importFromTxt() {
         try {
             Scanner sc = new Scanner(new File(path));
@@ -247,7 +248,6 @@ public class HotelTable extends JPanel {
         }
     }
 
-
     private void importIfEmpty() {
         boolean isEmpty = false;
 
@@ -267,41 +267,5 @@ public class HotelTable extends JPanel {
             System.out.println("Data is Database → No Import needed");
         }
     }
-
-
-
-
-    //add new line
-    public void addRow(Object id, String category, String name, String owner,
-                       String contact, String address, String city, String citycode,
-                       String phone, int rooms, int beds, String today) {
-        model.addRow(new Object[]{
-                id, category, name, owner, contact,
-                address, city, citycode, phone, rooms, beds, today
-        });
-    }
-
-    //update curent line (EDIT)
-    public void updateRow(Object id, String category, String name, String owner,
-                          String contact, String address, String city, String citycode,
-                          String phone, int rooms, int beds, String today) {
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 0).toString().equals(id.toString())) {
-                model.setValueAt(category,  i, 1);
-                model.setValueAt(name,      i, 2);
-                model.setValueAt(owner,     i, 3);
-                model.setValueAt(contact,   i, 4);
-                model.setValueAt(address,   i, 5);
-                model.setValueAt(city,      i, 6);
-                model.setValueAt(citycode,  i, 7);
-                model.setValueAt(phone,     i, 8);
-                model.setValueAt(rooms,     i, 9);
-                model.setValueAt(beds,      i, 10);
-                model.setValueAt(today,     i, 11);
-                break;
-            }
-        }
-    }
-
 
 }
