@@ -154,6 +154,11 @@ public class OccupancyPanel extends JPanel {
         addButton.addActionListener(e -> new AddOccupancyWindow(this));
         buttonPanel.add(addButton);
 
+        // US-07: Export current filtered table as A4 PDF
+        JButton exportButton = new JButton("EXPORT PDF");
+        exportButton.addActionListener(e -> PdfExporter.export(this));
+        buttonPanel.add(exportButton);
+
         // Only admins should add/edit/delete
         boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
         addButton.setEnabled(isAdmin);
