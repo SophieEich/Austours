@@ -63,8 +63,8 @@ public class HotelTable extends JPanel {
                         h.getCity(),
                         h.getCityCode(),
                         h.getPhone(),
-                        h.getNoRoom(),
-                        h.getNoBed(),
+                        h.getNoRooms(),
+                        h.getNoBeds(),
                         h.getLastReported()
                 });
             }
@@ -227,8 +227,8 @@ public class HotelTable extends JPanel {
                                 .city(d[6].replace("\"", "").trim())
                                 .cityCode(d[7].replace("\"", "").trim())
                                 .phone(d[8].replace("\"", "").trim())
-                                .noRoom(Integer.parseInt(d[9].trim()))
-                                .noBed(Integer.parseInt(d[10].trim()))
+                                .noRooms(Integer.parseInt(d[9].trim()))
+                                .noBeds(Integer.parseInt(d[10].trim()))
                                 .lastReported(d.length > 11 ? d[11].trim() : "")
                                 .build();
 

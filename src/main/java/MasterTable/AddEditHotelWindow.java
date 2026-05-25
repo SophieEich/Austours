@@ -158,8 +158,8 @@ public class AddEditHotelWindow extends JDialog {
                 .city(city.getText())
                 .cityCode(citycode.getText())
                 .phone(phone.getText())
-                .noRoom(roomCount)
-                .noBed(bedCount)
+                .noRooms(roomCount)
+                .noBeds(bedCount)
                 .lastReported(today)
                 .build();
 

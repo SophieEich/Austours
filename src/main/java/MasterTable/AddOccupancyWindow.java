@@ -146,13 +146,13 @@ public class AddOccupancyWindow extends JDialog {
             //Hotel-Objekt gets loaded
 
             //LAST VALIDATION CHECK. CHECKS if no more beds or rooms are added than the hotel has in the HotelTable
-            if (roomOccVal > hotel.getNoRoom()) {
+            if (roomOccVal > hotel.getNoRooms()) {
                 JOptionPane.showMessageDialog(this,
                         "Room occupancy cannot exceed total rooms!");
                 return;
             }
 
-            if (bedOccVal > hotel.getNoBed()) {
+            if (bedOccVal > hotel.getNoBeds()) {
                 JOptionPane.showMessageDialog(this,
                         "Bed occupancy cannot exceed total beds!");
                 return;
