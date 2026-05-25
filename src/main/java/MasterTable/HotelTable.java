@@ -122,7 +122,29 @@ public class HotelTable extends JPanel {
             TableUtils.resetSort(table);
         });
 
-
+        // Delete Button US11
+        JButton deleteButton = new JButton("DELETE HOTEL");
+        deleteButton.setEnabled(isAdmin);
+        buttonPanel.add(deleteButton);
+        deleteButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a hotel to delete!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this hotel and all linked occupancy data?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                int modelRow = table.convertRowIndexToModel(selectedRow);
+                Long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
+                deleteHotel(id);
+                fillTable();
+            }
+        });
     }
 
     private void innitComponents() {
@@ -195,6 +217,20 @@ public class HotelTable extends JPanel {
             JOptionPane.showMessageDialog(this, "Could not update: " + e.getMessage());
         }
     }
+
+    public void deleteHotel(Long id) {
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = s.beginTransaction();
+            Hotel h = s.get(Hotel.class, id);
+            if (h != null) {
+                s.remove(h);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not delete: " + e.getMessage());
+        }
+    }
+
     //IF Databse needs to be created again from scratch
     private void importFromTxt() {
         try {
