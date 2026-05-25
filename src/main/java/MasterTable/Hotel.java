@@ -45,10 +45,10 @@ import lombok.NoArgsConstructor;
         private String phone;
 
         @Column(name = "[Nr of Rooms]")
-        private Integer noRooms;
+        private Integer noRoom;
 
         @Column(name = "[Nr of Beds]")
-        private Integer noBeds;
+        private Integer noBed;
 
         @Column(name = "[Last reported Data]")
         private String lastReported;
