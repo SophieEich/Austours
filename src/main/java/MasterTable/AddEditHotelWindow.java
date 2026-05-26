@@ -144,7 +144,16 @@ public class AddEditHotelWindow extends JDialog {
             return;
         }
 
-
+        try {
+            cityCodeCheck = Integer.parseInt(citycode.getText().trim());
+            if (cityCodeCheck <= 0) {
+                JOptionPane.showMessageDialog(this, "Citycode must be positive a number!");
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Citycode must be a number!");
+            return;
+        }
 
 
 
