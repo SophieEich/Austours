@@ -26,7 +26,7 @@ public class MainWindow extends JFrame {
         tabs.addTab("Summary", new SummaryPanel());
         tabs.addTab("Hotels", new HotelTable(currentUser));
         tabs.addTab("Occupancy", new OccupancyPanel(currentUser));
-        tabs.addTab("Help", new HilfeTab());
+        tabs.addTab("Help", new HelpTab());
 
         add(tabs, BorderLayout.CENTER);
     }

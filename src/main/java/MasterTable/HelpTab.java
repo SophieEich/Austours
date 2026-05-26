@@ -4,8 +4,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 //US 18
-public class HilfeTab extends JPanel {
-    public HilfeTab() {
+public class HelpTab extends JPanel {
+    public HelpTab() {
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -28,10 +28,6 @@ public class HilfeTab extends JPanel {
                         "- Filter by hotel, category, year and/or month.\n" +
                         "- Export reports as PDF via the 'Export' button.\n" +
                         "- View occupancy histograms by selecting a FROM/TO month and year.\n" +
-                        "\n" +
-                        "BACKUP & EXPORT\n" +
-                        "- Save Backup: Click 'Save' to create a timestamped backup of all data.\n" +
-                        "- Send Data:   Click 'Send' to email the master data to predefined recipients.\n" +
                         "\n" +
                         "USER MANAGEMENT\n" +
                         "- Senior Users:  Full access to master and transactional data.\n" +
