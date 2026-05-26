@@ -61,6 +61,9 @@ import lombok.NoArgsConstructor;
         return id + " - " + name;
     }
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private java.util.List<Occupancy> occupancies; // Wenn wir ein Hotel löschen in HotelTable, soll es überall gelöscht werden
+
     }
 
 

@@ -1,5 +1,7 @@
 package MasterTable;
 
+import MasterTable.Login.UserRole;
+import MasterTable.Login.UsersHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -16,14 +18,12 @@ public class HotelTable extends JPanel {
     //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
-    private Hotel hotel;
     String path = "src/main/resources/hotels.txt";
 
+    private final UsersHibernate currentUser;
 
-
-
-
-    HotelTable() {
+    HotelTable(UsersHibernate user) {
+        this.currentUser = user;
 
         //USER STORY 3
         defineFrame();
@@ -31,10 +31,9 @@ public class HotelTable extends JPanel {
         addComponents();
         importIfEmpty();
         fillTable();
-
     }
 
-    private void fillTable() {
+    public void fillTable() {
         if (model.getColumnCount() == 0) {
             model.addColumn("ID");
             model.addColumn("CATEGORY");
@@ -82,6 +81,12 @@ public class HotelTable extends JPanel {
 
         JButton addButton = new JButton("ADD HOTEL");
         JButton editButton = new JButton("EDIT HOTEL");
+
+        //Only Admin can add/edit
+        boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
+        addButton.setEnabled(isAdmin);
+        editButton.setEnabled(isAdmin);
+
         // For Sorting
         JButton resetSortButton =  new JButton("RESET SORT");
 
@@ -117,7 +122,29 @@ public class HotelTable extends JPanel {
             TableUtils.resetSort(table);
         });
 
-
+        // Delete Button US11
+        JButton deleteButton = new JButton("DELETE HOTEL");
+        deleteButton.setEnabled(isAdmin);
+        buttonPanel.add(deleteButton);
+        deleteButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a hotel to delete!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this hotel and all linked occupancy data?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                int modelRow = table.convertRowIndexToModel(selectedRow);
+                Long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
+                deleteHotel(id);
+                fillTable();
+            }
+        });
     }
 
     private void innitComponents() {
@@ -191,10 +218,20 @@ public class HotelTable extends JPanel {
         }
     }
 
-    public void refreshTable() {
-        fillTable();
+    public void deleteHotel(Long id) {
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = s.beginTransaction();
+            Hotel h = s.get(Hotel.class, id);
+            if (h != null) {
+                s.remove(h);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not delete: " + e.getMessage());
+        }
     }
 
+    //IF Databse needs to be created again from scratch
     private void importFromTxt() {
         try {
             Scanner sc = new Scanner(new File(path));
@@ -247,7 +284,6 @@ public class HotelTable extends JPanel {
         }
     }
 
-
     private void importIfEmpty() {
         boolean isEmpty = false;
 
@@ -267,41 +303,5 @@ public class HotelTable extends JPanel {
             System.out.println("Data is Database → No Import needed");
         }
     }
-
-
-
-
-    //add new line
-    public void addRow(Object id, String category, String name, String owner,
-                       String contact, String address, String city, String citycode,
-                       String phone, int rooms, int beds, String today) {
-        model.addRow(new Object[]{
-                id, category, name, owner, contact,
-                address, city, citycode, phone, rooms, beds, today
-        });
-    }
-
-    //update curent line (EDIT)
-    public void updateRow(Object id, String category, String name, String owner,
-                          String contact, String address, String city, String citycode,
-                          String phone, int rooms, int beds, String today) {
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 0).toString().equals(id.toString())) {
-                model.setValueAt(category,  i, 1);
-                model.setValueAt(name,      i, 2);
-                model.setValueAt(owner,     i, 3);
-                model.setValueAt(contact,   i, 4);
-                model.setValueAt(address,   i, 5);
-                model.setValueAt(city,      i, 6);
-                model.setValueAt(citycode,  i, 7);
-                model.setValueAt(phone,     i, 8);
-                model.setValueAt(rooms,     i, 9);
-                model.setValueAt(beds,      i, 10);
-                model.setValueAt(today,     i, 11);
-                break;
-            }
-        }
-    }
-
 
 }

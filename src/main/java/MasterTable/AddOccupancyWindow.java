@@ -6,10 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
+
 import org.hibernate.Transaction;
 
 public class AddOccupancyWindow extends JDialog {

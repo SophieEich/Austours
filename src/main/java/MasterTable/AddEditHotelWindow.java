@@ -164,33 +164,13 @@ public class AddEditHotelWindow extends JDialog {
                 .build();
 
         if (isEditing) {
-            // ID aus der Tabelle holen damit Hibernate das richtige Update macht
-            Long id = Long.parseLong(rowData[0].toString()); // ID from rowData
+            Long id = Long.parseLong(rowData[0].toString());
             h.setId(id);
             parent.updateHotel(h);
-
-            // Tabelle direkt aktualisieren — kein DB-Roundtrip
-            parent.updateRow(rowData[0], selectedCategory, name.getText(),
-                    owner.getText(), contact.getText(), address.getText(),
-                    city.getText(), citycode.getText(), phone.getText(),
-                    roomCount, bedCount, today);
-
-            saveButton.setText("Close");
-
-
-
-
         } else {
-            // addHotel gives Hotel back gesetzter ID zurück
-            Hotel saved = parent.addHotel(h);
-
-            // Neue Zeile direkt hinzufügen — kein refreshTable() nötig
-            parent.addRow(saved.getId(), selectedCategory, name.getText(),
-                    owner.getText(), contact.getText(), address.getText(),
-                    city.getText(), citycode.getText(), phone.getText(),
-                    roomCount, bedCount, today);
+            parent.addHotel(h);
         }
-        // Save Button → Close Button
+        parent.fillTable(); // ← DB neu laden, fertig
         dispose();
     }
 }
