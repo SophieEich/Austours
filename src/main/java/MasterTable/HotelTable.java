@@ -27,7 +27,7 @@ public class HotelTable extends JPanel {
 
         //USER STORY 3
         defineFrame();
-        innitComponents();
+        initComponents();
         addComponents();
         importIfEmpty();
         fillTable();
@@ -147,7 +147,7 @@ public class HotelTable extends JPanel {
         });
     }
 
-    private void innitComponents() {
+    private void initComponents() {
         // 1. Container for the top Space (Header + Search)
         JPanel topContainer = new JPanel();
         topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));

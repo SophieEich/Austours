@@ -130,6 +130,7 @@ public class AddEditHotelWindow extends JDialog {
         //Only positve numebers
         int roomCount;
         int bedCount;
+        int cityCodeCheck;
 
         try {
             roomCount = Integer.parseInt(rooms.getText().trim());
@@ -142,6 +143,19 @@ public class AddEditHotelWindow extends JDialog {
             JOptionPane.showMessageDialog(this, "Rooms and Beds must be numbers!");
             return;
         }
+
+        try {
+            cityCodeCheck = Integer.parseInt(citycode.getText().trim());
+            if (cityCodeCheck <= 0) {
+                JOptionPane.showMessageDialog(this, "Citycode must be positive a number!");
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Citycode must be a number!");
+            return;
+        }
+
+
 
 
         String today = LocalDate.now().toString();
