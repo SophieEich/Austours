@@ -4,8 +4,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 //US 18
-public class HilfeTab extends JPanel {
-    public HilfeTab() {
+public class HelpTab extends JPanel {
+    public HelpTab() {
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
 

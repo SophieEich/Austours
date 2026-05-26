@@ -14,7 +14,7 @@ public class MainWindow extends JFrame {
         tabs.addTab("Summary", new SummaryPanel());
         tabs.addTab("Hotels", new HotelTable());
         tabs.addTab("Occupancy", new OccupancyPanel());
-        tabs.addTab("Help", new HilfeTab());
+        tabs.addTab("Help", new HelpTab());
 
         add(tabs);
     }
@@ -33,7 +33,7 @@ public class MainWindow extends JFrame {
         tabs.addTab("Summary", new SummaryPanel());
         tabs.addTab("Hotels", new HotelTable());
         tabs.addTab("Occupancy", new OccupancyPanel());
-        tabs.addTab("Help", new HilfeTab());
+        tabs.addTab("Help", new HelpTab());
 
         add(tabs);
     }
