@@ -111,16 +111,23 @@ public class AddEditHotelWindow extends JDialog {
 
 
     public void onSave() {
+        if (!hasChanges()) {
+            JOptionPane.showMessageDialog(this,
+                    "No changes detected. Please modify at least one field before saving.",
+                    "No Changes", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         //Validation - all fields must be filled in
-        if (name.getText().isEmpty() ||
-                owner.getText().isEmpty() ||
-                contact.getText().isEmpty() ||
-                address.getText().isEmpty() ||
-                city.getText().isEmpty() ||
-                citycode.getText().isEmpty() ||
-                phone.getText().isEmpty() ||
-                rooms.getText().isEmpty() ||
-                beds.getText().isEmpty()) {
+        if (name.getText().trim().isEmpty() ||
+                owner.getText().trim().isEmpty() ||
+                contact.getText().trim().isEmpty() ||
+                address.getText().trim().isEmpty() ||
+                city.getText().trim().isEmpty() ||
+                citycode.getText().trim().isEmpty() ||
+                phone.getText().trim().isEmpty() ||
+                rooms.getText().trim().isEmpty() ||
+                beds.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill all the fields");
             return;
         }
@@ -130,10 +137,26 @@ public class AddEditHotelWindow extends JDialog {
             return;
         }
 
+        // lengthCheck
+        int nameCheck = name.getText().trim().length();
+        int ownerCheck = owner.getText().trim().length();
+        int contactCheck = contact.getText().trim().length();
+        int addressCheck = address.getText().trim().length();
+        int cityCheck = city.getText().trim().length();
+        if (nameCheck < 2 ||  ownerCheck < 2 || contactCheck < 2 || addressCheck < 2 || cityCheck < 2) {
+            JOptionPane.showMessageDialog(this, "Must be at least 2 characters!");
+            return;
+        }
+
+
+
+
+
         //Only positve numebers
         int roomCount;
         int bedCount;
         int cityCodeCheck;
+        int phoneCheck;
 
         try {
             roomCount = Integer.parseInt(rooms.getText().trim());
@@ -158,6 +181,16 @@ public class AddEditHotelWindow extends JDialog {
             return;
         }
 
+        try {
+            phoneCheck = Integer.parseInt(phone.getText().trim());
+            if (phoneCheck <= 0) {
+                JOptionPane.showMessageDialog(this, "Phone must be positive a number!");
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Phone must be a number!");
+            return;
+        }
 
 
 
@@ -184,11 +217,37 @@ public class AddEditHotelWindow extends JDialog {
             Long id = Long.parseLong(rowData[0].toString());
             h.setId(id);
             parent.updateHotel(h);
+            parent.fillTable(); // database will be loaded again,  done
+            JOptionPane.showMessageDialog(null,
+                    "Hotel '" + name.getText() + "' was successfully updated!",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             parent.addHotel(h);
+            parent.fillTable(); // database will be loaded again, done
+            JOptionPane.showMessageDialog(null,
+                    "Hotel '" + name.getText() + "' was successfully added!",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+
         }
-        parent.fillTable(); // ← DB neu laden, fertig
         dispose();
+    }
+
+
+    private boolean hasChanges() {
+        if (!isEditing) return true; // beim Add immer speichern
+
+        String savedCategory = rowData[1].toString();
+
+        return !name.getText().equals(rowData[2].toString()) ||
+                !category.getSelectedItem().toString().equals(savedCategory) ||
+                !owner.getText().equals(rowData[3].toString()) ||
+                !contact.getText().equals(rowData[4].toString()) ||
+                !address.getText().equals(rowData[5].toString()) ||
+                !city.getText().equals(rowData[6].toString()) ||
+                !citycode.getText().equals(rowData[7].toString()) ||
+                !phone.getText().equals(rowData[8].toString()) ||
+                !rooms.getText().equals(rowData[9].toString()) ||
+                !beds.getText().equals(rowData[10].toString());
     }
 }
 

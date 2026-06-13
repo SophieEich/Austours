@@ -164,9 +164,6 @@ public class OccupancyPanel extends JPanel {
         boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
         addButton.setEnabled(isAdmin);
 
-        JButton resetSortButton = new JButton("RESET SORT");
-        resetSortButton.addActionListener(e -> TableUtils.resetSort(table));
-        buttonPanel.add(resetSortButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         JTextField searchField = new JTextField(20);

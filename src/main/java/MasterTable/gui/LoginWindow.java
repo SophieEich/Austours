@@ -49,6 +49,11 @@ public class LoginWindow extends JDialog {
         String username = usernamefield.getText().trim();
         String password = new String(passwordfield.getPassword());
 
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter username and password!");
+            return;
+        }
+
         UsersHibernate user = userDAO.findByUsernameAndPassword(username, password);
 
         if (user != null) {

@@ -26,6 +26,9 @@ public class HotelTable extends JPanel {
     private final HotelDAO hotelDAO = new HotelDAO();
 
     private final UsersHibernate currentUser;
+    private final Timer clearSelectionTimer = new Timer(9000, e -> {
+        table.clearSelection();
+    });
 
     public HotelTable(UsersHibernate user) {
         this.currentUser = user;
@@ -91,14 +94,9 @@ public class HotelTable extends JPanel {
         boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
         addButton.setEnabled(isAdmin);
         editButton.setEnabled(isAdmin);
-
-        // For Sorting
-        JButton resetSortButton =  new JButton("RESET SORT");
-
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
-        // For Sorting
-        buttonPanel.add(resetSortButton);
+
         add(buttonPanel, BorderLayout.SOUTH);
 
         addButton.addActionListener(e -> {
@@ -118,13 +116,11 @@ public class HotelTable extends JPanel {
             for (int i = 0; i < columnCount; i++) {
                 rowData[i] = model.getValueAt(modelRow, i);
             }
+
             JFrame father = (JFrame) SwingUtilities.getWindowAncestor(HotelTable.this);
             new AddEditHotelWindow(father, rowData, HotelTable.this);
-        });
-
-        // For Reset-Sorting
-        resetSortButton.addActionListener(e -> {
-            TableUtils.resetSort(table);
+            //selection will be immediately cleared after window is disposed
+            //table.clearSelection();
         });
 
         // Delete Button US11
@@ -193,6 +189,15 @@ public class HotelTable extends JPanel {
 
         //activates Sorting for the HotelTable +
         TableUtils.enableSorting(table);
+
+        //After 10 sec selection will be cleared automatically
+        clearSelectionTimer.setRepeats(false);
+
+        table.getSelectionModel().addListSelectionListener(e ->{
+            if (!e.getValueIsAdjusting()) {
+                clearSelectionTimer.restart();
+            }
+        });
 
     }
 
