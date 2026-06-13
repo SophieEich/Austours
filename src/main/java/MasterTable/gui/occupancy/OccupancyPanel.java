@@ -2,6 +2,7 @@ package MasterTable.gui.occupancy;
 
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -26,6 +27,7 @@ public class OccupancyPanel extends JPanel {
     public DefaultTableModel model;
     private final UsersHibernate currentUser;
     private final OccupancyDAO occupancyDAO = new OccupancyDAO();
+    private List<Occupancy> loadedOccupancies = new java.util.ArrayList<>();
 
 
     // ── US-02 / US-10: Filter controls ────────────────────────────────────────────────
@@ -56,6 +58,7 @@ public class OccupancyPanel extends JPanel {
     public void fillTable() {
         if (model == null) return;
         model.setRowCount(0);
+        loadedOccupancies.clear();
 
         // 1. Filter-Werte aus der UI holen
         String selectedHotel = (String) hotelFilter.getSelectedItem();
@@ -94,7 +97,8 @@ public class OccupancyPanel extends JPanel {
             int rowDate = occ.getYear() * 100 + occ.getMonth();
             if (rowDate < filterFrom || rowDate > filterTo) continue;
 
-            // 3. In Tabelle schreiben
+            // 3. Write in Tabele
+            loadedOccupancies.add(occ);
             model.addRow(new Object[]{
                     h.getId(),
                     h.getName(),
@@ -181,8 +185,57 @@ public class OccupancyPanel extends JPanel {
 
 
     private void initComponents() {
-        model = new DefaultTableModel();
+        model = new DefaultTableModel() {
+            @Override //US-23 makes Beds and Rooms editable from the Table
+            public boolean isCellEditable(int row, int column) {
+                return column == 4 || column == 5;
+            }
+        };
         table = new JTable(model);
+
+        model.addTableModelListener(e-> {
+            if (e.getType() != TableModelEvent.UPDATE) return;
+
+            int col = e.getColumn();
+            // only rooms + Beds Occupancy
+            if (col != 4 && col != 5) return;
+
+            int row = e.getFirstRow();
+
+            try {
+                Occupancy occ = loadedOccupancies.get(row); //straight from list
+                int roomOcc = Integer.parseInt(model.getValueAt(row, 4).toString());
+                int bedOcc= Integer.parseInt(model.getValueAt(row, 5).toString());
+
+                //Validation
+                if (roomOcc <= 0 || bedOcc <= 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Values must be positive numbers!");
+                    fillTable();
+                    return;
+                }
+                if (roomOcc > occ.getHotel().getNoRooms()) {
+                    JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
+                    fillTable(); // so that the old value is there
+                    return;
+                }
+
+                if (bedOcc > occ.getHotel().getNoBeds()) {
+                    JOptionPane.showMessageDialog(this, "Bed occupancy cannot exceed total beds!");
+                    fillTable(); // so that the old value is there
+                    return;
+                }
+
+                //DAO Call
+                occ.setRoomOccupancy(roomOcc);
+                occ.setBedOccupancy(bedOcc);
+                occupancyDAO.updateOccupancy(occ);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Update failed: "+ ex.getMessage());
+                fillTable();
+            }
+        });
+
         model.addColumn("HOTEL ID");
         model.addColumn("HOTEL NAME");
         model.addColumn("YEAR");
@@ -190,7 +243,6 @@ public class OccupancyPanel extends JPanel {
         model.addColumn("ROOM OCCUPANCY");
         model.addColumn("BED OCCUPANCY");
 
-        table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
         TableUtils.enableSorting(table);
     }
 
