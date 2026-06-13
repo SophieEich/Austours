@@ -1,8 +1,8 @@
-package MasterTable.Login;
+package MasterTable.gui;
 
-import MasterTable.HibernateUtil;
-import org.hibernate.Session;
 
+import MasterTable.entity.user.UsersHibernate;
+import MasterTable.dao.UserDAO;
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +11,7 @@ public class LoginWindow extends JDialog {
     private JTextField usernamefield = new JTextField(15);
     private JPasswordField passwordfield = new JPasswordField(15);
     private UsersHibernate loggedInUser = null;
+    private final UserDAO userDAO = new UserDAO();
 
     public LoginWindow() {
         setTitle("Login");
@@ -48,20 +49,13 @@ public class LoginWindow extends JDialog {
         String username = usernamefield.getText().trim();
         String password = new String(passwordfield.getPassword());
 
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
-            UsersHibernate user = session.createQuery(
-                    "FROM UsersHibernate uh WHERE uh.username = :uh AND uh.password = :p", UsersHibernate.class)
-                    .setParameter("uh", username)
-                    .setParameter("p", password)
-                    .uniqueResult();
+        UsersHibernate user = userDAO.findByUsernameAndPassword(username, password);
 
-            if (user != null) {
-                loggedInUser = user;
-                dispose();
-            }else {
-                JOptionPane.showMessageDialog(this, "Login Failed - Invalid username or password!");
-            }
-
+        if (user != null) {
+            loggedInUser = user;
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Login Failed - Invalid username or password!");
         }
 
     }

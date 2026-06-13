@@ -1,4 +1,4 @@
-package MasterTable;
+package MasterTable.util;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;

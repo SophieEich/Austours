@@ -31,9 +31,9 @@
 
         <!-- Entity Mapping -->
         <!-- <mapping class="com.example.model.Person"/> -->
-        <mapping class="MasterTable.Hotel"/> <!-- Verbindung zu Hotel Klasse damit Hibernate weiß wie das geht-->
-        <mapping class="MasterTable.Occupancy"/>
-        <mapping class="MasterTable.Login.UsersHibernate"/>
+        <mapping class="MasterTable.entity.Hotel"/> <!-- Verbindung zu Hotel Klasse damit Hibernate weiß wie das geht-->
+        <mapping class="MasterTable.entity.Occupancy"/>
+        <mapping class="MasterTable.entity.user.UsersHibernate"/>
 
     </session-factory>
 </hibernate-configuration>

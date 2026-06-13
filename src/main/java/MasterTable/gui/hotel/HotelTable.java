@@ -1,9 +1,13 @@
-package MasterTable;
+package MasterTable.gui.hotel;
 
-import MasterTable.Login.UserRole;
-import MasterTable.Login.UsersHibernate;
+import MasterTable.entity.user.UserRole;
+import MasterTable.entity.user.UsersHibernate;
+import MasterTable.entity.Hotel;
+import MasterTable.util.HibernateUtil;
+import MasterTable.util.TableUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import MasterTable.dao.HotelDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,10 +23,11 @@ public class HotelTable extends JPanel {
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
     String path = "src/main/resources/hotels.txt";
+    private final HotelDAO hotelDAO = new HotelDAO();
 
     private final UsersHibernate currentUser;
 
-    HotelTable(UsersHibernate user) {
+    public HotelTable(UsersHibernate user) {
         this.currentUser = user;
 
         //USER STORY 3
@@ -195,42 +200,17 @@ public class HotelTable extends JPanel {
         setLayout(new BorderLayout());
     }
 
-    // US- 4
-    //Needs to be updated for the SQL Server, then with selects and creates, updates, inserts
     public Hotel addHotel(Hotel h) {
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = s.beginTransaction();
-            s.persist(h); // nach persist() hat h.getId() den Wert von der DB
-            tx.commit();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not save: " + e.getMessage());
-        }
-        return h; // ID ist jetzt gesetzt
+        return hotelDAO.addHotel(h);
     }
 
     public void updateHotel(Hotel h) {
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = s.beginTransaction();
-            s.merge(h);
-            tx.commit();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not update: " + e.getMessage());
-        }
+        hotelDAO.updateHotel(h);
     }
 
     public void deleteHotel(Long id) {
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = s.beginTransaction();
-            Hotel h = s.get(Hotel.class, id);
-            if (h != null) {
-                s.remove(h);
-            }
-            tx.commit();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not delete: " + e.getMessage());
-        }
+        hotelDAO.deleteHotel(id);
     }
-
     //IF Databse needs to be created again from scratch
     private void importFromTxt() {
         try {

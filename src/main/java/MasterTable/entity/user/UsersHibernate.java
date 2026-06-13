@@ -1,4 +1,4 @@
-package MasterTable.Login;
+package MasterTable.entity.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

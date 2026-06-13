@@ -1,6 +1,8 @@
-package MasterTable;
+package MasterTable.gui.occupancy;
 
-import org.hibernate.Session;
+import MasterTable.entity.Hotel;
+import MasterTable.entity.Occupancy;
+import MasterTable.dao.OccupancyDAO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +10,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-import org.hibernate.Transaction;
-
 public class AddOccupancyWindow extends JDialog {
 
     private OccupancyPanel parent;
+    private final OccupancyDAO occupancyDAO = new OccupancyDAO();
 
     // US - 6 Enter transactional data (room/bed occupancy per month)
 
@@ -93,15 +94,9 @@ public class AddOccupancyWindow extends JDialog {
     }
 
     private void loadHotels() {
-        hotelSelect.removeAllItems(); // ensures that line is empty
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
-            for (Hotel h : hotels) {
-                // Wir speichern das Hotel-Objekt oder einen String
-                hotelSelect.addItem(h);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error loading hotels: " + e.getMessage());
+        List<Hotel> hotels = occupancyDAO.getAllHotels();
+        for (Hotel h : hotels) {
+            hotelSelect.addItem(h);
         }
     }
 
@@ -139,44 +134,26 @@ public class AddOccupancyWindow extends JDialog {
         //
         Hotel hotel = (Hotel) hotelSelect.getSelectedItem();
 
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = s.beginTransaction();
-
-
-            //Hotel-Objekt gets loaded
-
-            //LAST VALIDATION CHECK. CHECKS if no more beds or rooms are added than the hotel has in the HotelTable
-            if (roomOccVal > hotel.getNoRooms()) {
-                JOptionPane.showMessageDialog(this,
-                        "Room occupancy cannot exceed total rooms!");
-                return;
-            }
-
-            if (bedOccVal > hotel.getNoBeds()) {
-                JOptionPane.showMessageDialog(this,
-                        "Bed occupancy cannot exceed total beds!");
-                return;
-            }
-
-
-            Occupancy occ = Occupancy.builder()
-                    .hotel(hotel)
-                    .year(Integer.parseInt((String) year.getSelectedItem()))
-                    .month(Integer.parseInt((String) month.getSelectedItem()))
-                    .roomOccupancy(roomOccVal)
-                    .bedOccupancy(bedOccVal)
-                    .build();
-
-            s.persist(occ);
-            tx.commit();
-
-            parent.fillTable(); // refreshes table in panel
-            dispose();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error saving to DB: " + e.getMessage());
+        if (roomOccVal > hotel.getNoRooms()) {
+            JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
+            return;
         }
+
+        if (bedOccVal > hotel.getNoBeds()) {
+            JOptionPane.showMessageDialog(this, "Bed occupancy cannot exceed total beds!");
+            return;
+        }
+
+        Occupancy occ = Occupancy.builder()
+                .hotel(hotel)
+                .year(Integer.parseInt((String) year.getSelectedItem()))
+                .month(Integer.parseInt((String) month.getSelectedItem()))
+                .roomOccupancy(roomOccVal)
+                .bedOccupancy(bedOccVal)
+                .build();
+
+        occupancyDAO.saveOccupancy(occ);
+        parent.fillTable();
+        dispose();
     }
-
-
-
 }

@@ -1,6 +1,10 @@
-package MasterTable;
+package MasterTable.gui;
 
-import MasterTable.Login.UsersHibernate;
+import MasterTable.gui.occupancy.OccupancyPanel;
+import MasterTable.entity.user.UsersHibernate;
+import MasterTable.gui.hotel.HotelTable;
+import MasterTable.gui.summary.SummaryPanel;
+import MasterTable.gui.helptab.HelpTab;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +16,7 @@ public class MainWindow extends JFrame {
     private static final int HEADER_LOGO_HEIGHT = 70;
     private final UsersHibernate currentUser;
 
-    MainWindow(UsersHibernate user) {
+    public MainWindow(UsersHibernate user) {
         this.currentUser = user;
         defineFrame();
         addComponents();

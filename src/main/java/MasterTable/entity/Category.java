@@ -1,4 +1,4 @@
-package MasterTable;
+package MasterTable.entity;
 
 public enum Category {
     ALL("ALL"),

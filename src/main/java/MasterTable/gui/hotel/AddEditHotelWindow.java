@@ -1,5 +1,8 @@
-package MasterTable;
+package MasterTable.gui.hotel;
 
+
+import MasterTable.entity.Category;
+import MasterTable.entity.Hotel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,8 @@
-package MasterTable;
+package MasterTable.util;
 
-import MasterTable.Login.UsersHibernate;
+import MasterTable.entity.user.UsersHibernate;
+import MasterTable.entity.Hotel;
+import MasterTable.entity.Occupancy;
 import lombok.Getter;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

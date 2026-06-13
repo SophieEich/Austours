@@ -1,5 +1,6 @@
 package MasterTable;
 
+import MasterTable.gui.occupancy.OccupancyPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

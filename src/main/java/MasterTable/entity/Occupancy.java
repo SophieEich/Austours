@@ -1,4 +1,4 @@
-package MasterTable;
+package MasterTable.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

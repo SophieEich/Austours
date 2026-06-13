@@ -1,7 +1,9 @@
 package MasterTable;
 
-import MasterTable.Login.LoginWindow;
-import MasterTable.Login.UsersHibernate;
+import MasterTable.gui.LoginWindow;
+import MasterTable.entity.user.UsersHibernate;
+import MasterTable.gui.MainWindow;
+import MasterTable.util.HibernateUtil;
 
 import javax.swing.*;
 

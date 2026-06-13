@@ -1,4 +1,4 @@
-package MasterTable.Login;
+package MasterTable.entity.user;
 
 public enum UserRole {
 

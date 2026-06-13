@@ -26,6 +26,7 @@ This document serves as the technical documentation for the **NOE-Hotels** proje
 - **v0.6:** Login system with role-based access control (`LoginWindow`, `UsersHibernate`, `UserRole`) (US-12).
 - **v0.7:** Delete Hotel with cascade delete of linked occupancy data (US-11), logo header (US-17), help tab (US-18).
 - **v0.8:** PDF export of filtered occupancy statistics (US-7), `PdfExporter` class with NOE-TO branding, multi-page support.
+- - **v0.9:** Package refactoring — layered architecture (gui, entity, dao, util). DAO classes extracted (HotelDAO, OccupancyDAO, UserDAO). DB logic removed from GUI classes.
 
 ---
 
@@ -57,18 +58,21 @@ The system follows a **layered model** (N-Tier), separating the user interface (
 ### Architecture Diagram (Mermaid)
 ```mermaid
 graph TD
-    Login[LoginWindow] --> Main[Main.java]
-    Main --> MainWindow[MainWindow]
-    MainWindow --> Summary[SummaryPanel]
-    MainWindow --> Hotels[HotelTable]
-    MainWindow --> Occupancy[OccupancyPanel]
-    MainWindow --> Help[HilfeTab]
-    Hotels --> AddEdit[AddEditHotelWindow]
-    Occupancy --> AddOcc[AddOccupancyWindow]
-    Hotels --> HU[HibernateUtil]
-    Occupancy --> HU
-    Summary --> HU
-    Login --> HU
+    Login[gui.login/LoginWindow] --> Main[Main.java]
+    Main --> MainWindow[gui/MainWindow]
+    MainWindow --> Summary[gui.summary/SummaryPanel]
+    MainWindow --> Hotels[gui.hotel/HotelTable]
+    MainWindow --> Occupancy[gui.occupancy/OccupancyPanel]
+    MainWindow --> Help[gui.help/HelpTab]
+    Hotels --> AddEdit[gui.hotel/AddEditHotelWindow]
+    Occupancy --> AddOcc[gui.occupancy/AddOccupancyWindow]
+    Hotels --> HD[dao/HotelDAO]
+    Occupancy --> OD[dao/OccupancyDAO]
+    AddOcc --> OD
+    Login --> UD[dao/UserDAO]
+    HD --> HU[util/HibernateUtil]
+    OD --> HU
+    UD --> HU
     HU --> DB[(MS SQL Server)]
 ```
 
@@ -252,23 +256,25 @@ erDiagram
 ---
 
 ## 8. Class Overview
-
 | Class | Package | Purpose |
 |---|---|---|
 | `Main` | `MasterTable` | Application entry point, initializes Hibernate and opens LoginWindow |
-| `MainWindow` | `MasterTable` | Main JFrame with tabbed pane and logo header |
-| `HotelTable` | `MasterTable` | JPanel showing hotel list with add/edit/delete/search/sort |
-| `AddEditHotelWindow` | `MasterTable` | JDialog for adding or editing a hotel |
-| `OccupancyPanel` | `MasterTable` | JPanel showing occupancy data with filters |
-| `AddOccupancyWindow` | `MasterTable` | JDialog for adding occupancy data |
-| `SummaryPanel` | `MasterTable` | JPanel showing category statistics |
-| `HilfeTab` | `MasterTable` | JPanel with help/usage text (US-18) |
-| `Hotel` | `MasterTable` | Hibernate entity for hotel master data |
-| `Occupancy` | `MasterTable` | Hibernate entity for monthly occupancy data |
-| `Category` | `MasterTable` | Enum for hotel star categories |
-| `HibernateUtil` | `MasterTable` | Singleton SessionFactory provider |
-| `TableUtils` | `MasterTable` | Utility class for sorting, filtering, and resetting JTables |
-| `PdfExporter` | `MasterTable` | Exports filtered occupancy table as A4 PDF with NOE-TO branding, multi-page support, filter context (US-7) |
-| `LoginWindow` | `MasterTable.Login` | JDialog for user authentication |
-| `UsersHibernate` | `MasterTable.Login` | Hibernate entity for user accounts |
-| `UserRole` | `MasterTable.Login` | Enum: SENIOR, ADMIN |
+| `PdfExporter` | `MasterTable` | Exports filtered occupancy table as A4 PDF with NOE-TO branding |
+| `MainWindow` | `MasterTable.gui` | Main JFrame with tabbed pane and logo header |
+| `HotelTable` | `MasterTable.gui.hotel` | JPanel showing hotel list with add/edit/delete/search/sort |
+| `AddEditHotelWindow` | `MasterTable.gui.hotel` | JDialog for adding or editing a hotel |
+| `OccupancyPanel` | `MasterTable.gui.occupancy` | JPanel showing occupancy data with filters |
+| `AddOccupancyWindow` | `MasterTable.gui.occupancy` | JDialog for adding occupancy data |
+| `SummaryPanel` | `MasterTable.gui.summary` | JPanel showing category statistics |
+| `HelpTab` | `MasterTable.gui.help` | JPanel with help/usage text (US-18) |
+| `LoginWindow` | `MasterTable.gui.login` | JDialog for user authentication |
+| `Hotel` | `MasterTable.entity` | Hibernate entity for hotel master data |
+| `Occupancy` | `MasterTable.entity` | Hibernate entity for monthly occupancy data |
+| `Category` | `MasterTable.entity` | Enum for hotel star categories |
+| `UsersHibernate` | `MasterTable.entity.user` | Hibernate entity for user accounts |
+| `UserRole` | `MasterTable.entity.user` | Enum: SENIOR, ADMIN |
+| `HibernateUtil` | `MasterTable.util` | Singleton SessionFactory provider |
+| `TableUtils` | `MasterTable.util` | Utility class for sorting, filtering, and resetting JTables |
+| `HotelDAO` | `MasterTable.dao` | Database operations for Hotel (add, update, delete) |
+| `OccupancyDAO` | `MasterTable.dao` | Database operations for Occupancy (getAll, save) |
+| `UserDAO` | `MasterTable.dao` | Database operations for User (login query) |

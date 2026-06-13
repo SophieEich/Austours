@@ -1,5 +1,8 @@
-package MasterTable;
+package MasterTable.gui.summary;
 
+import MasterTable.entity.Category;
+import MasterTable.entity.Hotel;
+import MasterTable.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public class SummaryPanel extends JPanel {
     Map<String, Integer> bedsMap  = new HashMap<>();
 
     //US1
-    SummaryPanel() {
+    public SummaryPanel() {
         definePanel();
         initComponents();
         addComponents();
