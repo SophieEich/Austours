@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -14,23 +15,23 @@ import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
-public class HotelTable extends JPanel {
+public static class HotelTable extends JPanel {
     //not JFrame because we want 2 Windows
     JTable table = new JTable();
     DefaultTableModel model = new DefaultTableModel();
     String path = "src/main/resources/hotels.txt";
 
-    private final UsersHibernate currentUser;
+  //  private final UsersHibernate currentUser;
 
-    HotelTable(UsersHibernate user) {
-        this.currentUser = user;
+    //HotelTable(UsersHibernate user) {
+    //    this.currentUser = user;
 
         //USER STORY 3
-        defineFrame();
-        initComponents();
-        addComponents();
-        importIfEmpty();
-        fillTable();
+      //  defineFrame();
+       // initComponents();
+      //  addComponents();
+       // importIfEmpty();
+      //  fillTable();
     }
 
     public void fillTable() {
@@ -180,12 +181,24 @@ public class HotelTable extends JPanel {
         topContainer.add(searchPanel);
         add(topContainer, BorderLayout.NORTH);
 
-        // 2. Initialize the table
-        model = new DefaultTableModel();
+        // 2. Initialize the table (ALT)
+       // model = new DefaultTableModel();
+       // table = new JTable();
+       // table.setModel(model);
+        // table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
+        // NEU:
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0;
+            }
+        };
         table = new JTable();
         table.setModel(model);
-        table.setDefaultEditor(Object.class, null); // makes the Table uneditable without edit button
 
+// Category ComboBox – hier ans Ende von initComponents():
+      //  javax.swing.table.TableColumn catCol = table.getColumnModel().getColumn(1);
+     //   catCol.setCellEditor(new DefaultCellEditor(new JComboBox<>(Category.values())));
         //activates Sorting for the HotelTable +
         TableUtils.enableSorting(table);
 
@@ -304,4 +317,49 @@ public class HotelTable extends JPanel {
         }
     }
 
-}
+    //US 23
+
+    // UND DEN KONSTRUKTOR SO ÄNDERN:
+    HotelTable(UsersHibernate user) {
+        this.currentUser = user;
+
+        defineFrame();
+        initComponents();
+        addComponents();
+        importIfEmpty();
+        fillTable();
+
+        // NEU:
+        model.addTableModelListener(e -> {
+            if (e.getType() != TableModelEvent.UPDATE) return;
+            int row = e.getFirstRow();
+            int col = e.getColumn();
+            if (row < 0 || col < 0) return;
+            try {
+                Long id        = Long.parseLong(model.getValueAt(row, 0).toString());
+                String cat     = model.getValueAt(row, 1).toString();
+                String name    = model.getValueAt(row, 2).toString();
+                String owner   = model.getValueAt(row, 3).toString();
+                String contact = model.getValueAt(row, 4).toString();
+                String address = model.getValueAt(row, 5).toString();
+                String city    = model.getValueAt(row, 6).toString();
+                String cityCode= model.getValueAt(row, 7).toString();
+                String phone   = model.getValueAt(row, 8).toString();
+                int rooms      = Integer.parseInt(model.getValueAt(row, 9).toString().trim());
+                int beds       = Integer.parseInt(model.getValueAt(row, 10).toString().trim());
+                String lastRep = model.getValueAt(row, 11).toString();
+                Hotel h = Hotel.builder()
+                        .category(cat).name(name).owner(owner).contact(contact)
+                        .address(address).city(city).cityCode(cityCode).phone(phone)
+                        .noRooms(rooms).noBeds(beds).lastReported(lastRep)
+                        .build();
+                h.setId(id);
+                updateHotel(h);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Ungültiger Wert!");
+                fillTable();
+            }
+        });
+    }
+
