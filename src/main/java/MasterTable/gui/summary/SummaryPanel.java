@@ -44,6 +44,27 @@ public class SummaryPanel extends JPanel {
         model.addColumn("NUMBER OF HOTELS");
         model.addColumn("AVG ROOMS");
         model.addColumn("AVG BEDS");
+
+
+        // for better readability with color change
+        table.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                                                                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    setBackground(row % 2 == 0 ? Color.WHITE : new Color(235, 243, 250)); // NOE Blau
+                }
+                return this;
+            }
+        });
+
+        // automatically adjust width of column
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        //increases row height to 16pt
+        table.setRowHeight(25);
+
+
     }
 
     private void addComponents() {
