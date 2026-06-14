@@ -1,0 +1,294 @@
+<html>
+<head>
+<title>TECHNICAL_DOCUMENTATION.md</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #c77dbb; font-style: italic;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+TECHNICAL_DOCUMENTATION.md</font>
+</center></td></tr></table>
+<pre><span class="s0"># </span><span class="s2">Technical Documentation - NOE Hotels </span><span class="s1">(</span><span class="s2">Lower Austria Tourist Portal</span><span class="s1">)</span>
+
+<span class="s2">This document serves as the technical documentation for the </span><span class="s1">**</span><span class="s2">NOE-Hotels</span><span class="s1">** </span><span class="s2">project, developed as part of the </span><span class="s1">*</span><span class="s2">Project Management Cycle</span><span class="s1">* </span><span class="s2">course in the summer semester 2026.</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">1. General Project Information</span>
+
+<span class="s0">### </span><span class="s2">Project Overview</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Software Name</span><span class="s1">:** </span><span class="s2">NOE-Hotels </span><span class="s1">(</span><span class="s2">Lower Austria Tourist Portal</span><span class="s1">)</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Purpose/Goal</span><span class="s1">:** </span><span class="s2">Management of hotel master data and occupancy statistics for the NOE-Tourism Office GmbH </span><span class="s1">(</span><span class="s2">NOE-TO</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Description</span><span class="s1">:** </span><span class="s2">A Java-based desktop application with a Swing GUI and Hibernate/SQL Server integration for managing hotel master data, monthly occupancy data, user authentication, and statistical summaries.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Target Audience</span><span class="s1">:** </span><span class="s2">Senior users of NOE-TO, administrators </span><span class="s1">(</span><span class="s2">Admin role</span><span class="s1">)</span><span class="s2">, and hotel representatives.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Problem Solved</span><span class="s1">:** </span><span class="s2">Replaces the outdated legacy application </span><span class="s1">(</span><span class="s2">Java 8, File I/O</span><span class="s1">) </span><span class="s2">with a modern, database-backed solution including role-based access control, filtering, sorting, and PDF export capabilities.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Project Status</span><span class="s1">:** </span><span class="s2">In Progress</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Version</span><span class="s1">:** </span><span class="s2">1.0-SNAPSHOT</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Release Date</span><span class="s1">:** </span><span class="s2">July 1st, 2026 </span><span class="s1">(</span><span class="s2">planned go-live</span><span class="s1">)</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Responsible Team</span><span class="s1">:** </span><span class="s2">Students of the PMCY Summer Term 2026 course, FH BFI Vienna.</span>
+
+<span class="s0">### </span><span class="s2">Changelog</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.1</span><span class="s1">:** </span><span class="s2">Initial project structure, Maven setup, Hibernate configuration.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.2</span><span class="s1">:** </span><span class="s2">Hotel entity, TXT import </span><span class="s1">(</span><span class="s2">`hotels.txt`</span><span class="s1">)</span><span class="s2">, basic JTable display </span><span class="s1">(</span><span class="s2">US-3, US-4</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.3</span><span class="s1">:** </span><span class="s2">Add/Edit Hotel dialog </span><span class="s1">(</span><span class="s2">`AddEditHotelWindow`</span><span class="s1">)</span><span class="s2">, Hibernate CRUD </span><span class="s1">(</span><span class="s2">US-4, US-5</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.4</span><span class="s1">:** </span><span class="s2">Occupancy entity, Add Occupancy dialog, filter functionality </span><span class="s1">(</span><span class="s2">US-2, US-6, US-10</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.5</span><span class="s1">:** </span><span class="s2">Summary panel with category statistics </span><span class="s1">(</span><span class="s2">US-1</span><span class="s1">)</span><span class="s2">, sorting and search </span><span class="s1">(</span><span class="s2">TableUtils</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.6</span><span class="s1">:** </span><span class="s2">Login system with role-based access control </span><span class="s1">(</span><span class="s2">`LoginWindow`, `UsersHibernate`, `UserRole`</span><span class="s1">) (</span><span class="s2">US-12</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.7</span><span class="s1">:** </span><span class="s2">Delete Hotel with cascade delete of linked occupancy data </span><span class="s1">(</span><span class="s2">US-11</span><span class="s1">)</span><span class="s2">, logo header </span><span class="s1">(</span><span class="s2">US-17</span><span class="s1">)</span><span class="s2">, help tab </span><span class="s1">(</span><span class="s2">US-18</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">v0.8</span><span class="s1">:** </span><span class="s2">PDF export of filtered occupancy statistics </span><span class="s1">(</span><span class="s2">US-7</span><span class="s1">)</span><span class="s2">, `PdfExporter` class with NOE-TO branding, multi-page support.</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">2. System Architecture</span>
+
+<span class="s0">### </span><span class="s2">Architecture Overview</span>
+<span class="s2">The system follows a </span><span class="s1">**</span><span class="s2">layered model</span><span class="s1">** (</span><span class="s2">N-Tier</span><span class="s1">)</span><span class="s2">, separating the user interface </span><span class="s1">(</span><span class="s2">Swing</span><span class="s1">)</span><span class="s2">, business logic, and data access </span><span class="s1">(</span><span class="s2">Hibernate/JPA</span><span class="s1">)</span><span class="s2">.</span>
+
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Architecture Model</span><span class="s1">:** </span><span class="s2">Desktop Client </span><span class="s1">(</span><span class="s2">Monolithic</span><span class="s1">) </span><span class="s2">with an external MS SQL Server database.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Component Overview</span><span class="s1">:**</span>
+  <span class="s0">- </span><span class="s1">**</span><span class="s2">GUI Layer</span><span class="s1">:** </span><span class="s2">Swing components </span><span class="s1">(</span><span class="s2">`JFrame`, `JDialog`, `JPanel`, `JTable`, `JTabbedPane`</span><span class="s1">)</span><span class="s2">.</span>
+  <span class="s0">- </span><span class="s1">**</span><span class="s2">Logic Layer</span><span class="s1">:** </span><span class="s2">Panel and window classes containing validation, filtering, and CRUD logic.</span>
+  <span class="s0">- </span><span class="s1">**</span><span class="s2">Data Layer</span><span class="s1">:** </span><span class="s2">Hibernate ORM mapping Java entities to SQL Server tables.</span>
+
+<span class="s0">### </span><span class="s2">Technologies and Frameworks</span>
+<span class="s0">| </span><span class="s1">Technology </span><span class="s0">| </span><span class="s1">Version </span><span class="s0">| </span><span class="s1">Purpose </span><span class="s0">|</span>
+<span class="s0">|---|---|---|</span>
+<span class="s0">| </span><span class="s1">Java </span><span class="s0">| </span><span class="s1">25 </span><span class="s0">| </span><span class="s1">Programming language </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Java Swing </span><span class="s0">| </span><span class="s1">- </span><span class="s0">| </span><span class="s1">Desktop GUI framework </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Hibernate ORM </span><span class="s0">| </span><span class="s1">6.6.34.Final </span><span class="s0">| </span><span class="s1">Object-Relational Mapping </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Jakarta Persistence API </span><span class="s0">| </span><span class="s1">3.1.0 </span><span class="s0">| </span><span class="s1">JPA annotations </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">MS SQL Server JDBC </span><span class="s0">| </span><span class="s1">12.6.4.jre11 </span><span class="s0">| </span><span class="s1">Database driver </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Lombok </span><span class="s0">| </span><span class="s1">1.18.44 </span><span class="s0">| </span><span class="s1">Boilerplate reduction (@Data, @Builder) </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Apache Commons CSV </span><span class="s0">| </span><span class="s1">1.10.0 </span><span class="s0">| </span><span class="s1">CSV/TXT import </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Apache PDFBox </span><span class="s0">| </span><span class="s1">2.0.31 </span><span class="s0">| </span><span class="s1">PDF export (US-7) </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">SLF4J Simple </span><span class="s0">| </span><span class="s1">2.0.12 </span><span class="s0">| </span><span class="s1">Logging </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Maven </span><span class="s0">| </span><span class="s1">- </span><span class="s0">| </span><span class="s1">Build tool </span><span class="s0">|</span>
+
+<span class="s0">### </span><span class="s2">Architecture Diagram </span><span class="s1">(</span><span class="s2">Mermaid</span><span class="s1">)</span>
+<span class="s0">```</span><span class="s3">mermaid</span>
+<span class="s4">graph TD</span>
+    <span class="s4">Login[LoginWindow] --&gt; Main[Main.java]</span>
+    <span class="s4">Main --&gt; MainWindow[MainWindow]</span>
+    <span class="s4">MainWindow --&gt; Summary[SummaryPanel]</span>
+    <span class="s4">MainWindow --&gt; Hotels[HotelTable]</span>
+    <span class="s4">MainWindow --&gt; Occupancy[OccupancyPanel]</span>
+    <span class="s4">MainWindow --&gt; Help[HilfeTab]</span>
+    <span class="s4">Hotels --&gt; AddEdit[AddEditHotelWindow]</span>
+    <span class="s4">Occupancy --&gt; AddOcc[AddOccupancyWindow]</span>
+    <span class="s4">Hotels --&gt; HU[HibernateUtil]</span>
+    <span class="s4">Occupancy --&gt; HU</span>
+    <span class="s4">Summary --&gt; HU</span>
+    <span class="s4">Login --&gt; HU</span>
+    <span class="s4">HU --&gt; DB[(MS SQL Server)]</span>
+<span class="s0">```</span>
+
+<span class="s0">### </span><span class="s2">Data Flow</span>
+<span class="s0">1. </span><span class="s2">Application starts → `HibernateUtil` initializes `SessionFactory`.</span>
+<span class="s0">2. </span><span class="s2">`LoginWindow` opens → user enters credentials → Hibernate queries `Users` table.</span>
+<span class="s0">3. </span><span class="s2">On successful login → `MainWindow` opens with the logged-in user's role.</span>
+<span class="s0">4. </span><span class="s2">User interacts with tabs </span><span class="s1">(</span><span class="s2">Summary, Hotels, Occupancy</span><span class="s1">) </span><span class="s2">→ data is read from/written to the database via Hibernate sessions.</span>
+<span class="s0">5. </span><span class="s2">Role-based access</span><span class="s1">: </span><span class="s2">`ADMIN` can add/edit/delete; `SENIOR` can only view and filter.</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">3. Technical Requirements</span>
+
+<span class="s0">### </span><span class="s2">Hardware Requirements</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Processor</span><span class="s1">:** </span><span class="s2">Dual-Core 2.0 GHz or higher.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">RAM</span><span class="s1">:** </span><span class="s2">8 GB minimum, 16 GB recommended.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Storage</span><span class="s1">:** </span><span class="s2">500 MB free disk space.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Network</span><span class="s1">:** </span><span class="s2">Persistent internet/VPN connection for remote MS SQL Server access.</span>
+
+<span class="s0">### </span><span class="s2">Software Requirements</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Operating System</span><span class="s1">:** </span><span class="s2">Windows 10/11, macOS, or Linux.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">JDK</span><span class="s1">:** </span><span class="s2">Java Development Kit 25 or higher.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">IDE</span><span class="s1">:** </span><span class="s2">IntelliJ IDEA </span><span class="s1">(</span><span class="s2">recommended</span><span class="s1">) </span><span class="s2">with Lombok plugin and Annotation Processing enabled.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Database</span><span class="s1">:** </span><span class="s2">Access to MS SQL Server </span><span class="s1">(</span><span class="s2">via VPN or public IP</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">- </span><span class="s1">**</span><span class="s2">Build Tool</span><span class="s1">:** </span><span class="s2">Maven 3.x.</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">4. Installation and Configuration</span>
+
+<span class="s0">### </span><span class="s2">Build and Run</span>
+<span class="s0">1. </span><span class="s2">Clone the repository from GitHub </span><span class="s1">(</span><span class="s2">`SophieEich/Austours`</span><span class="s1">)</span><span class="s2">.</span>
+<span class="s0">2. </span><span class="s2">Open the project in IntelliJ IDEA.</span>
+<span class="s0">3. </span><span class="s2">Enable </span><span class="s1">**</span><span class="s2">Annotation Processing</span><span class="s1">**: </span><span class="s2">`File → Settings → Build → Compiler → Annotation Processors → Enable`.</span>
+<span class="s0">4. </span><span class="s2">Run `mvn clean install` to load all dependencies.</span>
+<span class="s0">5. </span><span class="s2">Configure the database connection in `src/main/resources/hibernate.cfg.xml`.</span>
+<span class="s0">6. </span><span class="s2">Start the application via `MasterTable.Main`.</span>
+
+<span class="s0">### </span><span class="s2">Database Configuration</span>
+<span class="s2">The connection is configured in `src/main/resources/hibernate.cfg.xml`</span><span class="s1">:</span>
+<span class="s0">- </span><span class="s2">Set `hibernate.connection.url` to the MS SQL Server connection string.</span>
+<span class="s0">- </span><span class="s2">Set `hibernate.connection.username` and `hibernate.connection.password`.</span>
+<span class="s0">- </span><span class="s2">`hibernate.hbm2ddl.auto` is set to `update` — tables are created/updated automatically.</span>
+
+<span class="s0">### </span><span class="s2">Initial Data Setup</span>
+<span class="s2">If the `Hotels` table is empty on startup, the application automatically imports data from `src/main/resources/hotels.txt` </span><span class="s1">(</span><span class="s2">`importIfEmpty</span><span class="s1">()</span><span class="s2">` in `HotelTable`</span><span class="s1">)</span><span class="s2">.</span>
+
+<span class="s2">User accounts must be created manually in SQL Server</span><span class="s1">:</span>
+<span class="s0">```</span><span class="s3">sql</span>
+<span class="s4">INSERT INTO Users (username, password, role) VALUES ('senior', 'senior', 'SENIOR');</span>
+<span class="s4">INSERT INTO Users (username, password, role) VALUES ('admin', 'admin', 'ADMIN');</span>
+<span class="s0">```</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">5. Usage Documentation</span>
+
+<span class="s0">### </span><span class="s2">Login</span>
+<span class="s0">- </span><span class="s2">On startup, the `LoginWindow` appears.</span>
+<span class="s0">- </span><span class="s2">Enter username and password — credentials are validated against the `Users` table in the database.</span>
+<span class="s0">- </span><span class="s2">After successful login, the `MainWindow` opens. The logged-in user and their role are displayed in the top-right corner of the header.</span>
+
+<span class="s0">### </span><span class="s2">Main Functions</span>
+
+<span class="s0">| </span><span class="s1">Feature </span><span class="s0">| </span><span class="s1">Description </span><span class="s0">| </span><span class="s1">US </span><span class="s0">| </span><span class="s1">Role </span><span class="s0">|</span>
+<span class="s0">|---|---|---|---|</span>
+<span class="s0">| </span><span class="s1">Summary </span><span class="s0">| </span><span class="s1">Category statistics (count, avg rooms, avg beds) </span><span class="s0">| </span><span class="s1">US-1 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Hotel List </span><span class="s0">| </span><span class="s1">Sortable, filterable table of all hotels </span><span class="s0">| </span><span class="s1">US-4 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Add Hotel </span><span class="s0">| </span><span class="s1">Form dialog to create a new hotel entry </span><span class="s0">| </span><span class="s1">US-3 </span><span class="s0">| </span><span class="s1">Admin </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Edit Hotel </span><span class="s0">| </span><span class="s1">Pre-filled form dialog to update hotel data </span><span class="s0">| </span><span class="s1">US-5 </span><span class="s0">| </span><span class="s1">Admin </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Delete Hotel </span><span class="s0">| </span><span class="s1">Deletes hotel and all linked occupancy data </span><span class="s0">| </span><span class="s1">US-11 </span><span class="s0">| </span><span class="s1">Admin </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Occupancy List </span><span class="s0">| </span><span class="s1">Filterable list of monthly room/bed occupancy </span><span class="s0">| </span><span class="s1">US-2, US-10 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Add Occupancy </span><span class="s0">| </span><span class="s1">Form to enter monthly occupancy data per hotel </span><span class="s0">| </span><span class="s1">US-6 </span><span class="s0">| </span><span class="s1">Admin </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Search </span><span class="s0">| </span><span class="s1">Real-time text search by hotel name </span><span class="s0">| </span><span class="s1">US-4 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Sort </span><span class="s0">| </span><span class="s1">Column header click sorts the table </span><span class="s0">| </span><span class="s1">- </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Reset Sort </span><span class="s0">| </span><span class="s1">Button to restore original sort order </span><span class="s0">| </span><span class="s1">- </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Export PDF </span><span class="s0">| </span><span class="s1">Exports filtered occupancy table as A4 PDF with NOE-TO branding </span><span class="s0">| </span><span class="s1">US-7 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Login/User Mgmt </span><span class="s0">| </span><span class="s1">Role-based access control (Admin/Senior) </span><span class="s0">| </span><span class="s1">US-12 </span><span class="s0">| </span><span class="s1">- </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Help Tab </span><span class="s0">| </span><span class="s1">Usage instructions for all user types </span><span class="s0">| </span><span class="s1">US-18 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Logo Header </span><span class="s0">| </span><span class="s1">NOE-TO logo displayed in the application header </span><span class="s0">| </span><span class="s1">US-17 </span><span class="s0">| </span><span class="s1">All </span><span class="s0">|</span>
+
+<span class="s0">### </span><span class="s2">Role Permissions</span>
+
+<span class="s0">| </span><span class="s1">Action </span><span class="s0">| </span><span class="s1">SENIOR </span><span class="s0">| </span><span class="s1">ADMIN </span><span class="s0">|</span>
+<span class="s0">|---|---|---|</span>
+<span class="s0">| </span><span class="s1">View all data </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Filter &amp; search </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Add Hotel </span><span class="s0">| </span><span class="s1">❌ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Edit Hotel </span><span class="s0">| </span><span class="s1">❌ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Delete Hotel </span><span class="s0">| </span><span class="s1">❌ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">Add Occupancy </span><span class="s0">| </span><span class="s1">❌ </span><span class="s0">| </span><span class="s1">✅ </span><span class="s0">|</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">6. API Documentation</span>
+<span class="s1">*</span><span class="s2">The project does not use REST APIs. All communication occurs via Hibernate sessions and Java method calls internally.</span><span class="s1">*</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">7. Database Documentation</span>
+
+<span class="s0">### </span><span class="s2">Data Model</span>
+
+<span class="s0">#### </span><span class="s2">Entities</span>
+
+<span class="s1">**</span><span class="s2">Hotel</span><span class="s1">** (</span><span class="s2">`hotels` table</span><span class="s1">)</span>
+<span class="s2">| Field | Column | Type | Notes |</span>
+<span class="s2">|---|---|---|---|</span>
+<span class="s2">| id | id | Long | Primary Key, auto-generated |</span>
+<span class="s2">| category | Category | String | e.g. `</span><span class="s1">*****</span><span class="s2">`, `</span><span class="s1">****</span><span class="s2">` |</span>
+<span class="s2">| name | Name | String | Hotel name |</span>
+<span class="s2">| owner | owner | String | Owner name |</span>
+<span class="s2">| contact | contact | String | Contact person |</span>
+<span class="s2">| address | Address | String | Street address |</span>
+<span class="s2">| city | City | String | City |</span>
+<span class="s2">| cityCode | Citycode | String | Postal code |</span>
+<span class="s2">| phone | Phone | String | Phone number |</span>
+<span class="s2">| noRooms | </span><span class="s1">[</span><span class="s2">Nr of Rooms</span><span class="s1">] </span><span class="s2">| Integer | Total number of rooms |</span>
+<span class="s2">| noBeds | </span><span class="s1">[</span><span class="s2">Nr of Beds</span><span class="s1">] </span><span class="s2">| Integer | Total number of beds |</span>
+<span class="s2">| lastReported | </span><span class="s1">[</span><span class="s2">Last reported Data</span><span class="s1">] </span><span class="s2">| String | Date of last data update |</span>
+<span class="s2">| occupancies | - | List\&lt;Occupancy\&gt; | OneToMany, CascadeType.REMOVE |</span>
+
+<span class="s1">**</span><span class="s2">Occupancy</span><span class="s1">** (</span><span class="s2">`Occupancy` table</span><span class="s1">)</span>
+<span class="s2">| Field | Column | Type | Notes |</span>
+<span class="s2">|---|---|---|---|</span>
+<span class="s2">| id | id | Long | Primary Key, auto-generated |</span>
+<span class="s2">| hotel | hotel id | Hotel | ManyToOne, FetchType.EAGER |</span>
+<span class="s2">| year | occ year | int | Year of occupancy |</span>
+<span class="s2">| month | occ month | int | Month of occupancy |</span>
+<span class="s2">| roomOccupancy | room occupancy | int | Number of occupied rooms |</span>
+<span class="s2">| bedOccupancy | bed occupancy | int | Number of occupied beds |</span>
+
+<span class="s1">**</span><span class="s2">UsersHibernate</span><span class="s1">** (</span><span class="s2">`Users` table</span><span class="s1">)</span>
+<span class="s2">| Field | Column | Type | Notes |</span>
+<span class="s2">|---|---|---|---|</span>
+<span class="s2">| id | id | Long | Primary Key, auto-generated |</span>
+<span class="s2">| username | username | String | Unique, not null |</span>
+<span class="s2">| password | password | String | Not null |</span>
+<span class="s2">| role | role | UserRole | Enum</span><span class="s1">: </span><span class="s2">SENIOR, ADMIN |</span>
+
+<span class="s0">#### </span><span class="s2">ER Diagram </span><span class="s1">(</span><span class="s2">Mermaid</span><span class="s1">)</span>
+<span class="s0">```</span><span class="s3">mermaid</span>
+<span class="s4">erDiagram</span>
+    <span class="s4">HOTELS {</span>
+        <span class="s4">long id PK</span>
+        <span class="s4">string Category</span>
+        <span class="s4">string Name</span>
+        <span class="s4">string owner</span>
+        <span class="s4">string contact</span>
+        <span class="s4">string Address</span>
+        <span class="s4">string City</span>
+        <span class="s4">string Citycode</span>
+        <span class="s4">string Phone</span>
+        <span class="s4">int Nr_of_Rooms</span>
+        <span class="s4">int Nr_of_Beds</span>
+        <span class="s4">string Last_reported_Data</span>
+    <span class="s4">}</span>
+    <span class="s4">OCCUPANCY {</span>
+        <span class="s4">long id PK</span>
+        <span class="s4">long hotel_id FK</span>
+        <span class="s4">int occ_year</span>
+        <span class="s4">int occ_month</span>
+        <span class="s4">int room_occupancy</span>
+        <span class="s4">int bed_occupancy</span>
+    <span class="s4">}</span>
+    <span class="s4">USERS {</span>
+        <span class="s4">long id PK</span>
+        <span class="s4">string username</span>
+        <span class="s4">string password</span>
+        <span class="s4">string role</span>
+    <span class="s4">}</span>
+    <span class="s4">HOTELS ||--o{ OCCUPANCY : &quot;has&quot;</span>
+<span class="s0">```</span>
+
+<span class="s0">### </span><span class="s2">Hibernate Configuration</span>
+<span class="s0">- </span><span class="s2">`HibernateUtil` provides a singleton `SessionFactory`.</span>
+<span class="s0">- </span><span class="s2">Registered entities</span><span class="s1">: </span><span class="s2">`Hotel`, `Occupancy`, `UsersHibernate`.</span>
+<span class="s0">- </span><span class="s2">All Hibernate logging is suppressed via SLF4J system properties for cleaner console output.</span>
+
+<span class="s0">---</span>
+
+<span class="s0">## </span><span class="s2">8. Class Overview</span>
+
+<span class="s0">| </span><span class="s1">Class </span><span class="s0">| </span><span class="s1">Package </span><span class="s0">| </span><span class="s1">Purpose </span><span class="s0">|</span>
+<span class="s0">|---|---|---|</span>
+<span class="s0">| </span><span class="s1">`Main` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Application entry point, initializes Hibernate and opens LoginWindow </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`MainWindow` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Main JFrame with tabbed pane and logo header </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`HotelTable` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JPanel showing hotel list with add/edit/delete/search/sort </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`AddEditHotelWindow` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JDialog for adding or editing a hotel </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`OccupancyPanel` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JPanel showing occupancy data with filters </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`AddOccupancyWindow` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JDialog for adding occupancy data </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`SummaryPanel` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JPanel showing category statistics </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`HilfeTab` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">JPanel with help/usage text (US-18) </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`Hotel` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Hibernate entity for hotel master data </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`Occupancy` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Hibernate entity for monthly occupancy data </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`Category` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Enum for hotel star categories </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`HibernateUtil` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Singleton SessionFactory provider </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`TableUtils` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Utility class for sorting, filtering, and resetting JTables </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`PdfExporter` </span><span class="s0">| </span><span class="s1">`MasterTable` </span><span class="s0">| </span><span class="s1">Exports filtered occupancy table as A4 PDF with NOE-TO branding, multi-page support, filter context (US-7) </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`LoginWindow` </span><span class="s0">| </span><span class="s1">`MasterTable.Login` </span><span class="s0">| </span><span class="s1">JDialog for user authentication </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`UsersHibernate` </span><span class="s0">| </span><span class="s1">`MasterTable.Login` </span><span class="s0">| </span><span class="s1">Hibernate entity for user accounts </span><span class="s0">|</span>
+<span class="s0">| </span><span class="s1">`UserRole` </span><span class="s0">| </span><span class="s1">`MasterTable.Login` </span><span class="s0">| </span><span class="s1">Enum: SENIOR, ADMIN </span><span class="s0">|</span></pre>
+</body>
+</html>

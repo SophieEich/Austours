@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import MasterTable.entity.user.UsersHibernate;
 
 
 @Entity
@@ -53,6 +54,13 @@ import lombok.NoArgsConstructor;
         @Column(name = "[Last reported Data]")
         private String lastReported;
 
+
+    // US24: Every Hotel has exactly one Representer (User).
+    // One Representer can have many Hotels -> ManyToOne (foreign key representative_id).
+    // This way the program knows which hotels are "my" hotels.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "representative_id")
+    private UsersHibernate representative;
 
 
     // to String for Occupancy Filter

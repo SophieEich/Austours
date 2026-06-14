@@ -46,5 +46,20 @@ public class HotelDAO {
         }
     }
 
+        // US24: Only loads hotels owned by the logged-in hotel representative.
+        //Filtered using the foreign key `representative_id` (= user ID).
+        public List<Hotel> getHotelsForRepresentative(Long representativeId){
+            try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+                return s.createQuery(
+                                "FROM Hotel h WHERE h.representative.id = :rid", Hotel.class)
+                        .setParameter("rid", representativeId)
+                        .list();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Could not load hotels: " + e.getMessage());
+                return java.util.Collections.emptyList();
+            }
+
+    }
+
 
 }

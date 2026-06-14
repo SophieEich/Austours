@@ -42,42 +42,72 @@ public class HotelTable extends JPanel {
     }
 
     public void fillTable() {
+        // US24: A hotel representative only sees their own hotels and only the required fields.
+        boolean isRepresentative = currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE;
+
+        // Create columns once – different depending on role
         if (model.getColumnCount() == 0) {
-            model.addColumn("ID");
-            model.addColumn("CATEGORY");
-            model.addColumn("NAME");
-            model.addColumn("OWNER");
-            model.addColumn("CONTACT");
-            model.addColumn("ADDRESS");
-            model.addColumn("CITY");
-            model.addColumn("CITYCODE");
-            model.addColumn("PHONE");
-            model.addColumn("NUMBER ROOMS");
-            model.addColumn("NUMBER BEDS");
-            model.addColumn("LAST REPORTED DATA"); // Kommt erst mit dem EDIT US-5
+            if (isRepresentative) {
+                // US24: ID, hotel name, address, number of rooms, number of beds, last reported data
+                model.addColumn("ID");
+                model.addColumn("NAME");
+                model.addColumn("ADDRESS");
+                model.addColumn("NUMBER ROOMS");
+                model.addColumn("NUMBER BEDS");
+                model.addColumn("LAST REPORTED DATA");
+            } else {
+                model.addColumn("ID");
+                model.addColumn("CATEGORY");
+                model.addColumn("NAME");
+                model.addColumn("OWNER");
+                model.addColumn("CONTACT");
+                model.addColumn("ADDRESS");
+                model.addColumn("CITY");
+                model.addColumn("CITYCODE");
+                model.addColumn("PHONE");
+                model.addColumn("NUMBER ROOMS");
+                model.addColumn("NUMBER BEDS");
+                model.addColumn("LAST REPORTED DATA");
+            }
         }
         model.setRowCount(0); // Rows will be eptied, but columns stay the same
 
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
+        if (isRepresentative) {
+            // US24: Only load hotels owned by this representative (filtered by user ID)
+            List<Hotel> hotels = hotelDAO.getHotelsForRepresentative(currentUser.getId());
             for (Hotel h : hotels) {
                 model.addRow(new Object[]{
                         h.getId(),
-                        h.getCategory(),
                         h.getName(),
-                        h.getOwner(),
-                        h.getContact(),
                         h.getAddress(),
-                        h.getCity(),
-                        h.getCityCode(),
-                        h.getPhone(),
                         h.getNoRooms(),
                         h.getNoBeds(),
                         h.getLastReported()
                 });
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Could not load hotels: " + e.getMessage());
+        } else {
+            // Admin / Senior: all hotels with all columns (as before)
+            try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+                List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
+                for (Hotel h : hotels) {
+                    model.addRow(new Object[]{
+                            h.getId(),
+                            h.getCategory(),
+                            h.getName(),
+                            h.getOwner(),
+                            h.getContact(),
+                            h.getAddress(),
+                            h.getCity(),
+                            h.getCityCode(),
+                            h.getPhone(),
+                            h.getNoRooms(),
+                            h.getNoBeds(),
+                            h.getLastReported()
+                    });
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Could not load hotels: " + e.getMessage());
+            }
         }
     }
 
@@ -162,6 +192,9 @@ public class HotelTable extends JPanel {
         //create Search-Panel
         JTextField searchField = new JTextField(20);
         searchField.setToolTipText("Search for Hotel Name...");
+
+        // US24: The table has fewer columns for the representative -> hotel name is in column 1, otherwise in column 2.
+        final int nameColumnIndex = (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) ? 1 : 2;
 
         // Event-Listener: Searches every time a key is pressed
         searchField.addKeyListener(new KeyAdapter() {
