@@ -193,7 +193,7 @@ public class OccupancyPanel extends JPanel {
         };
         table = new JTable(model);
 
-        //US 23
+        //US 23 (Inline editing of transactional data directly in overview table)
         model.addTableModelListener(e-> {
             if (e.getType() != TableModelEvent.UPDATE) return;
 
