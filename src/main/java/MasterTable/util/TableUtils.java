@@ -12,7 +12,7 @@ public class TableUtils {
     public static void enableSorting(JTable table) {
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(sorter);
-        // After 3 Clicks (ASC → DESC-> normal) will be normal again
+        // After 2 Clicks normal (ASC → Normal)
         table.getTableHeader().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
