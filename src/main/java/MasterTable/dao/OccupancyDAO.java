@@ -57,20 +57,7 @@ public class OccupancyDAO {
 
 
     //US-23
-    public void updateOccupancy(Occupancy occ) {
-        Transaction tx = null;
 
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            tx = s.beginTransaction();
-
-            s.merge(occ);
-
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            System.out.println("Could not update occupancy: " + e.getMessage());
-        }
-    }
 
 
 }
