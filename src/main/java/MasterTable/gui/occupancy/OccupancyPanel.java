@@ -194,7 +194,38 @@ public class OccupancyPanel extends JPanel {
         table = new JTable(model);
 
         //US 23
+        model.addTableModelListener(e-> {
+            if (e.getType() != TableModelEvent.UPDATE) return;
 
+            int col = e.getColumn();
+            // only rooms + Beds Occupancy
+            if (col != 4 && col != 5) return;
+
+            int row = e.getFirstRow();
+
+            try {
+                Occupancy occ = loadedOccupancies.get(row); //straight from list
+                int roomOcc = Integer.parseInt(model.getValueAt(row, 4).toString());
+                int bedOcc= Integer.parseInt(model.getValueAt(row, 5).toString());
+
+                //Validation
+                if (roomOcc <= 0 || bedOcc <= 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Values must be positive numbers!");
+                    fillTable();
+                    return;
+                }
+                if (roomOcc > occ.getHotel().getNoRooms()) {
+                    JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
+                    fillTable(); // so that the old value is there
+                    return;
+                }
+
+                if (bedOcc > occ.getHotel().getNoBeds()) {
+                    JOptionPane.showMessageDialog(this, "Bed occupancy cannot exceed total beds!");
+                    fillTable(); // so that the old value is there
+                    return;
+                }
 
                 //DAO Call
                 occ.setRoomOccupancy(roomOcc);
