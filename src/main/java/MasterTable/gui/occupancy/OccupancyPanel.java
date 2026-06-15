@@ -40,8 +40,6 @@ public class OccupancyPanel extends JPanel {
     public JComboBox<String>   toYear         = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     public JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
 
-
-
     // ─────────────────────────────────────────────────────────────────────────
 
     public OccupancyPanel(UsersHibernate user) {
@@ -56,6 +54,7 @@ public class OccupancyPanel extends JPanel {
     // US-02: Reads occupancy data from file and applies all active filter criteria
     // Displays room and bed occupancy per month in the summary table
     public void fillTable() {
+
         if (model == null) return;
         model.setRowCount(0);
         loadedOccupancies.clear();
@@ -193,7 +192,7 @@ public class OccupancyPanel extends JPanel {
         };
         table = new JTable(model);
 
-        //US 23
+        //US 23 (Inline editing of transactional data directly in overview table)
         model.addTableModelListener(e-> {
             if (e.getType() != TableModelEvent.UPDATE) return;
 
