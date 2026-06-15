@@ -234,7 +234,7 @@ public class AddEditHotelWindow extends JDialog {
 
 
     private boolean hasChanges() {
-        if (!isEditing) return true; // beim Add immer speichern
+        if (!isEditing) return true; // always save with Add
 
         String savedCategory = rowData[1].toString();
 

@@ -49,7 +49,7 @@ public class MainWindow extends JFrame {
             JLabel logoLabel = new JLabel(new ImageIcon(scaled));
             header.add(logoLabel, BorderLayout.WEST);
         } else {
-            // Fallback, falls die Datei nicht im Classpath liegt
+            // Fallback,if file is not in classpath
             JLabel fallback = new JLabel("Lower Austria Tourist Portal");
             fallback.setFont(new Font("Arial", Font.BOLD, 18));
             header.add(fallback);
