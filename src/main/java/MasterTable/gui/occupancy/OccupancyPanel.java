@@ -193,7 +193,8 @@ public class OccupancyPanel extends JPanel {
         };
         table = new JTable(model);
 
-        model.addTableModelListener(e-> {//US-23
+        //US 23
+        model.addTableModelListener(e-> {
             if (e.getType() != TableModelEvent.UPDATE) return;
 
             int col = e.getColumn();

@@ -141,7 +141,8 @@ public class HotelTable extends JPanel {
             JFrame father = (JFrame) SwingUtilities.getWindowAncestor(this);
             new AddEditHotelWindow(father, null, this); //null = ADD Modus
         });
-        //US-5
+
+//US-5
         editButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
