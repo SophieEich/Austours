@@ -55,6 +55,47 @@ public class OccupancyPanel extends JPanel {
     // Displays room and bed occupancy per month in the summary table
     public void fillTable() {
 
+        if (model == null) return;
+        model.setRowCount(0);
+        loadedOccupancies.clear();
+
+        // 1. Filter-Werte aus der UI holen
+        String selectedHotel = (String) hotelFilter.getSelectedItem();
+        Long filterHotelId = null;
+        if (selectedHotel != null && !selectedHotel.equals("ALL")) {
+            filterHotelId = Long.parseLong(selectedHotel.split(" - ")[0].trim());
+        }
+
+
+        Category selectedCategory = (Category) categoryFilter.getSelectedItem();
+
+        // 2. Datenbank-Abfrage
+
+
+        List<Occupancy> list = occupancyDAO.getAllOccupancies();
+
+        int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
+        int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
+
+        int fromMonthInt = Integer.parseInt((String) fromMonth.getSelectedItem());
+        int toMonthInt = Integer.parseInt((String) toMonth.getSelectedItem());
+
+        int filterFrom = fromYearInt * 100 + fromMonthInt;
+        int filterTo   = toYearInt * 100 + toMonthInt;
+
+        for (Occupancy occ : list) {
+            Hotel h = occ.getHotel();
+
+            // --- FILTER PRÜFUNG ---
+            if (filterHotelId != null && !h.getId().equals(filterHotelId)) continue;
+            if (selectedCategory != null && selectedCategory != Category.ALL) {
+                if (!h.getCategory().equals(selectedCategory.toString())) continue;
+            }
+
+            // Datum-Filter
+            int rowDate = occ.getYear() * 100 + occ.getMonth();
+            if (rowDate < filterFrom || rowDate > filterTo) continue;
+
             // 3. Write in Tabele
             loadedOccupancies.add(occ);
             model.addRow(new Object[]{
