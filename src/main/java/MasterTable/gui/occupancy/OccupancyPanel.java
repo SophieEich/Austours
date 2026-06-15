@@ -27,6 +27,7 @@ public class OccupancyPanel extends JPanel {
     public DefaultTableModel model;
     private final UsersHibernate currentUser;
     private final OccupancyDAO occupancyDAO = new OccupancyDAO();
+    //US-24
     private List<Occupancy> loadedOccupancies = new java.util.ArrayList<>();
 
 
