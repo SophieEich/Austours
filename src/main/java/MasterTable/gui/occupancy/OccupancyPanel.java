@@ -193,7 +193,6 @@ public class OccupancyPanel extends JPanel {
         };
         table = new JTable(model);
 
-
         model.addTableModelListener(e-> {
             if (e.getType() != TableModelEvent.UPDATE) return;
 
@@ -236,6 +235,7 @@ public class OccupancyPanel extends JPanel {
                 fillTable();
             }
         });
+
 
         model.addColumn("HOTEL ID");
         model.addColumn("HOTEL NAME");
