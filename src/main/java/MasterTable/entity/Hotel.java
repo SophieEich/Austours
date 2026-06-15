@@ -55,8 +55,6 @@ import MasterTable.entity.user.UsersHibernate;
         private String lastReported;
 
     // US14: New attribute columns — family-friendly, pet-friendly, spa, fitness
-    // Hibernate will automatically add these columns to the Hotels table (hbm2ddl.auto = update)
-    // Default is false (not null) — existing rows will be set to false automatically
 
         @Column(name = "family_friendly", nullable = false, columnDefinition = "BIT DEFAULT 0")
         @Builder.Default
