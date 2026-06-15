@@ -37,7 +37,7 @@ public class OccupancyPanel extends JPanel {
     public JComboBox<String>   fromMonth      = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
     public JComboBox<String>   fromYear       = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     public JComboBox<String>   toMonth        = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
-    public JComboBox<String>   toYear       = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
+    public JComboBox<String>   toYear         = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     public JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
 
 

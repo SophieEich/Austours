@@ -68,6 +68,10 @@ public class HotelTable extends JPanel {
                 model.addColumn("NUMBER ROOMS");
                 model.addColumn("NUMBER BEDS");
                 model.addColumn("LAST REPORTED DATA");
+                model.addColumn("family_friendly");
+                model.addColumn("pet_friendly");
+                model.addColumn("spa");
+                model.addColumn("fitness");
             }
         }
         model.setRowCount(0); // Rows will be eptied, but columns stay the same
@@ -102,7 +106,11 @@ public class HotelTable extends JPanel {
                             h.getPhone(),
                             h.getNoRooms(),
                             h.getNoBeds(),
-                            h.getLastReported()
+                            h.getLastReported(),
+                            h.isFamilyFriendly() ? "✓" : " ",
+                            h.isPetFriendly() ? "✓" : " ",
+                            h.isSpa() ? "✓" : " ",
+                            h.isFitness() ? "✓" : " "
                     });
                 }
             } catch (Exception e) {
