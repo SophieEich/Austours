@@ -2,13 +2,11 @@ package MasterTable.gui.summary;
 
 import MasterTable.entity.Category;
 import MasterTable.entity.Hotel;
-import MasterTable.entity.Occupancy;
 import MasterTable.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.HashMap;
@@ -25,38 +23,83 @@ public class SummaryPanel extends JPanel {
     Map<String, Integer> bedsMap  = new HashMap<>();
 
     //US1
-    model.addTableModelListener(e-> {//US-23
-        if (e.getType() != TableModelEvent.UPDATE) return;
+    public SummaryPanel() {
+        definePanel();
+        initComponents();
+        addComponents();
+        fillTable();        //füllen von tabellen
+    }
 
-        int col = e.getColumn();
-        // only rooms + Beds Occupancy
-        if (col != 4 && col != 5) return;
+    private void definePanel() {
+        setLayout(new BorderLayout());
+    }
 
-        int row = e.getFirstRow();
+    private void initComponents() {
+        model = new DefaultTableModel();
+        table = new JTable(model);
+        table.setEnabled(false); // read only
 
-        try {
-            Occupancy occ = loadedOccupancies.get(row); //straight from list
-            int roomOcc = Integer.parseInt(model.getValueAt(row, 4).toString());
-            int bedOcc= Integer.parseInt(model.getValueAt(row, 5).toString());
+        //kategorien der Spalten
+        model.addColumn("CATEGORY");
+        model.addColumn("NUMBER OF HOTELS");
+        model.addColumn("AVG ROOMS");
+        model.addColumn("AVG BEDS");
 
-            //Validation
-            if (roomOcc <= 0 || bedOcc <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Values must be positive numbers!");
-                fillTable();
-                return;
+
+        // for better readability with color change
+        table.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                                                                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    setBackground(row % 2 == 0 ? Color.WHITE : new Color(235, 243, 250)); // NOE Blau
+                }
+                return this;
             }
-            if (roomOcc > occ.getHotel().getNoRooms()) {
-                JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
-                fillTable(); // so that the old value is there
-                return;
-            }
+        });
 
-            if (bedOcc > occ.getHotel().getNoBeds()) {
-                JOptionPane.showMessageDialog(this, "Bed occupancy cannot exceed total beds!");
-                fillTable(); // so that the old value is there
-                return;
+        // automatically adjust width of column
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        //increases row height to 16pt
+        table.setRowHeight(25);
+
+
+    }
+
+    private void addComponents() {
+        JLabel title = new JLabel("Hotel Master Data Summary", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 16));
+        add(title, BorderLayout.NORTH);
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+
+        JPanel buttonPanel = new JPanel();
+
+        JButton refreshButton = new JButton("REFRESH");
+        refreshButton.addActionListener(e -> fillTable());
+
+        buttonPanel.add(refreshButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+
+    }
+
+    private void fillTable() {
+        // Initialize maps using enum
+
+        model.setRowCount(0);
+
+        //Maps get reset
+        for (Category cat : Category.values()) {
+            if (cat != Category.ALL) {
+                countMap.put(cat.toString(), 0);
+                roomsMap.put(cat.toString(), 0);
+                bedsMap.put(cat.toString(),  0);
             }
+        }
+
         // Connects with Database
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {
             List<Hotel> hotels = s.createQuery("from Hotel", Hotel.class).list();
