@@ -68,10 +68,10 @@ public class HotelTable extends JPanel {
                 model.addColumn("NUMBER ROOMS");
                 model.addColumn("NUMBER BEDS");
                 model.addColumn("LAST REPORTED DATA");
-                model.addColumn("family_friendly");
-                model.addColumn("pet_friendly");
-                model.addColumn("spa");
-                model.addColumn("fitness");
+                model.addColumn("FAMILY FRIENDLY");
+                model.addColumn("PET FRIENDLY");
+                model.addColumn("SPA");
+                model.addColumn("FITNESS");
             }
         }
         model.setRowCount(0); // Rows will be eptied, but columns stay the same

@@ -28,9 +28,9 @@ public class AddEditHotelWindow extends JDialog {
 
     // US14: Attribute checkboxes
     JCheckBox familyFriendly = new JCheckBox();
-    JCheckBox petFriendly    = new JCheckBox();
-    JCheckBox spa            = new JCheckBox();
-    JCheckBox fitness        = new JCheckBox();
+    JCheckBox petFriendly = new JCheckBox();
+    JCheckBox spa = new JCheckBox();
+    JCheckBox fitness = new JCheckBox();
 
     JButton saveButton = new JButton("Save");
 
@@ -46,7 +46,6 @@ public class AddEditHotelWindow extends JDialog {
         addComponents();
         setVisible(true);
     }
-
 
 
     private void defineDialog() {
@@ -70,21 +69,21 @@ public class AddEditHotelWindow extends JDialog {
             }
         }
 
-        name    .setText(rowData[2].toString());
-        owner   .setText(rowData[3].toString());
-        contact .setText(rowData[4].toString());
-        address .setText(rowData[5].toString());
-        city    .setText(rowData[6].toString());
+        name.setText(rowData[2].toString());
+        owner.setText(rowData[3].toString());
+        contact.setText(rowData[4].toString());
+        address.setText(rowData[5].toString());
+        city.setText(rowData[6].toString());
         citycode.setText(rowData[7].toString());
-        phone   .setText(rowData[8].toString());
-        rooms   .setText(rowData[9].toString());
-        beds    .setText(rowData[10].toString());
+        phone.setText(rowData[8].toString());
+        rooms.setText(rowData[9].toString());
+        beds.setText(rowData[10].toString());
 
         // US14: Pre-fill attribute checkboxes from rowData
-        familyFriendly.setSelected(Boolean.TRUE.equals(rowData[12]));
-        petFriendly.setSelected(Boolean.TRUE.equals(rowData[13]));
-        spa.setSelected(Boolean.TRUE.equals(rowData[14]));
-        fitness.setSelected(Boolean.TRUE.equals(rowData[15]));
+        familyFriendly.setSelected(isChecked(rowData[12]));
+        petFriendly.setSelected(isChecked(rowData[13]));
+        spa.setSelected(isChecked(rowData[14]));
+        fitness.setSelected(isChecked(rowData[15]));
 
 
     }
@@ -112,10 +111,14 @@ public class AddEditHotelWindow extends JDialog {
         add(beds);
 
         // US14: Attribute checkboxes
-        add(new JLabel("Family Friendly:")); add(familyFriendly);
-        add(new JLabel("Pet Friendly:"));    add(petFriendly);
-        add(new JLabel("Spa:"));             add(spa);
-        add(new JLabel("Fitness:"));         add(fitness);
+        add(new JLabel("Family Friendly:"));
+        add(familyFriendly);
+        add(new JLabel("Pet Friendly:"));
+        add(petFriendly);
+        add(new JLabel("Spa:"));
+        add(spa);
+        add(new JLabel("Fitness:"));
+        add(fitness);
 
         add(new JLabel(""));
         add(saveButton);
@@ -125,9 +128,6 @@ public class AddEditHotelWindow extends JDialog {
 
         saveButton.addActionListener(e -> onSave());
     }
-
-
-
 
 
     public void onSave() {
@@ -163,13 +163,10 @@ public class AddEditHotelWindow extends JDialog {
         int contactCheck = contact.getText().trim().length();
         int addressCheck = address.getText().trim().length();
         int cityCheck = city.getText().trim().length();
-        if (nameCheck < 2 ||  ownerCheck < 2 || contactCheck < 2 || addressCheck < 2 || cityCheck < 2) {
+        if (nameCheck < 2 || ownerCheck < 2 || contactCheck < 2 || addressCheck < 2 || cityCheck < 2) {
             JOptionPane.showMessageDialog(this, "Must be at least 2 characters!");
             return;
         }
-
-
-
 
 
         //Only positve numebers
@@ -211,7 +208,6 @@ public class AddEditHotelWindow extends JDialog {
             JOptionPane.showMessageDialog(this, "Phone must be a number!");
             return;
         }
-
 
 
         String today = LocalDate.now().toString();
@@ -264,21 +260,21 @@ public class AddEditHotelWindow extends JDialog {
 
         // US14: Also compare checkbox state for the 4 attributes
         boolean textChanged =
-                !name.getText().equals(rowData[2].toString())          ||
+                !name.getText().equals(rowData[2].toString()) ||
                         !category.getSelectedItem().toString().equals(savedCategory) ||
-                        !owner.getText().equals(rowData[3].toString())         ||
-                        !contact.getText().equals(rowData[4].toString())       ||
-                        !address.getText().equals(rowData[5].toString())       ||
-                        !city.getText().equals(rowData[6].toString())          ||
-                        !citycode.getText().equals(rowData[7].toString())      ||
-                        !phone.getText().equals(rowData[8].toString())         ||
-                        !rooms.getText().equals(rowData[9].toString())         ||
+                        !owner.getText().equals(rowData[3].toString()) ||
+                        !contact.getText().equals(rowData[4].toString()) ||
+                        !address.getText().equals(rowData[5].toString()) ||
+                        !city.getText().equals(rowData[6].toString()) ||
+                        !citycode.getText().equals(rowData[7].toString()) ||
+                        !phone.getText().equals(rowData[8].toString()) ||
+                        !rooms.getText().equals(rowData[9].toString()) ||
                         !beds.getText().equals(rowData[10].toString());
 
-        boolean oldFamily = "✓".equals(rowData[12]);
-        boolean oldPet = "✓".equals(rowData[13]);
-        boolean oldSpa = "✓".equals(rowData[14]);
-        boolean oldFitness = "✓".equals(rowData[15]);
+        boolean oldFamily = isChecked(rowData[12]);
+        boolean oldPet = isChecked(rowData[13]);
+        boolean oldSpa = isChecked(rowData[14]);
+        boolean oldFitness = isChecked(rowData[15]);
 
         boolean attrChanged =
                 familyFriendly.isSelected() != oldFamily ||
@@ -287,5 +283,11 @@ public class AddEditHotelWindow extends JDialog {
                         fitness.isSelected() != oldFitness;
 
         return textChanged || attrChanged;
+    }
+
+    private boolean isChecked(Object value) {
+        return Boolean.TRUE.equals(value)
+                || "true".equalsIgnoreCase(String.valueOf(value))
+                || "✓".equals(String.valueOf(value));
     }
 }
