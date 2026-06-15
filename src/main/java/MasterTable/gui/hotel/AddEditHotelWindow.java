@@ -26,6 +26,12 @@ public class AddEditHotelWindow extends JDialog {
     JTextField rooms = new JTextField();
     JTextField beds = new JTextField();
 
+    // US14: Attribute checkboxes
+    JCheckBox familyFriendly = new JCheckBox();
+    JCheckBox petFriendly    = new JCheckBox();
+    JCheckBox spa            = new JCheckBox();
+    JCheckBox fitness        = new JCheckBox();
+
     JButton saveButton = new JButton("Save");
 
 
@@ -47,7 +53,8 @@ public class AddEditHotelWindow extends JDialog {
         setSize(500, 500);
         // setDefaultCloseOperation(DISPOSE_ON_CLOSE); NOT Needed for JDialouge
         setLocationRelativeTo(getOwner());
-        setLayout(new GridLayout(11, 2, 15, 17));
+        // US14: 15 rows now (10 text fields + 4 checkboxes + 1 save button row)
+        setLayout(new GridLayout(15, 2, 15, 12));
     }
 
     private void prefillFields() {
@@ -73,6 +80,13 @@ public class AddEditHotelWindow extends JDialog {
         rooms   .setText(rowData[9].toString());
         beds    .setText(rowData[10].toString());
 
+        // US14: Pre-fill attribute checkboxes from rowData
+        familyFriendly.setSelected(Boolean.TRUE.equals(rowData[12]));
+        petFriendly.setSelected(Boolean.TRUE.equals(rowData[13]));
+        spa.setSelected(Boolean.TRUE.equals(rowData[14]));
+        fitness.setSelected(Boolean.TRUE.equals(rowData[15]));
+
+
     }
 
     private void addComponents() {
@@ -96,6 +110,12 @@ public class AddEditHotelWindow extends JDialog {
         add(rooms);
         add(new JLabel("Number of Beds:"));
         add(beds);
+
+        // US14: Attribute checkboxes
+        add(new JLabel("Family Friendly:")); add(familyFriendly);
+        add(new JLabel("Pet Friendly:"));    add(petFriendly);
+        add(new JLabel("Spa:"));             add(spa);
+        add(new JLabel("Fitness:"));         add(fitness);
 
         add(new JLabel(""));
         add(saveButton);
@@ -198,19 +218,23 @@ public class AddEditHotelWindow extends JDialog {
         String selectedCategory = category.getSelectedItem().toString();
 
 
-
+// US14: Pass attribute checkbox values to the builder
         Hotel h = Hotel.builder()
-                .category(selectedCategory)
-                .name(name.getText())
-                .owner(owner.getText())
-                .contact(contact.getText())
-                .address(address.getText())
-                .city(city.getText())
-                .cityCode(citycode.getText())
-                .phone(phone.getText())
+                .category(category.getSelectedItem().toString())
+                .name(name.getText().trim())
+                .owner(owner.getText().trim())
+                .contact(contact.getText().trim())
+                .address(address.getText().trim())
+                .city(city.getText().trim())
+                .cityCode(citycode.getText().trim())
+                .phone(phone.getText().trim())
                 .noRooms(roomCount)
                 .noBeds(bedCount)
                 .lastReported(today)
+                .familyFriendly(familyFriendly.isSelected())
+                .petFriendly(petFriendly.isSelected())
+                .spa(spa.isSelected())
+                .fitness(fitness.isSelected())
                 .build();
 
         if (isEditing) {
@@ -238,16 +262,30 @@ public class AddEditHotelWindow extends JDialog {
 
         String savedCategory = rowData[1].toString();
 
-        return !name.getText().equals(rowData[2].toString()) ||
-                !category.getSelectedItem().toString().equals(savedCategory) ||
-                !owner.getText().equals(rowData[3].toString()) ||
-                !contact.getText().equals(rowData[4].toString()) ||
-                !address.getText().equals(rowData[5].toString()) ||
-                !city.getText().equals(rowData[6].toString()) ||
-                !citycode.getText().equals(rowData[7].toString()) ||
-                !phone.getText().equals(rowData[8].toString()) ||
-                !rooms.getText().equals(rowData[9].toString()) ||
-                !beds.getText().equals(rowData[10].toString());
+        // US14: Also compare checkbox state for the 4 attributes
+        boolean textChanged =
+                !name.getText().equals(rowData[2].toString())          ||
+                        !category.getSelectedItem().toString().equals(savedCategory) ||
+                        !owner.getText().equals(rowData[3].toString())         ||
+                        !contact.getText().equals(rowData[4].toString())       ||
+                        !address.getText().equals(rowData[5].toString())       ||
+                        !city.getText().equals(rowData[6].toString())          ||
+                        !citycode.getText().equals(rowData[7].toString())      ||
+                        !phone.getText().equals(rowData[8].toString())         ||
+                        !rooms.getText().equals(rowData[9].toString())         ||
+                        !beds.getText().equals(rowData[10].toString());
+
+        boolean oldFamily = "✓".equals(rowData[12]);
+        boolean oldPet = "✓".equals(rowData[13]);
+        boolean oldSpa = "✓".equals(rowData[14]);
+        boolean oldFitness = "✓".equals(rowData[15]);
+
+        boolean attrChanged =
+                familyFriendly.isSelected() != oldFamily ||
+                        petFriendly.isSelected() != oldPet ||
+                        spa.isSelected() != oldSpa ||
+                        fitness.isSelected() != oldFitness;
+
+        return textChanged || attrChanged;
     }
 }
-

@@ -54,6 +54,26 @@ import MasterTable.entity.user.UsersHibernate;
         @Column(name = "[Last reported Data]")
         private String lastReported;
 
+    // US14: New attribute columns — family-friendly, pet-friendly, spa, fitness
+    // Hibernate will automatically add these columns to the Hotels table (hbm2ddl.auto = update)
+    // Default is false (not null) — existing rows will be set to false automatically
+
+        @Column(name = "family_friendly", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Builder.Default
+        private boolean familyFriendly = false;
+
+        @Column(name = "pet_friendly", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Builder.Default
+        private boolean petFriendly = false;
+
+        @Column(name = "spa", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Builder.Default
+        private boolean spa = false;
+
+        @Column(name = "fitness", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Builder.Default
+        private boolean fitness = false;
+
 
     // US24: Every Hotel has exactly one Representer (User).
     // One Representer can have many Hotels -> ManyToOne (foreign key representative_id).
