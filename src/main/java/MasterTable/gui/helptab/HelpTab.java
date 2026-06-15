@@ -3,7 +3,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-//US 18
+//US 18 (Help tab with user guide)
 public class HelpTab extends JPanel {
     public HelpTab() {
         setLayout(new BorderLayout());

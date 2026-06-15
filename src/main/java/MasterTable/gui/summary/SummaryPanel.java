@@ -22,7 +22,7 @@ public class SummaryPanel extends JPanel {
     Map<String, Integer> roomsMap = new HashMap<>();
     Map<String, Integer> bedsMap  = new HashMap<>();
 
-    //US1
+    //US1 (Summary of master data (hotels per category, avg. rooms/beds))
     public SummaryPanel() {
         definePanel();
         initComponents();
