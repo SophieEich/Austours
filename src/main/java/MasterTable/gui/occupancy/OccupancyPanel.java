@@ -71,8 +71,8 @@ public class OccupancyPanel extends JPanel {
 
         // 2. Datenbank-Abfrage
 
-
-        List<Occupancy> list = occupancyDAO.getAllOccupancies();
+        //For US-24, the line 75 was changed
+        List<Occupancy> list = occupancyDAO.getOccupanciesForRepresentative(currentUser.getUsername());
 
         int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
         int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
@@ -155,7 +155,7 @@ public class OccupancyPanel extends JPanel {
 
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("ADD OCCUPANCY");
-        addButton.addActionListener(e -> new AddOccupancyWindow(this));
+        addButton.addActionListener(e -> new AddOccupancyWindow(this, currentUser));
         buttonPanel.add(addButton);
 
         // US-07: Export current filtered table as A4 PDF
@@ -164,7 +164,7 @@ public class OccupancyPanel extends JPanel {
         buttonPanel.add(exportButton);
 
         // Only admins should add/edit/delete
-        boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
+        boolean isAdmin = currentUser.getRole() == UserRole.ADMIN || currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE;
         addButton.setEnabled(isAdmin);
 
         add(buttonPanel, BorderLayout.SOUTH);
