@@ -75,9 +75,9 @@ public class OccupancyPanel extends JPanel {
         //For US-24, the line 75 was changed
         List<Occupancy> list;
         if (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) {
-            list = occupancyDAO.getOccupanciesByRepresentativeId(currentUser.getId());//Joana
+            list = occupancyDAO.getOccupanciesByRepresentativeId(currentUser.getId());//Joana dsadsd
         } else {
-            list = occupancyDAO.getAllOccupancies();//Tekin
+            list = occupancyDAO.getAllOccupancies();//Tekin asddsaasd
         }
 
         int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
