@@ -79,6 +79,7 @@ public class AddEditHotelWindow extends JDialog {
         rooms.setText(rowData[9].toString());
         beds.setText(rowData[10].toString());
 
+
         // US14: Pre-fill attribute checkboxes from rowData
         familyFriendly.setSelected(isChecked(rowData[12]));
         petFriendly.setSelected(isChecked(rowData[13]));
@@ -128,7 +129,6 @@ public class AddEditHotelWindow extends JDialog {
 
         saveButton.addActionListener(e -> onSave());
     }
-
 
     public void onSave() {
         if (!hasChanges()) {
@@ -241,6 +241,7 @@ public class AddEditHotelWindow extends JDialog {
             JOptionPane.showMessageDialog(null,
                     "Hotel '" + name.getText() + "' was successfully updated!",
                     "Success", JOptionPane.INFORMATION_MESSAGE);
+
         } else {
             parent.addHotel(h);
             parent.fillTable(); // database will be loaded again, done
