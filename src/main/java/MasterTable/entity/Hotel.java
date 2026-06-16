@@ -73,7 +73,7 @@ import MasterTable.entity.user.UsersHibernate;
         private boolean fitness = false;
 
 
-    // US24: Every Hotel has exactly one Representer (User).
+// US24: Every Hotel has exactly one Representer (User).
     // One Representer can have many Hotels -> ManyToOne (foreign key representative_id).
     // This way the program knows which hotels are "my" hotels.
     @ManyToOne(fetch = FetchType.EAGER)

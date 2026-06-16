@@ -48,7 +48,7 @@ public class HotelDAO {
         }
     }
 
-        // US24: Only loads hotels owned by the logged-in hotel representative.
+// US24: Only loads hotels owned by the logged-in hotel representative.
         //Filtered using the foreign key `representative_id` (= user ID).
         public List<Hotel> getHotelsForRepresentative(Long representativeId){
             try (Session s = HibernateUtil.getSessionFactory().openSession()) {
