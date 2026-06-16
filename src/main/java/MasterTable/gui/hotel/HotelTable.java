@@ -42,13 +42,13 @@ public class HotelTable extends JPanel {
     }
 
     public void fillTable() {
-        // US24: A hotel representative only sees their own hotels and only the required fields.
+// US24: A hotel representative only sees their own hotels and only the required fields.
         boolean isRepresentative = currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE;
 
         // Create columns once – different depending on role
         if (model.getColumnCount() == 0) {
             if (isRepresentative) {
-                // US24: ID, hotel name, address, number of rooms, number of beds, last reported data
+// US24: ID, hotel name, address, number of rooms, number of beds, last reported data
                 model.addColumn("ID");
                 model.addColumn("NAME");
                 model.addColumn("ADDRESS");
@@ -77,7 +77,7 @@ public class HotelTable extends JPanel {
         model.setRowCount(0); // Rows will be eptied, but columns stay the same
 
         if (isRepresentative) {
-            // US24: Only load hotels owned by this representative (filtered by user ID)
+// US24: Only load hotels owned by this representative (filtered by user ID)
             List<Hotel> hotels = hotelDAO.getHotelsForRepresentative(currentUser.getId());
             for (Hotel h : hotels) {
                 model.addRow(new Object[]{
@@ -203,18 +203,6 @@ public class HotelTable extends JPanel {
         JTextField searchField = new JTextField(20);
         searchField.setToolTipText("Search for Hotel Name...");
 
-        // US24: The table has fewer columns for the representative -> hotel name is in column 1, otherwise in column 2.
-        final int nameColumnIndex = (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) ? 1 : 2;
-
-        // Event-Listener: Searches every time a key is pressed
-        searchField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent evt) {
-                // Column 2 is Hotelname in our Table
-                TableUtils.filterTable(table, searchField.getText(), 2);
-                // we give the Methode the table we are working in, the searchText, and in what column it should search
-            }
-        });
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel searchLabel = new JLabel("Search Hotelname:");
