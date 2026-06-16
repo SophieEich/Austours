@@ -23,15 +23,7 @@ public class HotelDAO {
         return h; // ID ist jetzt gesetzt
     }
 
-    public void updateHotel(Hotel h) {
-        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = s.beginTransaction();
-            s.merge(h);
-            tx.commit();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Could not update: " + e.getMessage());
-        }
-    }
+
 
     public void deleteHotel(Long id) {
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {

@@ -126,7 +126,10 @@ public class HotelTable extends JPanel {
         JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton("ADD HOTEL");
-        JButton editButton = new JButton("EDIT HOTEL");
+
+
+
+
 
         //Only Admin can add/edit
         boolean isAdmin = currentUser.getRole() == UserRole.ADMIN;
@@ -142,25 +145,12 @@ public class HotelTable extends JPanel {
             new AddEditHotelWindow(father, null, this); //null = ADD Modus
         });
 
-//US-5
-        editButton.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(null, "Please select a hotel to edit!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            int modelRow = table.convertRowIndexToModel(selectedRow);
-            int columnCount = model.getColumnCount();
-            Object[] rowData = new Object[columnCount];
-            for (int i = 0; i < columnCount; i++) {
-                rowData[i] = model.getValueAt(modelRow, i);
-            }
 
-            JFrame father = (JFrame) SwingUtilities.getWindowAncestor(HotelTable.this);
-            new AddEditHotelWindow(father, rowData, HotelTable.this);
-            //selection will be immediately cleared after window is disposed
-            //table.clearSelection();
-        });
+
+
+
+
+
 
         // Delete Button US11
         JButton deleteButton = new JButton("DELETE HOTEL");
@@ -271,9 +261,13 @@ public class HotelTable extends JPanel {
         return hotelDAO.addHotel(h);
     }
 
-    public void updateHotel(Hotel h) {
-        hotelDAO.updateHotel(h);
-    }
+
+
+
+
+
+
+
 
     public void deleteHotel(Long id) {
         hotelDAO.deleteHotel(id);
