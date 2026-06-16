@@ -47,7 +47,7 @@ public class LoginWindow extends JDialog {
 
     private void doLogin() {
         String username = usernamefield.getText().trim();
-        String password = new String(passwordfield.getPassword());
+        String password = new String(passwordfield.getPassword()).trim();;
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter username and password!");

@@ -258,7 +258,6 @@ public class AddEditHotelWindow extends JDialog {
 
         String savedCategory = rowData[1].toString();
 
-        // US14: Also compare checkbox state for the 4 attributes
         boolean textChanged =
                 !name.getText().equals(rowData[2].toString()) ||
                         !category.getSelectedItem().toString().equals(savedCategory) ||
@@ -271,6 +270,7 @@ public class AddEditHotelWindow extends JDialog {
                         !rooms.getText().equals(rowData[9].toString()) ||
                         !beds.getText().equals(rowData[10].toString());
 
+        // US14: Also compare checkbox state for the 4 attributes
         boolean oldFamily = isChecked(rowData[12]);
         boolean oldPet = isChecked(rowData[13]);
         boolean oldSpa = isChecked(rowData[14]);

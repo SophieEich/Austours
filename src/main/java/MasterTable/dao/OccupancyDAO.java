@@ -56,7 +56,20 @@ public class OccupancyDAO {
 
 
 
-    //US-23
+    // US-24
+    public List<Occupancy> getOccupanciesForRepresentative(String username) {
+        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
+            return s.createQuery("""
+            SELECT o
+            FROM Occupancy o
+            JOIN FETCH o.hotel h
+            JOIN h.representative r
+            WHERE r.username = :username
+        """, Occupancy.class)
+                    .setParameter("username", username)
+                    .list();
+        }
+    }
 
 
 

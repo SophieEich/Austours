@@ -3,6 +3,8 @@ package MasterTable.gui.occupancy;
 import MasterTable.entity.Hotel;
 import MasterTable.entity.Occupancy;
 import MasterTable.dao.OccupancyDAO;
+import MasterTable.entity.user.UserRole;
+import MasterTable.entity.user.UsersHibernate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,8 @@ public class AddOccupancyWindow extends JDialog {
 
     private OccupancyPanel parent;
     private final OccupancyDAO occupancyDAO = new OccupancyDAO();
+    // US-24
+    private final UsersHibernate currentUser;
 
     // US - 6 Enter transactional data (room/bed occupancy per month)
 
@@ -26,9 +30,11 @@ public class AddOccupancyWindow extends JDialog {
 
 
     //constructor
-    public AddOccupancyWindow(OccupancyPanel parent) {
+    public AddOccupancyWindow(OccupancyPanel parent, UsersHibernate user) {
         super((JFrame) SwingUtilities.getWindowAncestor(parent), "Add Occupancy", true);
         this.parent = parent;
+        // US-24
+        this.currentUser = user;
 
         defineFrame();
         initComponents();
@@ -133,7 +139,18 @@ public class AddOccupancyWindow extends JDialog {
         }
         //
         Hotel hotel = (Hotel) hotelSelect.getSelectedItem();
+        //-----------------------------
+        if (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) {
 
+            if (hotel.getRepresentative() == null ||
+                    !hotel.getRepresentative().getId().equals(currentUser.getId())) {
+
+                JOptionPane.showMessageDialog(this,
+                        "You can only add occupancy for your own hotels!");
+                return;
+            }
+        }
+        //--------------------------------------
         if (roomOccVal > hotel.getNoRooms()) {
             JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
             return;

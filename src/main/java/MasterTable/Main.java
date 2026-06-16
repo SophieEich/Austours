@@ -17,7 +17,6 @@ public class Main {
             //Splash Screen
             SplashScreen splash = new SplashScreen();
             splash.setVisible(true);
-
             new Thread(() -> {
                 HibernateUtil.getSessionFactory(); //SessionFactory gets prepared so LogIn is faster
 
