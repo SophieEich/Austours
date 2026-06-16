@@ -44,10 +44,10 @@ public class HelpTab extends JPanel {
                         "- View and check all previously entered transactional data.\n"
         );
 
-        textArea.setEditable(false);
+        textArea.setEditable(false);    //read only
         textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         textArea.setCaretPosition(textArea.getDocument().getLength());
 
-        add(new JScrollPane(textArea), BorderLayout.CENTER);
+        add(new JScrollPane(textArea), BorderLayout.CENTER);    //in the center/middle and you can scroll
     }
 }
