@@ -39,7 +39,7 @@ public class AddEditHotelWindow extends JDialog {
         super(father, rowData != null ? "Edit Hotel" : "Add Hotel", true);
         this.rowData = rowData;
         this.parent = parent;
-
+        this.isEditing = (rowData != null);
 
         defineDialog();
         prefillFields();
@@ -56,6 +56,28 @@ public class AddEditHotelWindow extends JDialog {
         setLayout(new GridLayout(15, 2, 15, 12));
     }
 
+    private void prefillFields() {
+        //Pre filled fields for isEditing
+        if (!isEditing) {
+            return; // that would be an add -> nothing to prefill
+        }
+        String savedCategory = rowData[1].toString();
+        for (Category cat : Category.values()) {
+            if (cat.toString().equals(savedCategory)) {
+                category.setSelectedItem(cat);
+                break;
+            }
+        }
+
+        name.setText(rowData[2].toString());
+        owner.setText(rowData[3].toString());
+        contact.setText(rowData[4].toString());
+        address.setText(rowData[5].toString());
+        city.setText(rowData[6].toString());
+        citycode.setText(rowData[7].toString());
+        phone.setText(rowData[8].toString());
+        rooms.setText(rowData[9].toString());
+        beds.setText(rowData[10].toString());
 
 
         // US14: Pre-fill attribute checkboxes from rowData
@@ -108,8 +130,43 @@ public class AddEditHotelWindow extends JDialog {
         saveButton.addActionListener(e -> onSave());
     }
 
+    public void onSave() {
+        if (!hasChanges()) {
+            JOptionPane.showMessageDialog(this,
+                    "No changes detected. Please modify at least one field before saving.",
+                    "No Changes", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        //Validation - all fields must be filled in
+        if (name.getText().trim().isEmpty() ||
+                owner.getText().trim().isEmpty() ||
+                contact.getText().trim().isEmpty() ||
+                address.getText().trim().isEmpty() ||
+                city.getText().trim().isEmpty() ||
+                citycode.getText().trim().isEmpty() ||
+                phone.getText().trim().isEmpty() ||
+                rooms.getText().trim().isEmpty() ||
+                beds.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill all the fields");
+            return;
+        }
 
+        if (category.getSelectedItem().equals(Category.ALL)) {
+            JOptionPane.showMessageDialog(this, "Please select a Star rating!");
+            return;
+        }
+
+        // lengthCheck
+        int nameCheck = name.getText().trim().length();
+        int ownerCheck = owner.getText().trim().length();
+        int contactCheck = contact.getText().trim().length();
+        int addressCheck = address.getText().trim().length();
+        int cityCheck = city.getText().trim().length();
+        if (nameCheck < 2 || ownerCheck < 2 || contactCheck < 2 || addressCheck < 2 || cityCheck < 2) {
+            JOptionPane.showMessageDialog(this, "Must be at least 2 characters!");
+            return;
+        }
 
 
         //Only positve numebers
@@ -176,6 +233,14 @@ public class AddEditHotelWindow extends JDialog {
                 .fitness(fitness.isSelected())
                 .build();
 
+        if (isEditing) {
+            Long id = Long.parseLong(rowData[0].toString());
+            h.setId(id);
+            parent.updateHotel(h);
+            parent.fillTable(); // database will be loaded again,  done
+            JOptionPane.showMessageDialog(null,
+                    "Hotel '" + name.getText() + "' was successfully updated!",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } else {
             parent.addHotel(h);
