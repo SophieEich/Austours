@@ -16,7 +16,6 @@ public class AddOccupancyWindow extends JDialog {
 
     private OccupancyPanel parent;
     private final OccupancyDAO occupancyDAO = new OccupancyDAO();
-    // US-24
     private final UsersHibernate currentUser;
 
     // US - 6 Enter transactional data (room/bed occupancy per month)
@@ -31,9 +30,8 @@ public class AddOccupancyWindow extends JDialog {
 
     //constructor
     public AddOccupancyWindow(OccupancyPanel parent, UsersHibernate user) {
-        super((JFrame) SwingUtilities.getWindowAncestor(parent), "Add Occupancy", true);
+        super((JFrame) SwingUtilities.getWindowAncestor(parent), "Add Occupancy", true);//US-6
         this.parent = parent;
-        // US-24
         this.currentUser = user;
 
         defineFrame();
@@ -69,7 +67,7 @@ public class AddOccupancyWindow extends JDialog {
         this.getRootPane().setDefaultButton(saveButton);
         add(saveButton);
 
-        //Search Logic
+        //Search Logic - Change Request US-29
         hotelSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent evt) {
@@ -137,9 +135,9 @@ public class AddOccupancyWindow extends JDialog {
             JOptionPane.showMessageDialog(this, "Year and Occupancy must be valid numbers! No decimal numbers");
             return;
         }
-        //
+        //__________________________________________________________________ US-26
         Hotel hotel = (Hotel) hotelSelect.getSelectedItem();
-        //-----------------------------
+
         if (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) {
 
             if (hotel.getRepresentative() == null ||
@@ -150,7 +148,7 @@ public class AddOccupancyWindow extends JDialog {
                 return;
             }
         }
-        //--------------------------------------
+
         if (roomOccVal > hotel.getNoRooms()) {
             JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
             return;

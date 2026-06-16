@@ -175,6 +175,7 @@ public class AddEditHotelWindow extends JDialog {
         int cityCodeCheck;
         int phoneCheck;
 
+
         try {
             roomCount = Integer.parseInt(rooms.getText().trim());
             bedCount = Integer.parseInt(beds.getText().trim());
@@ -208,6 +209,9 @@ public class AddEditHotelWindow extends JDialog {
             JOptionPane.showMessageDialog(this, "Phone must be a number!");
             return;
         }
+
+
+
 
 
         String today = LocalDate.now().toString();
