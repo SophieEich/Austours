@@ -42,7 +42,7 @@ public class OccupancyPanel extends JPanel {
     public JComboBox<Category> categoryFilter = new JComboBox<>(Category.values());
 
     // ─────────────────────────────────────────────────────────────────────────
-    //US10
+
     public OccupancyPanel(UsersHibernate user) {
         this.currentUser = user;
         definePanel();
@@ -72,7 +72,7 @@ public class OccupancyPanel extends JPanel {
 
         // 2. Datenbank-Abfrage
 
-        //For US-24, the line 76 was changed
+        //For US-24, the line 75 was changed
         List<Occupancy> list = occupancyDAO.getOccupanciesForRepresentative(currentUser.getUsername());
 
         int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());

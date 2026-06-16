@@ -1,5 +1,6 @@
 package MasterTable.entity.user;
 
+import MasterTable.entity.Hotel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,10 @@ public class UsersHibernate {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRole role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
 
 
 
