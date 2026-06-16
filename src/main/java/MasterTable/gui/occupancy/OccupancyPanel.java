@@ -73,7 +73,12 @@ public class OccupancyPanel extends JPanel {
         // 2. Datenbank-Abfrage
 
         //For US-24, the line 75 was changed
-        List<Occupancy> list = occupancyDAO.getOccupanciesForRepresentative(currentUser.getUsername());
+        List<Occupancy> list;
+        if (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) {
+            list = occupancyDAO.getOccupanciesByRepresentativeId(currentUser.getId());//Joana
+        } else {
+            list = occupancyDAO.getAllOccupancies();//Tekin
+        }
 
         int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
         int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
