@@ -14,12 +14,7 @@ public class LoginWindow extends JDialog {
     private final UserDAO userDAO = new UserDAO();
 
     public LoginWindow() {
-        setTitle("Login");
-        setModal(true);
-        setSize(350, 220);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout(10,10));
+        defineFrame();
 
         // Panel
         JPanel mainPanel = new JPanel(new BorderLayout(10,10));
@@ -45,10 +40,23 @@ public class LoginWindow extends JDialog {
         setVisible(true);
     }
 
+    private void defineFrame() {
+        setTitle("Login");
+        setModal(true); // stops main Programm
+        setSize(350, 220);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10,10));
+    }
+
+
+
+
     private void doLogin() {
         String username = usernamefield.getText().trim();
         String password = new String(passwordfield.getPassword()).trim();;
 
+        //Validation
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter username and password!");
             return;
