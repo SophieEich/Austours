@@ -151,7 +151,7 @@ public class HotelTable extends JPanel {
             }
             int modelRow = table.convertRowIndexToModel(selectedRow);
             int columnCount = model.getColumnCount();
-            Object[] rowData = new Object[columnCount]; //FRAGE für JOANA
+            Object[] rowData = new Object[columnCount];
             for (int i = 0; i < columnCount; i++) {
                 rowData[i] = model.getValueAt(modelRow, i);
             }
@@ -201,7 +201,6 @@ public class HotelTable extends JPanel {
         //create Search-Panel
         JTextField searchField = new JTextField(20);
         searchField.setToolTipText("Search for Hotel Name...");
-
 
         // US24: The table has fewer columns for the representative -> hotel name is in column 1, otherwise in column 2.
         final int nameColumnIndex = (currentUser.getRole() == UserRole.HOTEL_REPRESENTATIVE) ? 1 : 2;

@@ -194,33 +194,45 @@ public class OccupancyPanel extends JPanel {
         table = new JTable(model);
 
         //US 23 (Inline editing of transactional data directly in overview table)
-        model.addTableModelListener(e-> {
-            if (e.getType() != TableModelEvent.UPDATE) return;
+        model.addTableModelListener(e-> {   //code gets activated when someone tries to change a cell in the table
+            if (e.getType() != TableModelEvent.UPDATE) return;  //only react to updates, everything else ends ("return")
 
             int col = e.getColumn();
             // only rooms + Beds Occupancy
+            // column 4 = rooms, column 5 = beds
             if (col != 4 && col != 5) return;
 
+            // e contains the event data
+            // gets the clicked on row number (first)
             int row = e.getFirstRow();
 
             try {
+                // get(row) - clicked on row number
+                // wanted hotel gets saved in occ
+                // occ contains all info about this hotel (name, rooms, etc.)
                 Occupancy occ = loadedOccupancies.get(row); //straight from list
+                // getValueAt(row, 4) reads value from row, column 4 (rooms) and the result is returned as an object
+                // toString() converts the unknown object to text (string)
+                // Integer.parseInt() converts the text into an actual number (program can calculate and compare it)
                 int roomOcc = Integer.parseInt(model.getValueAt(row, 4).toString());
                 int bedOcc= Integer.parseInt(model.getValueAt(row, 5).toString());
 
-                //Validation
+                //Validation (never 0 or negative amount of rooms or (||) beds)
                 if (roomOcc <= 0 || bedOcc <= 0) {
-                    JOptionPane.showMessageDialog(this,
+                    JOptionPane.showMessageDialog(this,     //shows Pop-up error message
                             "Values must be positive numbers!");
-                    fillTable();
-                    return;
+                    fillTable();    // restore the old value
+                    return;         // stop execution
                 }
-                if (roomOcc > occ.getHotel().getNoRooms()) {
+                // occupied rooms cannot be greater than the maximum rooms
+                // occ.getHotel().getNoRooms() retrieves the maximum number of rooms
+                if (roomOcc > occ.getHotel().getNoRooms()) {    //if more rooms than the max --> error message
                     JOptionPane.showMessageDialog(this, "Room occupancy cannot exceed total rooms!");
                     fillTable(); // so that the old value is there
                     return;
                 }
 
+                // same thing as with the rooms (max numbers of beds)
                 if (bedOcc > occ.getHotel().getNoBeds()) {
                     JOptionPane.showMessageDialog(this, "Bed occupancy cannot exceed total beds!");
                     fillTable(); // so that the old value is there
@@ -228,12 +240,17 @@ public class OccupancyPanel extends JPanel {
                 }
 
                 //DAO Call
+                // if all 3 validations pass the new values are set in the object (database is yet changed)
                 occ.setRoomOccupancy(roomOcc);
                 occ.setBedOccupancy(bedOcc);
+                // Saving the updated value to the database using the DAO (Data Access Object)
                 occupancyDAO.updateOccupancy(occ);
-            } catch (Exception ex) {
+
+                // try catch acts as a safety net if unexpected errors occur
+            } catch (Exception ex) {    // catch block runs
+                // show error message with ex.getMessage()
                 JOptionPane.showMessageDialog(this, "Update failed: "+ ex.getMessage());
-                fillTable();
+                fillTable();    //restores old value
             }
         });
 

@@ -23,6 +23,7 @@ public class HotelDAO {
         return h; // ID ist jetzt gesetzt
     }
 
+//US5
     public void updateHotel(Hotel h) {
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = s.beginTransaction();
@@ -32,6 +33,7 @@ public class HotelDAO {
             JOptionPane.showMessageDialog(null, "Could not update: " + e.getMessage());
         }
     }
+
 
     public void deleteHotel(Long id) {
         try (Session s = HibernateUtil.getSessionFactory().openSession()) {
@@ -46,7 +48,7 @@ public class HotelDAO {
         }
     }
 
-        // US24: Only loads hotels owned by the logged-in hotel representative.
+// US24: Only loads hotels owned by the logged-in hotel representative.
         //Filtered using the foreign key `representative_id` (= user ID).
         public List<Hotel> getHotelsForRepresentative(Long representativeId){
             try (Session s = HibernateUtil.getSessionFactory().openSession()) {
