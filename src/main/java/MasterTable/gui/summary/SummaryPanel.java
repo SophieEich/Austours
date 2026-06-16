@@ -24,15 +24,15 @@ public class SummaryPanel extends JPanel {
 
     //US1 (Summary of master data (hotels per category, avg. rooms/beds))
     public SummaryPanel() {
-        definePanel();
-        initComponents();
-        addComponents();
+        definePanel();      //wie ist das fenster aufgeteilt
+        initComponents();   //welche Elemente gibt es
+        addComponents();    //wo im fenster kommen die Elemente hin
         fillTable();        //füllen von tabellen
     }
 
     private void definePanel() {
         setLayout(new BorderLayout());
-    }
+    }   // wie werden die Elemente im Fenster angeordnet (5 Zonen)
 
     private void initComponents() {
         model = new DefaultTableModel();
@@ -62,7 +62,7 @@ public class SummaryPanel extends JPanel {
         // automatically adjust width of column
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         //increases row height to 16pt
-        table.setRowHeight(25);
+        table.setRowHeight(25); //25 pixel hohe Zeilen
 
 
     }
@@ -70,18 +70,19 @@ public class SummaryPanel extends JPanel {
     private void addComponents() {
         JLabel title = new JLabel("Hotel Master Data Summary", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 16));
-        add(title, BorderLayout.NORTH);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        add(title, BorderLayout.NORTH); //north-zone of the border layout
+        add(new JScrollPane(table), BorderLayout.CENTER);   //if the table is too long you are able to scroll down
 
 
         JPanel buttonPanel = new JPanel();
 
         JButton refreshButton = new JButton("REFRESH");
+        //what happens when someone clicks on the refresh button
         refreshButton.addActionListener(e -> fillTable());
 
         buttonPanel.add(refreshButton);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);   //south zone
 
 
     }
