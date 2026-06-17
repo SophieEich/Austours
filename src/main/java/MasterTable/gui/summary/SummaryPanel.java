@@ -122,24 +122,28 @@ public class SummaryPanel extends JPanel {
         }
 
         // Add one row per category
-        int totalCount = 0;
-        int totalRooms = 0;
-        int totalBeds = 0;
+        // Total counters for the final total row - start at 0 and increases during the loop
+        int totalCount = 0; // how many hotels exist
+        int totalRooms = 0; // how many rooms
+        int totalBeds = 0;  // how many beds
 
+        // loop
         for (Category cat : Category.values()) {
-            if (cat == Category.ALL) continue;
+            if (cat == Category.ALL) continue;  // continue = skip the category ("ALL") --> it shouldn't get its own row (TOTAL)
+            // get stored values for this categories from the maps
+            int count = countMap.get(cat.toString());   // count = number of hotels
+            int rooms = roomsMap.get(cat.toString());   // rooms = total rooms
+            int beds  = bedsMap.get(cat.toString());    // beds = total beds for this category (e.g. 3 star hotels)
 
-            int count = countMap.get(cat.toString());
-            int rooms = roomsMap.get(cat.toString());
-            int beds  = bedsMap.get(cat.toString());
-
-            double avgRooms;
-            if (count > 0 ) {
+            // calcuating the average rooms per hotel in this category
+            double avgRooms;        // double --> decimal
+            if (count > 0 ) {   // avoids division by 0
                 avgRooms = (double) rooms / count;
             }else {
                 avgRooms = 0;
             }
 
+            // calcuating the average beds per hotel in this category
             double avgBeds;
             if (count > 0 ) {
                 avgBeds = (double) beds / count;
@@ -147,15 +151,16 @@ public class SummaryPanel extends JPanel {
                 avgBeds = 0;
             }
 
-
+            //adding a new row to the table
             model.addRow(new Object[]{
-                    cat.toString(),
-                    count,
-                    String.format("%.1f", avgRooms),
-                    String.format("%.1f", avgBeds)
+                    cat.toString(), //category
+                    count,          //number of hotels
+                    String.format("%.1f", avgRooms),    //average rooms --> a decimal number with one digit after the comma
+                    String.format("%.1f", avgBeds)      //average beds
             });
 
-            totalCount += count;
+            //adding this category's values to the running totals (for the total row in the end)
+            totalCount += count;    //adding to the current value
             totalRooms += rooms;
             totalBeds  += beds;
         }
@@ -175,11 +180,12 @@ public class SummaryPanel extends JPanel {
             totalAvgBeds = 0;
         }
 
+        //adding the total row
         model.addRow(new Object[]{
-                "TOTAL",
-                totalCount,
-                String.format("%.1f", totalAvgRooms),
-                String.format("%.1f", totalAvgBeds)
+                "TOTAL",    //name
+                totalCount, //total number of hotels
+                String.format("%.1f", totalAvgRooms),   //calculated average rooms
+                String.format("%.1f", totalAvgBeds)     //calculated average beds
         });
     }
 }
