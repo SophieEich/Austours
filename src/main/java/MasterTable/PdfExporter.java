@@ -29,7 +29,7 @@ public class PdfExporter {
     private static final float MB        = 40f;  // margin bottom
     private static final float CONTENT_W = W - ML - MR;
 
-    // NOE-TO brand colours
+    // NOE-TO brand colours ((red/green/blue) 0-255)
     private static final Color NOE_BLUE  = new Color(31,  78,  150);
     private static final Color NOE_LIGHT = new Color(235, 243, 250);
     private static final Color GREY      = new Color(120, 120, 120);
@@ -37,7 +37,7 @@ public class PdfExporter {
     // Row heights
     private static final float ROW_H        = 18f;
     private static final float TABLE_HDR_H  = 22f;
-    private static final float HEADER_BLOCK = 115f; // space used by NOE-TO header + filter box
+    private static final float HEADER_BLOCK = 115f;    // space used by NOE-TO header + filter box
 
     // US-07: Main entry point.
     public static void export(OccupancyPanel panel) {
@@ -55,39 +55,42 @@ public class PdfExporter {
                 "NOE-TO_Statistics_%s-%s_to_%s-%s.pdf", fromY, fromM, toY, toM);
 
         // ── 2. File chooser ───────────────────────────────────────────────────
-        JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser(); // save window
         fc.setDialogTitle("Save PDF");
         fc.setSelectedFile(new File(suggestedName));
-        if (fc.showSaveDialog(panel) != JFileChooser.APPROVE_OPTION) return;
+        if (fc.showSaveDialog(panel) != JFileChooser.APPROVE_OPTION) return; //if user does not click save then return
 
         File out = fc.getSelectedFile();
         if (!out.getName().toLowerCase().endsWith(".pdf"))
-            out = new File(out.getAbsolutePath() + ".pdf");
+            out = new File(out.getAbsolutePath() + ".pdf"); //pdf ending is added
 
         // ── 3. Build PDF ──────────────────────────────────────────────────────
-        TableModel data     = panel.table.getModel();
-        int        rowCount = data.getRowCount();
-        int        colCount = data.getColumnCount();
+        TableModel data     = panel.table.getModel();   //gets data from hotel
+        int        rowCount = data.getRowCount();       //how many rows
+        int        colCount = data.getColumnCount();    //how many columns
         float[]    colW     = columnWidths(colCount);
 
         // Calculate how many data rows fit per page
-        float usableFirst = H - MT - MB - HEADER_BLOCK - TABLE_HDR_H;
-        float usableRest  = H - MT - MB - TABLE_HDR_H;
+        float usableFirst = H - MT - MB - HEADER_BLOCK - TABLE_HDR_H;   //how many rows in first page incl. NOE header
+        float usableRest  = H - MT - MB - TABLE_HDR_H;                  //how many rows in other pages without header
         int   rowsPage1   = Math.max(1, (int) (usableFirst / ROW_H));
         int   rowsPageN   = Math.max(1, (int) (usableRest  / ROW_H));
 
         // Build list of start-row per page
+        // e.g. page one starts with row 0, page 2 starts with row 36, page 3 with 78 -> [0,36,72]
         java.util.List<Integer> pageBreaks = new java.util.ArrayList<>();
         pageBreaks.add(0);
         int cur = rowsPage1;
         while (cur < rowCount) { pageBreaks.add(cur); cur += rowsPageN; }
         int totalPages = Math.max(1, pageBreaks.size());
 
+        //Building PDF
         try (PDDocument doc = new PDDocument()) {
 
             PDType1Font regular = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
             PDType1Font bold    = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
 
+            //Adding pages to PDF
             for (int p = 0; p < totalPages; p++) {
 
                 PDPage page = new PDPage(PDRectangle.A4);
@@ -95,7 +98,7 @@ public class PdfExporter {
 
                 try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
 
-                    float y = H - MT;
+                    float y = H - MT; //in PDFBox (0,0) is bottom left
 
                     // US-07: Draw branding header only on page 1
                     if (p == 0) {
@@ -108,7 +111,13 @@ public class PdfExporter {
 
                     // US-07: Data rows for this page
                     int start = pageBreaks.get(p);
-                    int end   = (p + 1 < pageBreaks.size()) ? pageBreaks.get(p + 1) : rowCount;
+
+                    int end;
+                    if (p + 1 < pageBreaks.size()) {
+                        end = pageBreaks.get(p + 1);
+                    } else {
+                        end = rowCount;
+                    }
 
                     for (int r = start; r < end; r++) {
                         y = drawRow(cs, regular, y, colW, data, r);
@@ -119,11 +128,13 @@ public class PdfExporter {
                 }
             }
 
+            //saving PDF + successful message if ok
             doc.save(out);
             JOptionPane.showMessageDialog(panel,
                     "PDF saved:\n" + out.getAbsolutePath(),
                     "Export Successful", JOptionPane.INFORMATION_MESSAGE);
 
+            //Error-message if saving PDF has failed
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panel,
                     "PDF export failed:\n" + ex.getMessage(),
@@ -147,7 +158,7 @@ public class PdfExporter {
         // Timestamp (right-aligned)
         String ts = "Generated: " + LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-        float tsW = textWidth(regular, 8, ts);
+        float tsW = textWidth(regular, 8, ts);                          //width of timestamp
         setColor(cs, GREY, false);
         text(cs, regular, 8, W - MR - tsW, y - 26, ts);
 
@@ -225,6 +236,8 @@ public class PdfExporter {
 
     // ── Low-level helpers ─────────────────────────────────────────────────────
 
+    //beginText + endText because PDFBox needs that to "write" a text
+
     private static void text(PDPageContentStream cs, PDType1Font font,
                              float size, float x, float y, String txt) throws IOException {
         cs.beginText();
@@ -234,12 +247,16 @@ public class PdfExporter {
         cs.endText();
     }
 
+    //for every background with colour
+
     private static void fillRect(PDPageContentStream cs, Color color,
                                  float x, float y, float w, float h) throws IOException {
         setColor(cs, color, false);
-        cs.addRect(x, y, w, h);
+        cs.addRect(x, y, w, h);             // (x,y) -> is bottom left corner of the rectangle
         cs.fill();
     }
+
+    //for lines from point 1 to point 2
 
     private static void line(PDPageContentStream cs, Color color,
                              float x1, float y1, float x2, float y2, float width) throws IOException {
@@ -250,15 +267,21 @@ public class PdfExporter {
         cs.stroke();
     }
 
+    //to set colour because PDFBox want colours from 0.0-1.0
+
     private static void setColor(PDPageContentStream cs, Color c, boolean stroke) throws IOException {
         float r = c.getRed() / 255f, g = c.getGreen() / 255f, b = c.getBlue() / 255f;
-        if (stroke) cs.setStrokingColor(r, g, b);
-        else        cs.setNonStrokingColor(r, g, b);
+        if (stroke) cs.setStrokingColor(r, g, b);       //for lines
+        else        cs.setNonStrokingColor(r, g, b);    //for rectangles and text
     }
+
+    //to calculate the width of a text in order to center it
 
     private static float textWidth(PDType1Font font, float size, String txt) throws IOException {
         return font.getStringWidth(txt) / 1000f * size;
     }
+
+    //in order to shorten too long text if text with is to long -> so that long hotel names are shortened with "..."
 
     private static String truncate(String txt, PDType1Font font, float size, float maxW) throws IOException {
         if (textWidth(font, size, txt) <= maxW) return txt;
@@ -269,7 +292,9 @@ public class PdfExporter {
         return "";
     }
 
-    // US-07: Column widths proportional to CONTENT_W for the 6 occupancy columns
+    // Column widths proportional to CONTENT_W for the 6 occupancy columns
+    //if you don't do this then every column has the same width
+
     private static float[] columnWidths(int colCount) {
         if (colCount == 6) return new float[]{
                 CONTENT_W * 0.08f,  // HOTEL ID
