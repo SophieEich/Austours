@@ -67,7 +67,6 @@ public class OccupancyPanel extends JPanel {
             filterHotelId = Long.parseLong(selectedHotel.split(" - ")[0].trim());
         }
 
-
         Category selectedCategory = (Category) categoryFilter.getSelectedItem();
 
         // 2. Datenbank-Abfrage
@@ -79,7 +78,7 @@ public class OccupancyPanel extends JPanel {
         } else {
             list = occupancyDAO.getAllOccupancies();//Tekin
         }
-
+        //US-10
         int fromYearInt = Integer.parseInt((String) fromYear.getSelectedItem());
         int toYearInt = Integer.parseInt((String) toYear.getSelectedItem());
 
@@ -98,11 +97,11 @@ public class OccupancyPanel extends JPanel {
                 if (!h.getCategory().equals(selectedCategory.toString())) continue;
             }
 
-            // Datum-Filter
+            // Datum-Filter US-10
             int rowDate = occ.getYear() * 100 + occ.getMonth();
             if (rowDate < filterFrom || rowDate > filterTo) continue;
 
-            // 3. Write in Tabele
+            // 3. Write in Tabelle
             loadedOccupancies.add(occ);
             model.addRow(new Object[]{
                     h.getId(),
@@ -110,14 +109,14 @@ public class OccupancyPanel extends JPanel {
                     occ.getYear(),
                     occ.getMonth(),
                     occ.getRoomOccupancy(),
-                    occ.getBedOccupancy()
+                    occ.getBedOccupancy(),
             });
         }
 
     }
 
 
-    // US-10
+
     // US-02: Populates the hotel dropdown from hotels.txt for the hotel filter
     private void loadHotel() {
         hotelFilter.removeAllItems();
@@ -158,7 +157,7 @@ public class OccupancyPanel extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
 
 
-
+        //US-06
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("ADD OCCUPANCY");
         addButton.addActionListener(e -> new AddOccupancyWindow(this, currentUser));

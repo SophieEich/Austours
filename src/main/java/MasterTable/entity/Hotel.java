@@ -56,19 +56,19 @@ import MasterTable.entity.user.UsersHibernate;
 
     // US14: New attribute columns — family-friendly, pet-friendly, spa, fitness
 
-        @Column(name = "family_friendly", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Column(name = "family_friendly", nullable = false)
         @Builder.Default
         private boolean familyFriendly = false;
 
-        @Column(name = "pet_friendly", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Column(name = "pet_friendly", nullable = false)
         @Builder.Default
         private boolean petFriendly = false;
 
-        @Column(name = "spa", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Column(name = "spa", nullable = false)
         @Builder.Default
         private boolean spa = false;
 
-        @Column(name = "fitness", nullable = false, columnDefinition = "BIT DEFAULT 0")
+        @Column(name = "fitness", nullable = false)
         @Builder.Default
         private boolean fitness = false;
 

@@ -22,7 +22,7 @@ public class AddOccupancyWindow extends JDialog {
 
     JComboBox<Hotel> hotelSelect = new JComboBox<>(); // Empty dropdown for hotel selection
     //Occupancy data
-    JComboBox<String> year  = new JComboBox<>(new String[] {"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
+    JComboBox<String> year  = new JComboBox<>(new String[]{"2024","2025","2026","2027", "2028", "2029", "2030", "2031"});
     JComboBox<String> month = new JComboBox<>(new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"});
     JTextField roomOcc   = new JTextField();
     JTextField bedOcc    = new JTextField();
@@ -94,9 +94,9 @@ public class AddOccupancyWindow extends JDialog {
 
     private void initComponents() { //each label gets one column
 
-        setLayout(new GridLayout(7, 2, 10, 10));
+        setLayout(new GridLayout(8, 2, 10, 10));
     }
-
+    //
     private void loadHotels() {
         List<Hotel> hotels = occupancyDAO.getAllHotels();
         for (Hotel h : hotels) {

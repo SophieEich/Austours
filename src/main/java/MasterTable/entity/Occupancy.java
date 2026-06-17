@@ -37,5 +37,4 @@ public class Occupancy {
     @Column(name = "bed occupancy")
     private int bedOccupancy;
 
-
 }

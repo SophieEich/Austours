@@ -80,7 +80,7 @@ public class AddEditHotelWindow extends JDialog {
         beds.setText(rowData[10].toString());
 
 
-        // US14: Pre-fill attribute checkboxes from rowData
+        // US14
         familyFriendly.setSelected(isChecked(rowData[12]));
         petFriendly.setSelected(isChecked(rowData[13]));
         spa.setSelected(isChecked(rowData[14]));
@@ -218,7 +218,7 @@ public class AddEditHotelWindow extends JDialog {
         String selectedCategory = category.getSelectedItem().toString();
 
 
-// US14: Pass attribute checkbox values to the builder
+
         Hotel h = Hotel.builder()
                 .category(category.getSelectedItem().toString())
                 .name(name.getText().trim())
@@ -231,6 +231,7 @@ public class AddEditHotelWindow extends JDialog {
                 .noRooms(roomCount)
                 .noBeds(bedCount)
                 .lastReported(today)
+                // US14
                 .familyFriendly(familyFriendly.isSelected())
                 .petFriendly(petFriendly.isSelected())
                 .spa(spa.isSelected())
@@ -275,7 +276,7 @@ public class AddEditHotelWindow extends JDialog {
                         !rooms.getText().equals(rowData[9].toString()) ||
                         !beds.getText().equals(rowData[10].toString());
 
-        // US14: Also compare checkbox state for the 4 attributes
+        // US14
         boolean oldFamily = isChecked(rowData[12]);
         boolean oldPet = isChecked(rowData[13]);
         boolean oldSpa = isChecked(rowData[14]);
@@ -291,8 +292,6 @@ public class AddEditHotelWindow extends JDialog {
     }
 
     private boolean isChecked(Object value) {
-        return Boolean.TRUE.equals(value)
-                || "true".equalsIgnoreCase(String.valueOf(value))
-                || "✓".equals(String.valueOf(value));
+        return "✓".equals(String.valueOf(value));
     }
 }
