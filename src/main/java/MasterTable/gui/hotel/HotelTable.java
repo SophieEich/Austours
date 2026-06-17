@@ -158,8 +158,7 @@ public class HotelTable extends JPanel {
 
             JFrame father = (JFrame) SwingUtilities.getWindowAncestor(HotelTable.this);
             new AddEditHotelWindow(father, rowData, HotelTable.this);
-            //selection will be immediately cleared after window is disposed
-            //table.clearSelection();
+
         });
 
         // Delete Button US11
